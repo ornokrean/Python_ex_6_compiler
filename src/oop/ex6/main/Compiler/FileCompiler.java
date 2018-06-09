@@ -18,7 +18,7 @@ public class FileCompiler {
 
 	protected HashSet<Variable> vars;
 
-	private BlockCompiler[] mySubBlocks;
+	private ArrayList<BlockCompiler> mySubBlocks = new ArrayList<>();
 
 	private static int[] parenthesisCounter = {0,0};
 
@@ -111,10 +111,9 @@ public class FileCompiler {
 
 	public void compile() throws Exception{
 
-
-//		for (BlockCompiler block : mySubBlocks) {
-//			block.compile();
-//		}
+		for (BlockCompiler block : mySubBlocks) {
+			block.compile();
+		}
 	}
 
 }
