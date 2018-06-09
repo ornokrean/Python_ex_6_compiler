@@ -9,11 +9,11 @@ String s;
 
 void boo(int a, int b, String s) {
 	if (true) {
-		boo(1,2,"hello");
-		while (false) {
-			soo(true);
-		}
-	}
+     		boo(1,2,"hello");
+     		while (false) {
+     			soo(true);
+     		}
+     	}
 	return;
 }
 

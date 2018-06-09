@@ -38,7 +38,11 @@ public class BlockCompiler extends FileCompiler {
     public void compile() throws Exception{
         // first off we check if the last 2 lines contains the return and "}"  statement.
         checkReturnStatment();
-        for (int i = start; i < end; i++) {
+        //check signature
+        int i = start;
+        while (i< end-1){
+            i++;
+
             LineCase lineCase = getLineCase(code.get(i));
             switch (lineCase){
                 case RETURN:
@@ -46,25 +50,37 @@ public class BlockCompiler extends FileCompiler {
                 case END_BLOCK:
                     break;
                 case IF_WHILE:
+                    i = subBlockGeneretor(i);
                     break;
                 case VAR_USAGE:
                     break;
                 case FUNCTION_CALL:
                     break;
                 case NO_MATCH:
-                    throw new Exception("bad line format");
+                    System.out.println(code.get(i));
+                    // raise exception is necessary
             }
         }
 
         //compiling my subBlocks ?
 
     }
+    private int subBlockGeneretor(int lineNumber){
+        return 0;
+    }
+
+
     private void   isBooleanConditionValid(String line)throws Exception{
          throw  new Exception("bad boolean input");
     }
+
+
     private void isVarUsageValid() throws Exception{
         throw  new Exception("bad variable usage input");
     }
+
+
+
 
 //](true|false|[-]?[0-9]+[.]?[0-9]*|[-]?[.][0-9]+)[)][\s]*[{][\s]*$
     private LineCase getLineCase(String line){
@@ -82,22 +98,22 @@ public class BlockCompiler extends FileCompiler {
             return LineCase.END_BLOCK;
         }
 
-
         //^[\s]*(return;)[\s]*^
         //[\\s]*((final)?[\\s]+(int|double|char|boolean|String)[\\s].*|(([a-zA-Z]*|[_])[\\w]+)[\\s]+[=].*)
         // return line case.
-        p =  Pattern.compile("^[\\s]*(return;)[\\s]*^");
+
+        p =  Pattern.compile("(return;)[\\s]*");
         m =  p.matcher(line);
         if (m.matches()){ return LineCase.RETURN; }
 
 
         // var usage call case
-        p =  Pattern.compile("[\\s]*((final)?[\\s]+(int|double|char|boolean|String)[\\s].*|(([a-zA-Z]*|[_])[\\w]+)[\\s]+[=].*)");
+        p =  Pattern.compile("((final)?[\\s]*(int|double|char|boolean|String)[\\s].*|(([a-zA-Z]*|[_])[\\w]+)[\\s]+[=].*)");
         m = p.matcher(line);
 
         if(m.matches()){ return LineCase.VAR_USAGE;}
 
-        p =  Pattern.compile("[\\s]*[a-zA-Z][\\w]+[(].*[)][\\s]*[;]");
+        p =  Pattern.compile("[a-zA-Z][\\w]*[(].*[)][\\s]*(;|[{])");
         m = p.matcher(line);
 
         if(m.matches()){ return LineCase.FUNCTION_CALL;}
@@ -106,12 +122,12 @@ public class BlockCompiler extends FileCompiler {
     }
 
     private void checkReturnStatment() throws Exception {
-        Pattern p =  Pattern.compile("^[\\s]*}[\\s]*$");
+        Pattern p =  Pattern.compile("}[\\s]*$");
         Matcher m = p.matcher(code.get(end));
         if (!m.matches()){
             throw new Exception("bad end of block");
         }
-        p =  Pattern.compile("^[\\s]*return;[\\s]*^");
+        p =  Pattern.compile("(return;)[\\s]*");
         m = p.matcher(code.get(end-1));
 
         if (!m.matches()){
