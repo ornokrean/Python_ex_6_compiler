@@ -19,4 +19,4 @@ int boo(int a, int b, String s) {
 
 void soo(boolean b) {
 	return;
-}
+    }
