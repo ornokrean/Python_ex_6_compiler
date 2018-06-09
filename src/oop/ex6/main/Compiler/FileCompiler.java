@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 
 public class FileCompiler {
 
+	public static final String EMPTY_LINE = "";
 	protected ArrayList<String> code = new ArrayList<>();
 
 	protected HashSet<String> functionsList;
@@ -20,7 +21,7 @@ public class FileCompiler {
 
 	private ArrayList<BlockCompiler> mySubBlocks = new ArrayList<>();
 
-	private static int[] parenthesisCounter = {0,0};
+	private int[] parenthesisCounter = {0,0};
 
 	private static final String CODE_REGEX = "(?:(?:(?:(?:void|if|while).*\\{)|\\}|.*[;]?))";
 	private static final Pattern CODE_PATTERN = Pattern.compile(CODE_REGEX);
@@ -28,8 +29,11 @@ public class FileCompiler {
 	private static final String NO_COMMENT_REGEX = "([^\\/]{2}.*|})";
 	private static final Pattern NO_COMMENT_PATTERN = Pattern.compile(NO_COMMENT_REGEX);
 
-	private static final String BAD_COMMENT_REGEX = "";
+	private static final String BAD_COMMENT_REGEX = "([\\s].*|[/*]+)";
 	private static final Pattern BAD_COMMENT_PATTERN = Pattern.compile(BAD_COMMENT_REGEX);
+
+	private static final String COMMENT_REGEX = "[\\s]*([/]|[/*])+.*";
+	private static final Pattern COMMENT_PATTERN = Pattern.compile(COMMENT_REGEX);
 
 	private static int lineNum;// TODO: this is a variable used only for tests. please remove before submit;
 
@@ -47,16 +51,19 @@ public class FileCompiler {
 	 * @param line the line to check
 	 * @return true iff the line is valid.
 	 */
-	private boolean validateLine(String line) {
+	private boolean validateLine(String line) throws Exception {
 		Matcher codePattern = CODE_PATTERN.matcher(line);
-		Matcher noComment = NO_COMMENT_PATTERN.matcher(line);
-		if (codePattern.matches()) { // if it is comment, lets check if the comment is valid:
-			return !noComment.matches();
+		Matcher comment = COMMENT_PATTERN.matcher(line);
+		Matcher badComment = BAD_COMMENT_PATTERN.matcher(line);
+
+		if (comment.matches()) { // if it is comment, lets check if the comment is valid:
+			if (badComment.matches()){
+				throw new Exception("bad comment in line "+ lineNum);
+			}
+		}else {
+			return codePattern.matches() && !line.equals(EMPTY_LINE);
 		}
-
-//		Matcher m2 = notCommentPattern.matcher(line);
-
-		return true;
+		return false;
 	}
 
 
@@ -66,20 +73,22 @@ public class FileCompiler {
 
 		while ((codeLine = codeReader.readLine()) != null) {
 			lineNum++;// TODO: this is a variable used only for tests. please remove before submit;
-			changeCounter(codeLine);
+			compileHelper.changeCounter(parenthesisCounter,codeLine);
 			if (validateLine(codeLine)) {
+				// we know the code is valid, no comment and can be any code line:
+
 				code.add(codeLine.replace("\t",""));
 			}
 		}
 		lineNum = -1;  // TODO: lineNum used only for tests. please remove before submit;
 
-		//FIX for tests only
+		//FIX for tests only, delete
 		for (String c : code) {
 			System.out.println(c);
 		}
 
 		// check counter at the end
-		checkCounter(parenthesisCounter[0] != 0, parenthesisCounter[1] != 0);
+		compileHelper.checkCounter(parenthesisCounter[0] != 0, parenthesisCounter[1] != 0);
 		codeReader.close();
 	}
 
@@ -87,29 +96,6 @@ public class FileCompiler {
 
 
 
-	private void changeCounter(String line) throws Exception {
-		Pattern notCommentPattern = Pattern.compile("([^/]{2}.*|}|\\{)");
-		Matcher m2 = notCommentPattern.matcher(line);
-		if (!m2.matches())
-			return;
-		updateCounter(line);
-		checkCounter(parenthesisCounter[0] < 0, parenthesisCounter[1] < 0);
-		// TODO: lineNum used only for tests. please remove before submit;
-
-	}
-
-	private void checkCounter(boolean b, boolean b2) throws Exception {
-		if (b || b2)
-			throw new Exception("problem with {}() in line number: " + lineNum);
-							// TODO: lineNum used only for tests. please remove before submit;
-	}
-
-	private void updateCounter(String line) {
-		parenthesisCounter[0] += line.length() - line.replace("{", "").length();
-		parenthesisCounter[0] -= line.length() - line.replace("}", "").length();
-		parenthesisCounter[1] += line.length() - line.replace("(", "").length();
-		parenthesisCounter[1] -= line.length() - line.replace(")", "").length();
-	}
 
 
 	public void compile() throws Exception{
