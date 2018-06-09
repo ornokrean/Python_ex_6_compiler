@@ -57,9 +57,7 @@ public class FileCompiler {
 		String codeLine;
 		Map<Character,Integer> counter = new HashMap<>();
 		counter.put('{',0);
-		counter.put('}',0);
 		counter.put('(',0);
-		counter.put(')',0);
 		while ((codeLine = codeReader.readLine()) != null) {
 			changeCounter(counter, codeLine);
 
@@ -68,8 +66,7 @@ public class FileCompiler {
 			}
 		}
 		// check counter at the end
-		if (!counter.get('{').equals(counter.get('}')) ||
-				!counter.get('(').equals(counter.get(')')))
+		if (!counter.get('{').equals(0) || !counter.get('(').equals(0))
 			throw new Exception("problem with {}()");
 		for (String c : code) {
 			System.out.println(c);
@@ -86,14 +83,9 @@ public class FileCompiler {
 		int count;
 
 
-			if ((count = line.length() - line.replace(par[i], "").length()) > 0) {
-				counter[0] += ((-1)^i)*count;
-
 
 		if (counter[0] < 0 || counter[1] < 0)
 			throw new Exception("problem with {}()");
-
-
 	}
 
 	public void compile() {
