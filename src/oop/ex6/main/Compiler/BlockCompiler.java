@@ -19,9 +19,9 @@ public class BlockCompiler extends FileCompiler {
         this.parentBlock = parentBlock;
     }
 
+
     @Override
     public void compile() {
-
 
         //compiling my subBlocks ?
         super.compile();

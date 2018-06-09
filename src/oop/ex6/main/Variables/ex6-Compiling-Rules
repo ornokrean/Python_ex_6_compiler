@@ -1,0 +1,180 @@
+ex6 guidelines for compiling s-java.
+
+Last modified 9.6.2018 by : Tomer Lankri.
+------------------------------------------------------------------------------------------------------------------------
+
+VARIABLES :
+
+---legal stuff:
+
+-Its possible to support ,or not to, in naming a variable in a protected word in java, such as : int while = 5;
+
+-Method parameters are local variables of the method!
+
+-In case of several variables with the same name a reference to a variable will reference the one in the most specific scope.
+
+
+-Only two kinds of variables, global and local.
+legal definition of a variable is :
+
+type name = value;
+
+
+
+-It is also legal to define a variable without declaring its value meaning :
+
+type name; (example : int a;)
+
+
+
+-It is also legal to define several variables in the same line :
+
+
+double a,b;
+
+char c = 'Z',f;
+
+boolean a,b,c,d = true , f = 20;
+
+
+
+-Name := any sequence of ([a-zA-Z]+|[_]+[a-zA-Z]+)[a-zA-Z_0-9]*
+
+
+---illegal stuff :
+
+
+-It is illegal to  declare a variable in 2 lines:
+
+int a
+= 5;    (an illegal statement).
+
+
+-There cannot be two global variables with the same name.though a local variable can have the same name as a global variable.
+
+-Two local variables cannot be initiated with the same name.
+
+-Illegal java modifiers : public/private/static.
+
+-Important : a ! local !  variable cannot be used unless its been assigned before, meaning if a variable was not initialised in its
+declaration, either it will not be used at all later, or the next time it is called is its assignment of value.
+
+-A global variable can be referenced before the line it was assigned of declared.
+
+-A global variable can only be assigned with another global variable only if it was already assigned.
+
+-In case of an variable that has not assigned a value, any method that calls him must assign a value to it first inside
+the method. ( here the request is trying to avoid the case of not assigning a value to a var and using it un-assigned
+since we do not know which method will be called before).
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+METHODS
+
+---legal stuff :
+
+- Name := as defined for a variable.  but cannot start with [0-9] or "_".
+
+- Parameters := A list seperated by commas of : valid type and a valid variable name (that has no value!)
+
+- Only void methods are supported.
+
+- Methods can call other methods in the file, regardless of their location.
+
+- Return statement can appear anywhere but must appear in the last line of the code like such:   return;
+
+- A method signature can contain the word "final" upon one of the parameters - it just mean its illegal for the method to change the value of the parameter.
+
+- A method must end with a '}'
+
+- A method can call itself (recursion is allowed).
+
+
+---illegal stuff :
+
+- Calling a method with incompatible variables, wrong number of variables, or uninitialised variables.
+
+- Its illegal to do method overloading, meaning creating 2 functions with the same name but different number of parameters.
+
+- illegal to declare a method inside a method
+
+------------------------------------------------------------------------------------------------------------------------
+
+IF/WHILE :
+
+---legal stuff:
+
+- The first line must end with a '{'
+ and the last line of the block must end with a '}' and nothing else, like in the a method block.
+
+- The condition inside the if must be boolean, as described above.
+
+- IF/WHILE blocks are regular block of code and can contain variable declaration and method calls etc.
+
+- IF/WHILE blocks can be nested as much as needed.
+
+- The '||' and '&&' statements can appear.
+
+---illegal stuff :
+
+- The '||' and '&&' statements must be separated by value of a kind meaning this is illegal : if(||a){ , if(a || && b).
+
+- The "if else","do/while","for","switch", are not required to be supported.
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+GENERAL STUFF :
+
+---legal stuff:
+
+-Necessary whitespaces :
+    - A methods name to the "void" - return type.
+    - A variable name to its type.
+    - A final modifier and variable type: finalString a = "a" - is illegal.
+
+- A legal line in s-java :
+
+- An empty line, \s should catch is, and should be ignored.
+
+- A comment line which starts with  //, nothing before the //, nor white spaces, anything can appear after the //.
+
+- A code line the must end with a ";" or "{" or "}".  whitespaces may appear before or after the suffixes. the suffix cannot be
+  moved to the next line instead.
+
+
+---illegal stuff:
+- Packages are not supported, not exceptions (includes try,catch,finally).
+
+- Each line of code must appear in a single line, also not two statements in one line.
+
+- Classes, interfaces, enums.
+
+- Javadoc and multiline comments "/**..*/"
+
+- Single line comments in the code, meaning after a code line writing ,  // something...
+
+- Operators (int a 3 - 5; , String b = "00" + "P")
+
+- Arrays are not supported.
+
+- String value := does not contain  \ or ' or " or ,
+
+- White spaces are usually ignored and can be anywhere, except inside reserved words and variable declarations
+  this is illegal : "i n t a =5;", "i f(a||b){"
+  and in illegal in the start of a comment meaning this is illegal : " \\comment"
+
+
+  ------------------------------------------------------------------------------------------------------------------------
+  int :=  can only get whole numbers.
+
+  double :=  can get a int or a double  (example :  2.58)
+
+  String := any number of characters between two  ""  (example : "sT98*^$&")
+
+  boolean := true,false or any number, int or double.
+
+  char := any character in a quotation mark (example : '&','1'...)
+
+  ------------------------------------------------------------------------------------------------------------------------
