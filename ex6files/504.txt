@@ -11,12 +11,11 @@ void foo() {
 
 	return;
 }
-
 void boo(int a, int b, int c1, String d) {
 	char e = c;
 	return;
-} 
-
-void doo(int a1, int a2) {
+}
+void doo(int a1, int a2){
 	return;
 }
+/**/
