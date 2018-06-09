@@ -83,17 +83,15 @@ public class FileCompiler {
 		int count;
 
 
-
-		if (counter[0] < 0 || counter[1] < 0)
-			throw new Exception("problem with {}()");
+//		if (counter[0] < 0 || counter[1] < 0)
+//			throw new Exception("problem with {}()");
+//	}
 	}
+	public void compile() throws Exception{
+//			for (BlockCompiler block : mySubBlocks) {
+//				block.compile();
+//			}
+		}
 
-	public void compile() {
-
-
-//		for (BlockCompiler block : mySubBlocks) {
-//			block.compile();
-//		}
-	}
 
 }

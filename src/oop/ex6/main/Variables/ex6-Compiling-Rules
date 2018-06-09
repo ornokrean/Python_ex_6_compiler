@@ -138,7 +138,7 @@ GENERAL STUFF :
 
 - An empty line, \s should catch is, and should be ignored.
 
-- A comment line which starts with  //, nothing before the //, nor white spaces, anything can appear after the //.
+- A comment line which starts with  "//", nothing before the "//", nor white spaces, anything can appear after the //.
 
 - A code line the must end with a ";" or "{" or "}".  whitespaces may appear before or after the suffixes. the suffix cannot be
   moved to the next line instead.

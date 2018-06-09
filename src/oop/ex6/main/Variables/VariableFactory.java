@@ -6,7 +6,8 @@ import java.util.regex.Pattern;
 
 public class VariableFactory {
     private static final String BAD_VARIABLE_DECLERATION = "ERROR: Wrong type variable in line : ";
-    public enum typeCases{
+
+    enum typeCases{
 
         BOOLEAN("boolean"), INT("int"), DOUBLE("double"), STRING("String"), CHAR("Char"),ISFINAL("final");
 
@@ -16,7 +17,6 @@ public class VariableFactory {
 
 
         typeCases(String string) {myType = string; }
-
         public String getMyType() {return myType;}
     }
 //    private static final String[] availableTypes = {"boolean","int","double","String","Char"};
@@ -59,43 +59,45 @@ public class VariableFactory {
         try{
             return Integer.parseInt(varValue);
         }catch (NumberFormatException e){
-            throw new ExceptionInInitializerError(BAD_VARIABLE_DECLERATION);
+            throw new ExceptionInInitializerError("bad int");
         }
     }
+
     private static double doubleHelper(String varValue) {
         try{
             return Double.parseDouble(varValue);
         }catch (NumberFormatException e){
-            throw new ExceptionInInitializerError(BAD_VARIABLE_DECLERATION);
+            throw new ExceptionInInitializerError("bad double");
         }
     }
 
     private static Boolean bolleanHelper(String varValue){
-        Pattern p = Pattern.compile("\b(true|false|[0-9]*[.]?[0-9]*)\b");
+        Pattern p = Pattern.compile("(true|false|[-]?[0-9]+[.]?[0-9]*|[-]?[.][0-9]+)\b");
         Matcher m = p.matcher(varValue);
-        if(!(m.matches())){throw new ExceptionInInitializerError(BAD_VARIABLE_DECLERATION);}
+        if(!(m.matches())){ throw new ExceptionInInitializerError("bad boolean");}
 
         if(varValue.equals("true")||varValue.equals("false")){
             return Boolean.parseBoolean(varValue);
         }
         else {
-            return (Double.parseDouble(varValue)==0.0);
+            return (Double.parseDouble(varValue) != 0.0);
         }
     }
 
     private static String stringHelper(String varValue){
-        Pattern p = Pattern.compile("[\"].*[\"]");
+        Pattern p = Pattern.compile("[\"][^\"]*[\"]");
         Matcher m = p.matcher(varValue);
-        if(!(m.matches())){throw new ExceptionInInitializerError(BAD_VARIABLE_DECLERATION);}
+        if(!(m.matches())){throw new ExceptionInInitializerError("bad string");}
 
         // to check boundaries.
         return varValue.substring(1,varValue.length()-1);
+
     }
 
     private static char  charHelper(String varValue){
-        Pattern p = Pattern.compile("[\'].?[\']");
+        Pattern p = Pattern.compile("[\'][^\'][\']");
         Matcher m = p.matcher(varValue);
-        if(!(m.matches())){throw new ExceptionInInitializerError(BAD_VARIABLE_DECLERATION);}
+        if(!(m.matches())){throw new ExceptionInInitializerError("bad char");}
 
         // to check boundaries.
         char charVal = varValue.charAt(1);
