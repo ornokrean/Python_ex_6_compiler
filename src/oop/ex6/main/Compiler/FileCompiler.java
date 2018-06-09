@@ -37,6 +37,7 @@ public class FileCompiler {
 
 	public FileCompiler(BufferedReader codeReader) throws IOException, Exception {
 		initiateCompiler(codeReader);
+
 	}
 
 	/*
@@ -45,15 +46,15 @@ public class FileCompiler {
 	 * @return true iff the line is valid.
 	 */
 	private boolean validateLine(String line) {
-//		Matcher codePattern = NO_COMMENT_PATTERN.matcher(line);
-
+		Matcher codePattern = CODE_PATTERN.matcher(line);
 		Matcher noComment = NO_COMMENT_PATTERN.matcher(line);
-		if (!noComment.matches()) { // if it is comment, lets check if the comment is valid:
-
+		if (codePattern.matches()) { // if it is comment, lets check if the comment is valid:
+			return noComment.matches();
 		}
+
 //		Matcher m2 = notCommentPattern.matcher(line);
 
-		return false;
+		return true;
 	}
 
 
