@@ -48,12 +48,15 @@ public class FileCompiler {
 //		Matcher codePattern = NO_COMMENT_PATTERN.matcher(line);
 
 		Matcher noComment = NO_COMMENT_PATTERN.matcher(line);
-		if (noComment.matches()) { // if it is comment, lets check if the comment is valid:
-//			Matcher m2 = notCommentPattern.matcher(line);
-			return noComment.matches();
+		if (!noComment.matches()) { // if it is comment, lets check if the comment is valid:
+
 		}
+//		Matcher m2 = notCommentPattern.matcher(line);
+
 		return false;
 	}
+
+
 
 	private void initiateCompiler(BufferedReader codeReader) throws IOException, Exception {
 		String codeLine;
@@ -61,17 +64,18 @@ public class FileCompiler {
 		while ((codeLine = codeReader.readLine()) != null) {
 			lineNum++;// TODO: this is a variable used only for tests. please remove before submit;
 			changeCounter(codeLine);
-
 			if (validateLine(codeLine)) {
 				code.add(codeLine);
-				// check counter at the end
 			}
 		}
 		lineNum = -1;  // TODO: lineNum used only for tests. please remove before submit;
 
+		//FIX for tests only
 		for (String c : code) {
 			System.out.println(c);
 		}
+
+		// check counter at the end
 		checkCounter(parenthesisCounter[0] != 0, parenthesisCounter[1] != 0);
 		codeReader.close();
 	}

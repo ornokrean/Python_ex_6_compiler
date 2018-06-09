@@ -1,7 +1,7 @@
 // A very complex test
 //I am just a comment
 //int a = 5;
-     //final int b = 3;
+//final int b = 3;
 
 void foo(int a, boolean b) {
 	// Hello
