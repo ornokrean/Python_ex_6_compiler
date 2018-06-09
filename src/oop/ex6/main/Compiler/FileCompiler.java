@@ -1,15 +1,12 @@
 package oop.ex6.main.Compiler;
 
 
-import com.sun.istack.internal.NotNull;
 import oop.ex6.main.Variables.Variable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,13 +16,23 @@ public class FileCompiler {
 
 	protected HashSet<String> functionsList;
 
-//    private BufferedReader codeReader;
-
 	protected HashSet<Variable> vars;
 
 	private BlockCompiler[] mySubBlocks;
 
+	private static int[] parenthesisCounter = {0,0};
+
+	private static final String CODE_REGEX = "(?:(?:(?:(?:void|if|while).*\\{)|\\}|.*[;]?))";
+	private static final Pattern CODE_PATTERN = Pattern.compile(CODE_REGEX);
+
+	private static final String NO_COMMENT_REGEX = "([^\\/]{2}.*|})";
+	private static final Pattern NO_COMMENT_PATTERN = Pattern.compile(NO_COMMENT_REGEX);
+
+	private static int lineNum;// TODO: this is a variable used only for tests. please remove before submit;
+
+
 	public FileCompiler() {
+
 	}
 
 	public FileCompiler(BufferedReader codeReader) throws IOException, Exception {
@@ -38,60 +45,76 @@ public class FileCompiler {
 	 * @return true iff the line is valid.
 	 */
 	private boolean validateLine(String line) {
-//		Pattern codeLinePattern = Pattern.compile("(?:(?:(?:void|if|while).*\\{)|\\}|[\\S^\\/]{2}.*;)");
-//		Pattern notCommentPattern = Pattern.compile("([^\\/]{2}.*|\\})");
+//		Matcher codePattern = NO_COMMENT_PATTERN.matcher(line);
 
-		Pattern codeLinePattern = Pattern.compile("(.*(?:(?:(?:void|if|while).*\\{)|\\}|[\\S^\\/]*.*[;]?))");
+		Matcher noComment = NO_COMMENT_PATTERN.matcher(line);
+		if (!noComment.matches()) { // if it is comment, lets check if the comment is valid:
 
-
-//		Pattern notCommentPattern = Pattern.compile("([^/]{2}.*|})");
-		Matcher m = codeLinePattern.matcher(line);
-		if (m.matches()) {
-//			Matcher m2 = notCommentPattern.matcher(line);
-			return m.matches();
 		}
+//		Matcher m2 = notCommentPattern.matcher(line);
+
 		return false;
 	}
 
+
+
 	private void initiateCompiler(BufferedReader codeReader) throws IOException, Exception {
 		String codeLine;
-		Map<Character,Integer> counter = new HashMap<>();
-		counter.put('{',0);
-		counter.put('(',0);
-		while ((codeLine = codeReader.readLine()) != null) {
-			changeCounter(counter, codeLine);
 
+		while ((codeLine = codeReader.readLine()) != null) {
+			lineNum++;// TODO: this is a variable used only for tests. please remove before submit;
+			changeCounter(codeLine);
 			if (validateLine(codeLine)) {
 				code.add(codeLine);
 			}
 		}
-		// check counter at the end
-		if (!counter.get('{').equals(0) || !counter.get('(').equals(0))
-			throw new Exception("problem with {}()");
+		lineNum = -1;  // TODO: lineNum used only for tests. please remove before submit;
+
+		//FIX for tests only
 		for (String c : code) {
 			System.out.println(c);
 		}
 
+		// check counter at the end
+		checkCounter(parenthesisCounter[0] != 0, parenthesisCounter[1] != 0);
 		codeReader.close();
 	}
 
-	private void changeCounter(Map counter, String line) throws Exception {
-		Pattern notCommentPattern = Pattern.compile("([^/]{2}.*|})");
+
+
+
+
+	private void changeCounter(String line) throws Exception {
+		Pattern notCommentPattern = Pattern.compile("([^/]{2}.*|}|\\{)");
 		Matcher m2 = notCommentPattern.matcher(line);
 		if (!m2.matches())
 			return;
-		int count;
+		updateCounter(line);
+		checkCounter(parenthesisCounter[0] < 0, parenthesisCounter[1] < 0);
+		// TODO: lineNum used only for tests. please remove before submit;
 
-
-//		if (counter[0] < 0 || counter[1] < 0)
-//			throw new Exception("problem with {}()");
-//	}
 	}
-	public void compile() throws Exception{
-//			for (BlockCompiler block : mySubBlocks) {
-//				block.compile();
-//			}
-		}
 
+	private void checkCounter(boolean b, boolean b2) throws Exception {
+		if (b || b2)
+			throw new Exception("problem with {}() in line number: " + lineNum);
+							// TODO: lineNum used only for tests. please remove before submit;
+	}
+
+	private void updateCounter(String line) {
+		parenthesisCounter[0] += line.length() - line.replace("{", "").length();
+		parenthesisCounter[0] -= line.length() - line.replace("}", "").length();
+		parenthesisCounter[1] += line.length() - line.replace("(", "").length();
+		parenthesisCounter[1] -= line.length() - line.replace(")", "").length();
+	}
+
+
+	public void compile() {
+
+
+//		for (BlockCompiler block : mySubBlocks) {
+//			block.compile();
+//		}
+	}
 
 }

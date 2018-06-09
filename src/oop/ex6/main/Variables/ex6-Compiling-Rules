@@ -7,41 +7,41 @@ VARIABLES :
 
 ---legal stuff:
 
--Its possible to support ,or not to, in naming a variable in a protected word in java, such as : int while = 5;
+-Its possible to support, or not to, in naming a variable in a protected word in java, such as: int while = 5;
 
 -Method parameters are local variables of the method!
 
 -In case of several variables with the same name a reference to a variable will reference the one in the most specific scope.
 
 
--Only two kinds of variables, global and local.
-legal definition of a variable is :
+-Only two kinds of variables; global and local.
+legal definition of a variable is:
 
-type name = value;
-
-
-
--It is also legal to define a variable without declaring its value meaning :
-
-type name; (example : int a;)
+                            type name = value;
 
 
+-It is also legal to define a variable without declaring its value meaning:
 
--It is also legal to define several variables in the same line :
-
-
-double a,b;
-
-char c = 'Z',f;
-
-boolean a,b,c,d = true , f = 20;
+                            type name; (example: int a; )
 
 
 
--Name := any sequence of ([a-zA-Z]+|[_]+[a-zA-Z]+)[a-zA-Z_0-9]*
+-It is also legal to define several variables in the same line:
+
+                            double a,b;
+
+                            char c = 'Z',f;
+
+                            boolean a,b,c,d = true , f = 20;
 
 
----illegal stuff :
+
+-Name:= any sequence matching the rule: ([a-zA-Z]+|[_]+[a-zA-Z]+)[a-zA-Z_0-9]*
+(meaning: first letter can be the character "_" but it must be followed with a letter. all number and letters
+allowed)
+
+
+---illegal stuff:
 
 
 -It is illegal to  declare a variable in 2 lines:
@@ -50,22 +50,24 @@ int a
 = 5;    (an illegal statement).
 
 
--There cannot be two global variables with the same name.though a local variable can have the same name as a global variable.
+-There cannot be two global variables with the same name. though a local variable can have the same name as a
+global variable.
 
 -Two local variables cannot be initiated with the same name.
 
--Illegal java modifiers : public/private/static.
+-Illegal java modifiers: public/private/static.
 
--Important : a ! local !  variable cannot be used unless its been assigned before, meaning if a variable was not initialised in its
-declaration, either it will not be used at all later, or the next time it is called is its assignment of value.
+-Important : a ! local !  variable cannot be used unless its been assigned before, meaning if a variable was
+not initialised in its declaration, either it will not be used at all later, or the next time it is called is
+its assignment of value.
 
 -A global variable can be referenced before the line it was assigned of declared.
 
 -A global variable can only be assigned with another global variable only if it was already assigned.
 
--In case of an variable that has not assigned a value, any method that calls him must assign a value to it first inside
-the method. ( here the request is trying to avoid the case of not assigning a value to a var and using it un-assigned
-since we do not know which method will be called before).
+-In case of an variable that has not assigned a value, any method that calls him must assign a value to it
+first inside the method. (here the request is trying to avoid the case of not assigning a value to a var and
+using it un-assigned since we do not know which method will be called before).
 
 
 ------------------------------------------------------------------------------------------------------------------------
@@ -145,6 +147,8 @@ GENERAL STUFF :
 
 
 ---illegal stuff:
+
+
 - Packages are not supported, not exceptions (includes try,catch,finally).
 
 - Each line of code must appear in a single line, also not two statements in one line.
