@@ -37,7 +37,6 @@ public class FileCompiler {
 
 	public FileCompiler(BufferedReader codeReader) throws IOException, Exception {
 		initiateCompiler(codeReader);
-
 	}
 
 	/*
@@ -46,15 +45,15 @@ public class FileCompiler {
 	 * @return true iff the line is valid.
 	 */
 	private boolean validateLine(String line) {
-		Matcher codePattern = CODE_PATTERN.matcher(line);
-		Matcher noComment = NO_COMMENT_PATTERN.matcher(line);
-		if (codePattern.matches()) { // if it is comment, lets check if the comment is valid:
-			return noComment.matches();
-		}
+//		Matcher codePattern = NO_COMMENT_PATTERN.matcher(line);
 
+		Matcher noComment = NO_COMMENT_PATTERN.matcher(line);
+		if (!noComment.matches()) { // if it is comment, lets check if the comment is valid:
+
+		}
 //		Matcher m2 = notCommentPattern.matcher(line);
 
-		return true;
+		return false;
 	}
 
 
@@ -111,6 +110,7 @@ public class FileCompiler {
 
 
 	public void compile() throws Exception{
+		mySubBlocks.add(new BlockCompiler(0,code.size(),this));
 
 		for (BlockCompiler block : mySubBlocks) {
 			block.compile();
