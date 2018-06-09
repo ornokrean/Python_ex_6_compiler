@@ -28,6 +28,9 @@ public class FileCompiler {
 	private static final String NO_COMMENT_REGEX = "([^\\/]{2}.*|})";
 	private static final Pattern NO_COMMENT_PATTERN = Pattern.compile(NO_COMMENT_REGEX);
 
+	private static final String BAD_COMMENT_REGEX = "";
+	private static final Pattern BAD_COMMENT_PATTERN = Pattern.compile(BAD_COMMENT_REGEX);
+
 	private static int lineNum;// TODO: this is a variable used only for tests. please remove before submit;
 
 
@@ -48,7 +51,7 @@ public class FileCompiler {
 		Matcher codePattern = CODE_PATTERN.matcher(line);
 		Matcher noComment = NO_COMMENT_PATTERN.matcher(line);
 		if (codePattern.matches()) { // if it is comment, lets check if the comment is valid:
-			return noComment.matches();
+			return !noComment.matches();
 		}
 
 //		Matcher m2 = notCommentPattern.matcher(line);
@@ -65,7 +68,7 @@ public class FileCompiler {
 			lineNum++;// TODO: this is a variable used only for tests. please remove before submit;
 			changeCounter(codeLine);
 			if (validateLine(codeLine)) {
-				code.add(codeLine);
+				code.add(codeLine.replace("\t",""));
 			}
 		}
 		lineNum = -1;  // TODO: lineNum used only for tests. please remove before submit;
