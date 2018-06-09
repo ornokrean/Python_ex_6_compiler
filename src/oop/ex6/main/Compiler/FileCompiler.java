@@ -109,7 +109,7 @@ public class FileCompiler {
 	}
 
 
-	public void compile() {
+	public void compile() throws Exception{
 
 
 //		for (BlockCompiler block : mySubBlocks) {
