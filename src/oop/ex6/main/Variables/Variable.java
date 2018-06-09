@@ -26,5 +26,17 @@ public  class Variable<T> {
 		this.name = name;
 		this.value = value;
 	}
+
+	public boolean isFinal() {
+		return isFinal;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public T getValue() {
+		return value;
+	}
 }
 

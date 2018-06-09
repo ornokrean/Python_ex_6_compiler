@@ -15,12 +15,12 @@ public class VariableFactory {
         private final String WORDREGEX = "\\b[a-zA-z_0-9]*\\b";
 
 
-
         typeCases(String string) {myType = string; }
 
         public String getMyType() {return myType;}
     }
 //    private static final String[] availableTypes = {"boolean","int","double","String","Char"};
+
 
     public static Variable variableFactory(String isFinal, String type, String varName,String varValue) throws ExceptionInInitializerError{
         Boolean finalFlag = false;
@@ -28,26 +28,26 @@ public class VariableFactory {
 
         if(type.equals(typeCases.BOOLEAN.myType)){
             Boolean bool = bolleanHelper(varValue);
-            return new Variable<Boolean>(finalFlag,varName,bool);
+            return new Variable<>(finalFlag,varName,bool);
 
 
         }else if(type.equals(typeCases.INT.myType)){
             int num = intHelper(varValue);
-            return new Variable<Integer>(finalFlag,varName,num);
+            return new Variable<>(finalFlag,varName,num);
 
 
         }else if(type.equals(typeCases.DOUBLE.myType)){
             double num = doubleHelper(varValue);
-            return new Variable<Double>(finalFlag,varName,num);
+            return new Variable<>(finalFlag,varName,num);
 
 
         }else if(type.equals(typeCases.STRING.myType)){
             String string = stringHelper(varValue);
-            return new Variable<String>(finalFlag,varName,string);
+            return new Variable<>(finalFlag,varName,string);
 
         }else if(type.equals(typeCases.CHAR.myType)){
             char charVar = charHelper(varValue);
-            return new Variable<Character>(finalFlag,varName,charVar);
+            return new Variable<>(finalFlag,varName,charVar);
         }
         else {
             throw new ExceptionInInitializerError(BAD_VARIABLE_DECLERATION);
@@ -88,7 +88,7 @@ public class VariableFactory {
         Matcher m = p.matcher(varValue);
         if(!(m.matches())){throw new ExceptionInInitializerError(BAD_VARIABLE_DECLERATION);}
 
-        // to check bounderis.
+        // to check boundaries.
         return varValue.substring(1,varValue.length()-1);
     }
 
@@ -97,7 +97,7 @@ public class VariableFactory {
         Matcher m = p.matcher(varValue);
         if(!(m.matches())){throw new ExceptionInInitializerError(BAD_VARIABLE_DECLERATION);}
 
-        // to check bounderis.
+        // to check boundaries.
         char charVal = varValue.charAt(1);
         return charVal;
     }
