@@ -23,11 +23,11 @@ public class FileCompiler {
 
 	private int[] parenthesisCounter = {0,0};
 
-	private static final String CODE_REGEX = "(?:(?:(?:(?:void|if|while).*\\{)|\\}|.*[;]?))";
+	private static final String CODE_REGEX = "[\\s]*(?:(?:(?:(?:void|if|while).*\\{)|\\}|.*[;]))";
 	private static final Pattern CODE_PATTERN = Pattern.compile(CODE_REGEX);
 
-	private static final String NO_COMMENT_REGEX = "([^\\/]{2}.*|})";
-	private static final Pattern NO_COMMENT_PATTERN = Pattern.compile(NO_COMMENT_REGEX);
+//	private static final String NO_COMMENT_REGEX = "([^\\/]{2}.*|})";
+//	private static final Pattern NO_COMMENT_PATTERN = Pattern.compile(NO_COMMENT_REGEX);
 
 	private static final String BAD_COMMENT_REGEX = "([\\s].*|[/*]+)";
 	private static final Pattern BAD_COMMENT_PATTERN = Pattern.compile(BAD_COMMENT_REGEX);
@@ -60,6 +60,8 @@ public class FileCompiler {
 			if (badComment.matches()){
 				throw new Exception("bad comment in line "+ lineNum);
 			}
+		}else if (!codePattern.matches() && !line.equals(EMPTY_LINE)){
+			throw new Exception("bad comment in line "+ lineNum);
 		}else {
 			return codePattern.matches() && !line.equals(EMPTY_LINE);
 		}

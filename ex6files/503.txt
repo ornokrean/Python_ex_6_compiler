@@ -10,7 +10,7 @@ void foo(int a, boolean b) {
 }
 
 void doo() {
-	if (true) {
+    if (true) {
 		return;
 	}
 	goo(5, 44);
