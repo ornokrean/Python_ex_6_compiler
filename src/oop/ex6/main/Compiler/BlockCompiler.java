@@ -14,9 +14,7 @@ public class BlockCompiler extends FileCompiler {
 
     private static final String VAR_DECLERATION = "(final)?[\\s]+(int|double|char|boolean|String)[\\s].*";
 
-    enum LineCase {
-         IF_WHILE,FUNCTION_CALL,VAR_USAGE,RETURN,END_BLOCK,NO_MATCH;
-     }
+    enum LineCase {IF_WHILE,FUNCTION_CALL,VAR_USAGE,RETURN,END_BLOCK,NO_MATCH}
 
 
     public BlockCompiler(int start, int end,FileCompiler myCompiler) {
@@ -60,13 +58,21 @@ public class BlockCompiler extends FileCompiler {
                     System.out.println(code.get(i));
                     // raise exception is necessary
             }
+            for (BlockCompiler subblock:mySubBlocks
+                 ) {
+                subblock.compile();
+            }
         }
-
-        //compiling my subBlocks ?
-
     }
-    private int subBlockGeneretor(int lineNumber){
-        return 0;
+    private int subBlockGeneretor(int lineNumber) throws Exception{
+        int startOfSubblock = lineNumber;
+        compileHelper.changeCounter(parenthesisCounter,code.get(lineNumber));
+        while (parenthesisCounter[0] != 0){
+            lineNumber++;
+            compileHelper.changeCounter(parenthesisCounter,code.get(lineNumber));
+        }
+        mySubBlocks.add(new BlockCompiler(startOfSubblock,lineNumber,myCompiler));
+        return lineNumber;
     }
 
 

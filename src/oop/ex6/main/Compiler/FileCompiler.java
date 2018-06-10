@@ -19,9 +19,9 @@ public class FileCompiler {
 
 	protected HashSet<Variable> vars;
 
-	private ArrayList<BlockCompiler> mySubBlocks = new ArrayList<>();
+	protected ArrayList<BlockCompiler> mySubBlocks = new ArrayList<>();
 
-	private int[] parenthesisCounter = {0,0};
+	protected int[] parenthesisCounter = {0,0};
 
 	private static final String CODE_REGEX = "[\\s]*(?:(?:(?:(?:void|if|while).*\\{)|\\}|.*[;]))";
 	private static final Pattern CODE_PATTERN = Pattern.compile(CODE_REGEX);
@@ -101,7 +101,7 @@ public class FileCompiler {
 
 
 	public void compile() throws Exception{
-		mySubBlocks.add(new BlockCompiler(0,code.size(),this));
+		mySubBlocks.add(new BlockCompiler(1,8,this));
 
 		for (BlockCompiler block : mySubBlocks) {
 			block.compile();
