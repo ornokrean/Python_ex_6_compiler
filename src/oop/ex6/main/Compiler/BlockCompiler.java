@@ -126,6 +126,27 @@ public class BlockCompiler extends FileCompiler {
 
         return LineCase.NO_MATCH;//TODO take care of return
     }
+    public int generateSubBlocks(String line,int lineNumber) throws Exception{
+        int endline = lineNumber;
+
+        Pattern p1 =  Pattern.compile("(void)\\s+[a-zA-Z][\\w]*[(].*[)][\\s]*(;|[{])");
+        Matcher m1 = p1.matcher(line);
+
+//        if(m1.matches()){ return LineCase.FUNCTION_CALL;}
+
+        // if or while case.
+        Pattern p2 =  Pattern.compile("^[\\s]*(if|while)[\\s]*[(].+[)][\\s]*[{]");
+        Matcher m2 = p2.matcher(line);
+
+        if(m2.matches() || m1.matches()){
+            compileHelper.changeCounter(parenthesisCounter,code.get(endline));
+            while (parenthesisCounter[0] != 0){
+                endline++;
+                compileHelper.changeCounter(parenthesisCounter,code.get(endline));
+            }
+        }
+        return endline;
+    }
 
     private void checkReturnStatment() throws Exception {
         Pattern p =  Pattern.compile("}[\\s]*$");
