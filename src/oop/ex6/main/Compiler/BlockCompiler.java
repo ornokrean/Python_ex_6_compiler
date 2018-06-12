@@ -45,10 +45,10 @@ public class BlockCompiler extends FileCompiler {
 
 	private int subBlockGeneretor(int lineNumber) throws Exception {
 		int startOfSubblock = lineNumber;
-		compileHelper.changeCounter(parenthesisCounter, code.get(lineNumber));
+//		compileHelper.changeCounter(parenthesisCounter, code.get(lineNumber));
 		while (parenthesisCounter[0] != 0) {
 			lineNumber++;
-			compileHelper.changeCounter(parenthesisCounter, code.get(lineNumber));
+//			compileHelper.changeCounter(parenthesisCounter, code.get(lineNumber));
 		}
 		mySubBlocks.add(new BlockCompiler(startOfSubblock, lineNumber, myCompiler, this));
 		return lineNumber;
@@ -92,7 +92,7 @@ public class BlockCompiler extends FileCompiler {
 		p = Pattern.compile("((final)?[\\s]*(int|double|char|boolean|String)[\\s].*|(([a-zA-Z]*|[_])[\\w]+)[\\s]+[=].*)");
 		m = p.matcher(line);
 		if (m.matches()) {
-			return LineCase.VAR_USAGE;
+			return 0;
 		}
 
 
@@ -100,9 +100,8 @@ public class BlockCompiler extends FileCompiler {
 		p = Pattern.compile("[a-zA-Z][\\w]*[(].*[)][\\s]*(;|[{])");
 		m = p.matcher(line);
 		if (m.matches()) {
-			return LineCase.FUNCTION_CALL;
+			return 0;
 		}
-
 
 		throw new Exception("No match for line");
 	}

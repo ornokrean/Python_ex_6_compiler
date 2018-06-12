@@ -6,14 +6,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class compileHelper {
+	private FileCompiler compiler;
+	compileHelper(FileCompiler comp) {
+		this.compiler = comp;
+	}
 
-	static void changeCounter(int[] parenthesisCounter, String line) throws Exception {
+	private void changeCounter() throws Exception {
 		Pattern notCommentPattern = Pattern.compile("([^/]{2}.*|}|\\{)");
-		Matcher m2 = notCommentPattern.matcher(line);
+		Matcher m2 = notCommentPattern.matcher(compiler.codeLine);
 		if (!m2.matches())
 			return;
-		updateCounter(parenthesisCounter, line);
-		checkCounter(parenthesisCounter[0] < 0, parenthesisCounter[1] < 0);
+		updateCounter(compiler.parenthesisCounter, compiler.codeLine);
+		checkCounter(compiler.parenthesisCounter[0] < 0, compiler.parenthesisCounter[1] < 0);
 		// TODO: lineNum used only for tests. please remove before submit;
 
 	}
@@ -29,17 +33,39 @@ public class compileHelper {
 		parenthesisCounter[1] += line.length() - line.replace("(", "").length();
 		parenthesisCounter[1] -= line.length() - line.replace(")", "").length();
 	}
-	static Variable checkVariableAssignment(String line){
-		// is it a new variable declaration?
-		Pattern p  = Pattern.compile("(final)?[\\s]*(int|double|char|boolean|String)[\\s].*|");
-		Matcher m = p.matcher(line);
-		if(m.matches()){
-
+	private void newBlockHelper() {
+		if (compiler.parBefore == 0 && compiler.parenthesisCounter[0] == 1) {
+			// a new block is in the block!
+			compiler.blockStart = compiler.lineNum;
+		} else if (compiler.parBefore == 1 && compiler.parenthesisCounter[0] == 0) {
+			//it is the end of the block:
+			compiler.mySubBlocks.add(new BlockCompiler(compiler.blockStart,compiler.lineNum,compiler,true));
 		}
-
-		return null;
+	}
+	
+	public void compileLine() throws Exception{
+		compiler.parBefore = compiler.parenthesisCounter[0];
+		changeCounter();
+		// check for the new block indexes, if needed.
+		this.newBlockHelper();
 	}
 
-
+	
+	
+	
+	
 	// (([a-zA-Z]*|[_])[\w]+)[\s]+[=].*) regex for var name.
+
+
+
+	//	static Variable checkVariableAssignment(String line){
+//		// is it a new variable declaration?
+//		Pattern p  = Pattern.compile("(final)?[\\s]*(int|double|char|boolean|String)[\\s].*|");
+//		Matcher m = p.matcher(line);
+//		if(m.matches()){
+//
+//		}
+//		return null;
+//	}
+
 }
