@@ -1,5 +1,7 @@
 package oop.ex6.main.Compiler;
 
+import oop.ex6.main.Variables.Variable;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,5 +29,17 @@ public class compileHelper {
 		parenthesisCounter[1] += line.length() - line.replace("(", "").length();
 		parenthesisCounter[1] -= line.length() - line.replace(")", "").length();
 	}
+	static Variable checkVariableAssignment(String line){
+		// is it a new variable declaration?
+		Pattern p  = Pattern.compile("(final)?[\\s]*(int|double|char|boolean|String)[\\s].*|");
+		Matcher m = p.matcher(line);
+		if(m.matches()){
 
+		}
+
+		return null;
+	}
+
+
+	// (([a-zA-Z]*|[_])[\w]+)[\s]+[=].*) regex for var name.
 }
