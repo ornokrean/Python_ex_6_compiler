@@ -31,7 +31,7 @@ public class compileHelper {
 		parenthesisCounter[1] += line.length() - line.replace("(", "").length();
 		parenthesisCounter[1] -= line.length() - line.replace(")", "").length();
 	}
-	private void newBlockHelper() {
+	private void newBlockHelper() throws Exception {
 		if (compiler.parentesisCountBefore == 0 && compiler.parenthesisCounter[0] == 1) {
 			// a new block is in the block!
 			compiler.blockStartIndex = compiler.lineNum;

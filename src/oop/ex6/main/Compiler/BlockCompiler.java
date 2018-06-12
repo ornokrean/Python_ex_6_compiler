@@ -1,6 +1,8 @@
 package oop.ex6.main.Compiler;
 
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,18 +16,29 @@ public class BlockCompiler extends FileCompiler {
 	boolean isFunctionBlock = false;
 	private BlockCompiler parentBlock = null;
 
-	public BlockCompiler(int start, int end, FileCompiler myCompiler, Boolean isFunctionBlock) {
+	public BlockCompiler(int start, int end, FileCompiler myCompiler, Boolean isFunctionBlock) throws Exception{
+		super();
 		this.start = start;
 		this.end = end;
 		this.myCompiler = myCompiler;
 		this.code = myCompiler.code;
 		this.isFunctionBlock = isFunctionBlock;
+		initiateBlock();
 	}
 
 
-	public BlockCompiler(int start, int end, FileCompiler myCompiler, BlockCompiler parentBlock) {
+	public BlockCompiler(int start, int end, FileCompiler myCompiler, BlockCompiler parentBlock) throws  Exception{
 		this(start, end, myCompiler, false);
 		this.parentBlock = parentBlock;
+	}
+
+
+	void initiateBlock() throws IOException, Exception {
+		for (int i = start; i <= end; i++) {
+			currentCodeLine = code.get(i);
+			lineNum = i;
+			compileHelper.compileLine();
+		}
 	}
 
 	@Override

@@ -34,7 +34,6 @@ public class FileCompiler {
 
 
 	public FileCompiler() {
-
 	}
 
 	public FileCompiler(BufferedReader codeReader) throws IOException, Exception {
@@ -66,7 +65,7 @@ public class FileCompiler {
 	}
 
 
-	private void initiateCompiler(BufferedReader codeReader) throws IOException, Exception {
+	 void initiateCompiler(BufferedReader codeReader) throws IOException, Exception {
 
 		// FIX TODO FIX what to do with globals? which block will handle?
 		while ((currentCodeLine = codeReader.readLine()) != null) {
