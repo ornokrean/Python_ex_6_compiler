@@ -1,0 +1,606 @@
+20:52:11
+
+school solution#User solution#result#Test name
+
+
+while testing /BaraksTests/variables/74.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++void foo() {
+int a = 3;
+if (true) {
+}
+int x = a;
+return;
+}
+Index: 8, Size: 7
+
+
+while testing /SchoolTests/test411.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++int a =               5;
+Index: 8, Size: 1
+1
+
+
+while testing /BaraksTests/variables/15.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++int eger = 8;
+char mander = 'a';
+double d = "banana";
+String attached = "why";
+boolean sheu = true;
+Index: 8, Size: 5
+
+
+while testing /SchoolTests/test454.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++final int a = 5;
+void foo() {
+a = 4;
+return;
+}
+Index: 8, Size: 5
+1
+
+
+while testing /BaraksTests/variables/50.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++int a = 3;
+double b = a;
+Index: 8, Size: 2
+
+
+while testing /SchoolTests/test264.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++void foo(int a) {
+return 8;
+}
+Index: 8, Size: 3
+1
+
+
+while testing /BaraksTests/variables/90.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++private int x = 3;
+Index: 8, Size: 1
+
+
+while testing /SchoolTests/test221.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++void foo() {
+String a;
+return;
+}
+Index: 8, Size: 4
+1
+
+
+while testing /BaraksTests/variables/28.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++int a;
+int b = a;
+Index: 8, Size: 2
+
+
+while testing /BaraksTests/variables/92.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++static int x = 3;
+Index: 8, Size: 1
+
+
+while testing /SchoolTests/test469.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++void Ab() {
+return;
+}
+Index: 8, Size: 3
+1
+
+
+while testing /BaraksTests/variables/17.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++int eger = 8;
+char mander = 'a';
+double d = 0;
+String attached = '3';
+boolean sheu = true;
+Index: 8, Size: 5
+
+
+while testing /SchoolTests/test301.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++void foo() {
+boolean b = true;
+if (b) {
+}
+return;
+}
+Index: 8, Size: 6
+1
+
+
+while testing /BaraksTests/variables/52.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++double a='a';
+double b = a;
+Index: 8, Size: 2
+
+
+while testing /SchoolTests/test045.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++char a = 0.5;
+Index: 8, Size: 1
+1
+
+
+while testing /BaraksTests/variables/33.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++String a = "a";
+int b = a;
+Index: 8, Size: 2
+
+
+while testing /SchoolTests/test238.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++void foo() {
+final double a;
+return;
+}
+Index: 8, Size: 4
+1
+
+
+while testing /BaraksTests/variables/76.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++void foo() {
+int a = 3;
+if (true) {
+while (true) {
+int x = a;
+}
+}
+return;
+}
+bad end of block
+
+
+while testing /SchoolTests/test024.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++String a = 0.5;
+Index: 8, Size: 1
+1
+
+
+while testing /BaraksTests/variables/37.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++int a = 3;
+char b = a;
+Index: 8, Size: 2
+
+
+while testing /SchoolTests/test061.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++void a;
+Index: 8, Size: 1
+1
+
+
+while testing /BaraksTests/variables/72.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++void foo() {
+int x = a;
+return;
+}
+double a = 3;
+Index: 8, Size: 5
+
+
+while testing /SchoolTests/test325.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++void foo() {
+boolean b = true;
+if (b || false) {
+}
+return;
+}
+Index: 8, Size: 6
+1
+
+
+while testing /BaraksTests/variables/13.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++int eger = 8;
+char mander = 'a';
+double d = '3';
+String attached = "why";
+boolean sheu = true;
+Index: 8, Size: 5
+
+
+while testing /SchoolTests/test408.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++void foo() {
+int a;
+int a;
+return;
+}
+Index: 8, Size: 5
+1
+
+
+while testing /BaraksTests/variables/56.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++boolean a,b,c;
+Index: 8, Size: 1
+
+
+while testing /SchoolTests/test435.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++bad code syntax in line 1
+1
+
+
+while testing /BaraksTests/variables/11.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++int eger = 8;
+char mander = 'a';
+double d = 0.7D;
+String attached = "why";
+boolean sheu = true;
+Index: 8, Size: 5
+
+
+while testing /SchoolTests/test470.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++void _b() {
+return;
+}
+Index: 8, Size: 3
+1
+
+
+while testing /BaraksTests/variables/54.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++boolean a = true, b = false;
+Index: 8, Size: 1
+
+
+while testing /SchoolTests/test019.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++final boolean a = true;
+Index: 8, Size: 1
+1
+
+
+while testing /BaraksTests/variables/69.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++int a = 3;
+void foo() {
+int x = a;
+return;
+}
+Index: 8, Size: 5
+
+
+while testing /SchoolTests/test104.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++bad code syntax in line 0
+1
+
+
+while testing /BaraksTests/variables/94.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++boolean x = 3 == 3;
+Index: 8, Size: 1
+
+
+while testing /SchoolTests/test205.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++bad code syntax in line 2
+1
+
+
+while testing /BaraksTests/variables/08.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++int eger = 8;
+char mander = 0;
+double d = 0.7;
+String attached = "why";
+boolean sheu = true;
+Index: 8, Size: 5
+
+
+while testing /SchoolTests/test437.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++bad code syntax in line 4
+1
+
+
+while testing /BaraksTests/variables/35.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++char a = '3';
+char b = a;
+Index: 8, Size: 2
+
+
+while testing /SchoolTests/test472.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++int a;
+void a() {
+return;
+}
+Index: 8, Size: 4
+1
+
+
+while testing /BaraksTests/variables/70.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++void foo() {
+int x = a;
+return;
+}
+int a = 3;
+Index: 8, Size: 5
+
+
+while testing /SchoolTests/test242.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++void foo() {
+char a = 'a';
+return;
+}
+Index: 8, Size: 4
+1
+
+
+while testing /BaraksTests/structure/04.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++Index: 8, Size: 0
+
+
+while testing /SchoolTests/test207.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++void foo() {
+int a = hhh;
+return;
+}
+Index: 8, Size: 4
+1
+
+
+while testing /BaraksTests/structure/20.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++problem with {}()
+
+
+while testing /SchoolTests/test106.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++void foo() {
+return;
+}
+Index: 8, Size: 3
+1
+
+
+while testing /BaraksTests/structure/22.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++bad code syntax in line 6
+
+
+while testing /SchoolTests/test327.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++void foo() {
+boolean a = true;
+int b = 1;
+while (a || b) {
+}
+return;
+}
+Index: 8, Size: 7
+1
+
+
+while testing /BaraksTests/structure/06.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++int x;
+Index: 8, Size: 1
+
+
+while testing /SchoolTests/test026.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++final String a;
+Index: 8, Size: 1
+1
+
+
+while testing /SchoolTests/test063.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++void a = 0.55;
+Index: 8, Size: 1
+1
+
+
+while testing /BaraksTests/structure/02.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++bad comment in line 1
+
+
+while testing /SchoolTests/test002.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++int a = 5;
+Index: 8, Size: 1
+1
+
+
+while testing /BaraksTests/structure/24.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++void foo() {
+if (true);
+return;
+}
+Index: 8, Size: 4
+
+
+while testing /SchoolTests/test047.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++char a = 'hhh';
+Index: 8, Size: 1
+1
+
+
+while testing /BaraksTests/structure/19.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++void foo() {
+return;
+problem with {}()
+
+
+while testing /SchoolTests/test303.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++void foo() {
+if (false) {
+}
+return;
+}
+Index: 8, Size: 5
+1
+
+
+while testing /BaraksTests/structure/23.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++bad code syntax in line 2
+
+
+while testing /SchoolTests/test413.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++foo                (            5          , 7   );
+void foo(int b, int c) {
+return;
+}
+Index: 8, Size: 4
+1
+
+
+while testing /BaraksTests/structure/07.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++int x ;
+Index: 8, Size: 1
+
+
+while testing /BaraksTests/structure/05.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++bad code syntax in line 1
+
+
+while testing /SchoolTests/test456.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++void foo() {
+final int a = 5;
+a = 6;
+return;
+}
+Index: 8, Size: 5
+1
+
+
+while testing /BaraksTests/structure/21.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++bad code syntax in line 2
+
+
+while testing /SchoolTests/test266.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++int a = 5;
+void foo() {
+a = 4;
+return;
+}
+Index: 8, Size: 5
+1
+
+
+while testing /BaraksTests/structure/18.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++bad code syntax in line 3
+
+
+while testing /SchoolTests/test223.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++void foo() {
+String a = 5;
+return;
+}
+Index: 8, Size: 4
+1
+
+
+while testing /BaraksTests/structure/25.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++bad code syntax in line 5
+
+
+while testing /SchoolTests/test307.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++void foo() {
+char b = '5';
+if (b) {
+}
+return;
+}
+Index: 8, Size: 6
+1
+
+
+while testing /BaraksTests/structure/01.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++Index: 8, Size: 0
+
+
+while testing /SchoolTests/test006.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++int a = "hello";
+Index: 8, Size: 1
+1
+
+
+while testing /BaraksTests/structure/03.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++Index: 8, Size: 0
+
+
+while testing /SchoolTests/test043.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++char a = '%';
+Index: 8, Size: 1
+1
+
+
+while testing /BaraksTests/structure/16.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++bad code syntax in line 0
+
+
+while testing /SchoolTests/test262.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++int a = 5;
+void foo() {
+return a;
+}
+Index: 8, Size: 4
+1
+
+
+while testing /BaraksTests/structure/14.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++bad code syntax in line 1
+
+
+while testing /SchoolTests/test227.sjava, Your program printed something that is not '1' or '0'.
+The prints (or errors) were:
++void foo() {
+final String a = "hhh";
+return;
+}
+Index: 8, Size: 4
+1
+
