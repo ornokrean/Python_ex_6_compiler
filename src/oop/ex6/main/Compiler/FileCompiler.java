@@ -19,27 +19,18 @@ public class FileCompiler {
 	private static final Pattern BAD_COMMENT_PATTERN = Pattern.compile(BAD_COMMENT_REGEX);
 	private static final String COMMENT_REGEX = "[\\s]*([/]|[/*])+.*";
 	private static final Pattern COMMENT_PATTERN = Pattern.compile(COMMENT_REGEX);
-
-
-
-
-	protected ArrayList<String> code = new ArrayList<>();
-	protected HashSet<String> functionsList;
-
-	String codeLine;
-	int parBefore;
-	int lineNum;
-	int blockStart;
-
-	compileHelper compileHelper = new compileHelper(this);
-
-
-
 	//	private static final String NO_COMMENT_REGEX = "([^\\/]{2}.*|})";
 //	private static final Pattern NO_COMMENT_PATTERN = Pattern.compile(NO_COMMENT_REGEX);
 	protected HashSet<Variable> vars;
 	protected ArrayList<BlockCompiler> mySubBlocks = new ArrayList<>();
 	protected int[] parenthesisCounter = {0, 0};
+	ArrayList<String> code = new ArrayList<>();
+	HashSet<String> functionsList;
+	String currentCodeLine;
+	int parentesisCountBefore;
+	int lineNum;
+	int blockStartIndex;
+	compileHelper compileHelper = new compileHelper(this);
 
 
 	public FileCompiler() {
@@ -78,13 +69,13 @@ public class FileCompiler {
 	private void initiateCompiler(BufferedReader codeReader) throws IOException, Exception {
 
 		// FIX TODO FIX what to do with globals? which block will handle?
-		while ((codeLine = codeReader.readLine()) != null) {
-			if (validateLine(codeLine)) {
+		while ((currentCodeLine = codeReader.readLine()) != null) {
+			if (validateLine(currentCodeLine)) {
 				//this is a valid line
 				compileHelper.compileLine();
 
 				// we know the code is valid, no comment and can be any code line:
-				code.add(codeLine.replace("\t", ""));
+				code.add(currentCodeLine.replace("\t", ""));
 				lineNum++;
 			}
 		}
@@ -92,7 +83,7 @@ public class FileCompiler {
 		//FIX for tests only, delete
 		lineNum = 0;
 		for (String c : code) {
-			System.out.println(lineNum+":|    "+c);
+			System.out.println(lineNum + ":|    " + c);
 			lineNum++;
 		}
 
@@ -102,13 +93,7 @@ public class FileCompiler {
 	}
 
 
-
-
-
-
-
-
-	public void compile() throws Exception{
+	public void compile() throws Exception {
 //		mySubBlocks.add(new BlockCompiler(1,8,this));
 
 
