@@ -18,7 +18,7 @@ public class  Sjavac {
         }
         // TODO to check is it a valid path!!!
     }
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args){
         try {
             checkInput(args);
 
@@ -32,7 +32,6 @@ public class  Sjavac {
             System.err.println(e.getMessage());
         }
     }
-
 
 
 

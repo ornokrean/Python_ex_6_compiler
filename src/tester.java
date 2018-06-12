@@ -7,6 +7,10 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class tester {
+	int number;
+	int fileNum;
+	String prefPath;
+	ArrayList<String[]> filelines = new ArrayList<>();
 
 	static int fakeMain(String[] args) {
 		try {
@@ -26,41 +30,46 @@ public class tester {
 			return 1;
 		}
 	}
-
-	// FIX for tester:
-
 	@Test
 	public void tests() throws FileNotFoundException, IOException {
 		BufferedReader redaer = new BufferedReader(new FileReader
 				("/Users/or/Desktop/CS/Java/ex6/ex6_files/sjavac_tests.txt"));
-		ArrayList<String[]> filelines = new ArrayList<>();
 		String line;
-		int j = 0;
 		while ((line = redaer.readLine()) != null) {
 			filelines.add(line.split(" "));
-			j++;
 		}
-		String prefPath = "/Users/or/Desktop/CS/Java/ex6/ex6_files/tests/";
+		prefPath = "/Users/or/Desktop/CS/Java/ex6/ex6_files/tests/";
 		System.out.println("Starting tests...");
-		int fileNum = 0;
+		fileNum = 0;
 		for (int i = 0; i < 506; i++) {
-			String path = prefPath + "test" + i + ".sjava";
+			number = i;
+			String path = prefPath + "test" + number + ".sjava";
 			if ((new File(path)).exists()) {
-				System.out.print("now testing file " + i + " ... ");
-				int ans = fakeMain(new String[]{path});
-				boolean check = (ans == Integer.parseInt(filelines.get(fileNum)[1]));
-				fileNum++;
+
+
 				String testInfo = " (";
+
 				for (String s : filelines.get(fileNum)) {
 					testInfo += " " + s;
 				}
 				testInfo += " )";
-				Assert.assertTrue("Test number " + i + " failed, should print " + filelines
+
+				System.out.print("now testing file " + number + " ... ");
+				int ans = fakeMain(new String[]{path});
+				boolean check = (ans == Integer.parseInt(filelines.get(fileNum)[1]));
+				fileNum++;
+				Assert.assertTrue("Test number " + number + " failed, should print " + filelines
 						.get(fileNum)[1] + " but printed " + ans + testInfo, check);
 				System.out.println(" Passed :)");
 			}
 		}
 		System.out.println("All test passed :)");
 	}
+	@Test
+	public void test() {
+
+
+	}
+
 
 }
