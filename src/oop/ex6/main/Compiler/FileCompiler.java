@@ -13,29 +13,22 @@ import java.util.regex.Pattern;
 public class FileCompiler {
 
 	public static final String EMPTY_LINE = "";
-	protected ArrayList<String> code = new ArrayList<>();
-
-	protected HashSet<String> functionsList;
-
-	protected HashSet<Variable> vars;
-
-	protected ArrayList<BlockCompiler> mySubBlocks = new ArrayList<>();
-
-	protected int[] parenthesisCounter = {0,0};
-
 	private static final String CODE_REGEX = "[\\s]*(?:(?:(?:(?:void|if|while).*\\{)|\\}|.*[;]))";
 	private static final Pattern CODE_PATTERN = Pattern.compile(CODE_REGEX);
+	private static final String BAD_COMMENT_REGEX = "([\\s].*|[/*]+)";
+	private static final Pattern BAD_COMMENT_PATTERN = Pattern.compile(BAD_COMMENT_REGEX);
+	private static final String COMMENT_REGEX = "[\\s]*([/]|[/*])+.*";
+	private static final Pattern COMMENT_PATTERN = Pattern.compile(COMMENT_REGEX);
+	protected ArrayList<String> code = new ArrayList<>();
+	protected HashSet<String> functionsList;
 
 //	private static final String NO_COMMENT_REGEX = "([^\\/]{2}.*|})";
 //	private static final Pattern NO_COMMENT_PATTERN = Pattern.compile(NO_COMMENT_REGEX);
-
-	private static final String BAD_COMMENT_REGEX = "([\\s].*|[/*]+)";
-	private static final Pattern BAD_COMMENT_PATTERN = Pattern.compile(BAD_COMMENT_REGEX);
-
-	private static final String COMMENT_REGEX = "[\\s]*([/]|[/*])+.*";
-	private static final Pattern COMMENT_PATTERN = Pattern.compile(COMMENT_REGEX);
-
-	private static int lineNum;// TODO: this is a variable used only for tests. please remove before submit;
+	protected HashSet<Variable> vars;
+	protected ArrayList<BlockCompiler> mySubBlocks = new ArrayList<>();
+	protected ArrayList<int[]> subBlockIndices = new ArrayList<>();
+	protected int[] parenthesisCounter = {0, 0};
+	private int lineNum;
 
 
 	public FileCompiler() {
@@ -57,13 +50,13 @@ public class FileCompiler {
 		Matcher badComment = BAD_COMMENT_PATTERN.matcher(line);
 
 		if (comment.matches()) { // if it is comment, lets check if the comment is valid:
-			if (badComment.matches()){//bad comment line. bye bye.
-				throw new Exception("bad comment in line "+ lineNum);
+			if (badComment.matches()) {//bad comment line. bye bye.
+				throw new Exception("bad comment in line " + lineNum);
 			}
-		}else if (!codePattern.matches() && !line.equals(EMPTY_LINE)){
+		} else if (!codePattern.matches() && !line.equals(EMPTY_LINE)) {
 			//it has something inside but it isn't a code
-			throw new Exception("bad code syntax in line "+ lineNum);
-		}else { // return a code
+			throw new Exception("bad code syntax in line " + lineNum);
+		} else { // return a code
 			return codePattern.matches() && !line.equals(EMPTY_LINE);
 			//return !line.equals(EMPTY_LINE);
 		}//fix: check with tomer if there's need for double return (?)
@@ -71,24 +64,30 @@ public class FileCompiler {
 	}
 
 
-
 	private void initiateCompiler(BufferedReader codeReader) throws IOException, Exception {
 		String codeLine;
+		int[] newBlockIndices = new int[2];
+		int parBefore;
 
+		// FIX TODO FIX what to do with globals? which block will handle?
 		while ((codeLine = codeReader.readLine()) != null) {
-			lineNum++;// TODO: this is a variable used only for tests. please remove before submit;
-			compileHelper.changeCounter(parenthesisCounter,codeLine);
 			if (validateLine(codeLine)) {
+				//this is a valid line
+				parBefore = parenthesisCounter[0];
+				compileHelper.changeCounter(parenthesisCounter, codeLine);
+				// check for the new block indexes, if needed.
+				newBlockIndices = newBlockHelper(parenthesisCounter,newBlockIndices, parBefore);
 				// we know the code is valid, no comment and can be any code line:
-
-				code.add(codeLine.replace("\t",""));
+				code.add(codeLine.replace("\t", ""));
+				lineNum++;
 			}
 		}
-		lineNum = -1;  // TODO: lineNum used only for tests. please remove before submit;
 
 		//FIX for tests only, delete
+		lineNum = 0;
 		for (String c : code) {
-			System.out.println(c);
+			System.out.println(lineNum+":|    "+c);
+			lineNum++;
 		}
 
 		// check counter at the end
@@ -96,6 +95,19 @@ public class FileCompiler {
 		codeReader.close();
 	}
 
+	private int[] newBlockHelper(int[] parenthesisCounter, int[] newBlockIndices, int parBefore) {
+		if (parBefore == 0 && parenthesisCounter[0] == 1) {
+			// a new block is in the block!
+			newBlockIndices[0] = lineNum;
+		} else if (parBefore == 1 && parenthesisCounter[0] == 0) {
+			//it is the end of the block:
+			newBlockIndices[1] = lineNum;
+			subBlockIndices.add(newBlockIndices);
+
+			newBlockIndices = new int[2];
+		}
+		return newBlockIndices;
+	}
 
 
 
@@ -104,6 +116,7 @@ public class FileCompiler {
 
 	public void compile() throws Exception{
 //		mySubBlocks.add(new BlockCompiler(1,8,this));
+
 
 		for (BlockCompiler block : mySubBlocks) {
 			block.compile();
