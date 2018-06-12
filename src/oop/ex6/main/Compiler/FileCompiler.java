@@ -30,13 +30,15 @@ public class FileCompiler {
 	int parentesisCountBefore;
 	int lineNum;
 	int blockStartIndex;
-	compileHelper compileHelper = new compileHelper(this);
+	compileHelper compileHelper ;
 
 
 	public FileCompiler() {
+		this.compileHelper = new compileHelper(this);
 	}
 
 	public FileCompiler(BufferedReader codeReader) throws IOException, Exception {
+		this();
 		initiateCompiler(codeReader);
 	}
 
@@ -71,10 +73,12 @@ public class FileCompiler {
 		while ((currentCodeLine = codeReader.readLine()) != null) {
 			if (validateLine(currentCodeLine)) {
 				//this is a valid line
+				code.add(currentCodeLine.replace("\t", ""));
+
+
 				compileHelper.compileLine();
 
 				// we know the code is valid, no comment and can be any code line:
-				code.add(currentCodeLine.replace("\t", ""));
 				lineNum++;
 			}
 		}
@@ -96,9 +100,9 @@ public class FileCompiler {
 //		mySubBlocks.add(new BlockCompiler(1,8,this));
 
 
-		for (BlockCompiler block : mySubBlocks) {
-			block.compile();
-		}
+//		for (BlockCompiler block : mySubBlocks) {
+//			block.compile();
+//		}
 	}
 
 }

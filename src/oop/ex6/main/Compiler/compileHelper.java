@@ -38,6 +38,7 @@ public class compileHelper {
 		} else if (compiler.parentesisCountBefore == 1 && compiler.parenthesisCounter[0] == 0) {
 			//it is the end of the block:
 			compiler.mySubBlocks.add(new BlockCompiler(compiler.blockStartIndex,compiler.lineNum,compiler,true));
+
 		}
 	}
 	

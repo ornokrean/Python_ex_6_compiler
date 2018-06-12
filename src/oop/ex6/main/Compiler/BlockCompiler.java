@@ -17,13 +17,14 @@ public class BlockCompiler extends FileCompiler {
 	private BlockCompiler parentBlock = null;
 
 	public BlockCompiler(int start, int end, FileCompiler myCompiler, Boolean isFunctionBlock) throws Exception{
-		super();
+		this.compileHelper = new compileHelper(this);
 		this.start = start;
 		this.end = end;
 		this.myCompiler = myCompiler;
 		this.code = myCompiler.code;
 		this.isFunctionBlock = isFunctionBlock;
 		initiateBlock();
+		// compile first line
 	}
 
 
@@ -34,11 +35,20 @@ public class BlockCompiler extends FileCompiler {
 
 
 	void initiateBlock() throws IOException, Exception {
-		for (int i = start; i <= end; i++) {
+		System.out.println("my start is :"+start+",my end is :"+end);
+
+		System.out.println("************");
+		System.out.println(code.get(start));
+		for (int i = start+1; i < end; i++) {
 			currentCodeLine = code.get(i);
+
+
+			System.out.println(code.get(i));
 			lineNum = i;
 			compileHelper.compileLine();
 		}
+		System.out.println(code.get(end));
+		System.out.println("************");
 	}
 
 	@Override
