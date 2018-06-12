@@ -57,14 +57,16 @@ public class FileCompiler {
 		Matcher badComment = BAD_COMMENT_PATTERN.matcher(line);
 
 		if (comment.matches()) { // if it is comment, lets check if the comment is valid:
-			if (badComment.matches()){
+			if (badComment.matches()){//bad comment line. bye bye.
 				throw new Exception("bad comment in line "+ lineNum);
 			}
 		}else if (!codePattern.matches() && !line.equals(EMPTY_LINE)){
-			throw new Exception("bad comment in line "+ lineNum);
-		}else {
+			//it has something inside but it isn't a code
+			throw new Exception("bad code syntax in line "+ lineNum);
+		}else { // return a code
 			return codePattern.matches() && !line.equals(EMPTY_LINE);
-		}
+			//return !line.equals(EMPTY_LINE);
+		}//fix: check with tomer if there's need for double return (?)
 		return false;
 	}
 
