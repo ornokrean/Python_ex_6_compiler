@@ -10,6 +10,7 @@ public class BlockCompiler extends FileCompiler {
     private BlockCompiler parentBlock = null;
     int start;
     int end;
+    boolean isFunctionBlock = false;
     private static final String  VAR_ASSIGNMENT = "(([a-zA-Z]*|[_])[\\w]+)[\\s]+[=].*";
 
     private static final String VAR_DECLERATION = "(final)?[\\s]+(int|double|char|boolean|String)[\\s].*";
@@ -17,16 +18,17 @@ public class BlockCompiler extends FileCompiler {
     enum LineCase {IF_WHILE,FUNCTION_CALL,VAR_USAGE,RETURN,END_BLOCK,NO_MATCH}
 
 
-    public BlockCompiler(int start, int end,FileCompiler myCompiler) {
+    public BlockCompiler(int start, int end,FileCompiler myCompiler,Boolean isFunctionBlock) {
         this.start = start;
         this.end = end;
         this.myCompiler = myCompiler;
         this.code = myCompiler.code;
+        this.isFunctionBlock = isFunctionBlock;
     }
 
 
     public BlockCompiler(int start, int end, FileCompiler myCompiler, BlockCompiler parentBlock) {
-        this(start,end,myCompiler);
+        this(start,end,myCompiler,false);
         this.parentBlock = parentBlock;
     }
 
@@ -35,7 +37,7 @@ public class BlockCompiler extends FileCompiler {
     @Override
     public void compile() throws Exception{
         // first off we check if the last 2 lines contains the return and "}"  statement.
-        checkReturnStatment();
+        checkReturnStatement();
         //check signature
         int i = start;
         while (i< end-1){
@@ -44,10 +46,13 @@ public class BlockCompiler extends FileCompiler {
             LineCase lineCase = getLineCase(code.get(i));
             switch (lineCase){
                 case RETURN:
+                    // Do nothing?
                     break;
                 case END_BLOCK:
+                    // Do nothing?
                     break;
                 case IF_WHILE:
+
                     i = subBlockGeneretor(i);
                     break;
                 case VAR_USAGE:
@@ -64,14 +69,15 @@ public class BlockCompiler extends FileCompiler {
             }
         }
     }
-    private int subBlockGeneretor(int lineNumber) throws Exception{
+
+    private int subBlockGeneretor(int lineNumber) throws Exception {
         int startOfSubblock = lineNumber;
         compileHelper.changeCounter(parenthesisCounter,code.get(lineNumber));
         while (parenthesisCounter[0] != 0){
             lineNumber++;
             compileHelper.changeCounter(parenthesisCounter,code.get(lineNumber));
         }
-        mySubBlocks.add(new BlockCompiler(startOfSubblock,lineNumber,myCompiler));
+        mySubBlocks.add(new BlockCompiler(startOfSubblock,lineNumber,myCompiler,this));
         return lineNumber;
     }
 
@@ -106,8 +112,8 @@ public class BlockCompiler extends FileCompiler {
 
         //^[\s]*(return;)[\s]*^
         //[\\s]*((final)?[\\s]+(int|double|char|boolean|String)[\\s].*|(([a-zA-Z]*|[_])[\\w]+)[\\s]+[=].*)
-        // return line case.
 
+        // return line case.
         p =  Pattern.compile("(return;)[\\s]*");
         m =  p.matcher(line);
         if (m.matches()){ return LineCase.RETURN; }
@@ -126,40 +132,21 @@ public class BlockCompiler extends FileCompiler {
 
         return LineCase.NO_MATCH;//TODO take care of return
     }
-    public int generateSubBlocks(String line,int lineNumber) throws Exception{
-        int endline = lineNumber;
 
-        Pattern p1 =  Pattern.compile("(void)\\s+[a-zA-Z][\\w]*[(].*[)][\\s]*(;|[{])");
-        Matcher m1 = p1.matcher(line);
+    private void checkReturnStatement() throws Exception {
+        if(isFunctionBlock){
+            Pattern p =  Pattern.compile("}[\\s]*$");
+            Matcher m = p.matcher(code.get(end));
+            if (!m.matches()){
+                throw new Exception("bad end of block");
+            }
+            p =  Pattern.compile("(return;)[\\s]*");
+            m = p.matcher(code.get(end-1));
 
-//        if(m1.matches()){ return LineCase.FUNCTION_CALL;}
-
-        // if or while case.
-        Pattern p2 =  Pattern.compile("^[\\s]*(if|while)[\\s]*[(].+[)][\\s]*[{]");
-        Matcher m2 = p2.matcher(line);
-
-        if(m2.matches() || m1.matches()){
-            compileHelper.changeCounter(parenthesisCounter,code.get(endline));
-            while (parenthesisCounter[0] != 0){
-                endline++;
-                compileHelper.changeCounter(parenthesisCounter,code.get(endline));
+            if (!m.matches()){
+                throw new Exception("bad end of block");
             }
         }
-        return endline;
     }
-
-    private void checkReturnStatment() throws Exception {
-        Pattern p =  Pattern.compile("}[\\s]*$");
-        Matcher m = p.matcher(code.get(end));
-        if (!m.matches()){
-            throw new Exception("bad end of block");
-        }
-        p =  Pattern.compile("(return;)[\\s]*");
-        m = p.matcher(code.get(end-1));
-
-        if (!m.matches()){
-            throw new Exception("bad end of block");
-        }
-        }
 
 }

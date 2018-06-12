@@ -103,7 +103,7 @@ public class FileCompiler {
 
 
 	public void compile() throws Exception{
-		mySubBlocks.add(new BlockCompiler(1,8,this));
+//		mySubBlocks.add(new BlockCompiler(1,8,this));
 
 		for (BlockCompiler block : mySubBlocks) {
 			block.compile();
