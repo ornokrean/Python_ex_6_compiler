@@ -1,7 +1,6 @@
 package oop.ex6.main.Compiler;
 
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,7 +16,7 @@ public class BlockCompiler extends FileCompiler {
 	private BlockCompiler parentBlock = null;
 
 	public BlockCompiler(int start, int end, FileCompiler myCompiler, Boolean isFunctionBlock) throws Exception{
-		this.compileHelper = new compileHelper(this);
+		this.compileHelper = new CompileHelper(this);
 		this.start = start;
 		this.end = end;
 		this.myCompiler = myCompiler;
@@ -68,10 +67,10 @@ public class BlockCompiler extends FileCompiler {
 
 	private int subBlockGeneretor(int lineNumber) throws Exception {
 		int startOfSubblock = lineNumber;
-//		compileHelper.changeCounter(parenthesisCounter, code.get(lineNumber));
-		while (parenthesisCounter[0] != 0) {
+//		CompileHelper.changeCounter(bracketsCount, code.get(lineNumber));
+		while (bracketsCount[0] != 0) {
 			lineNumber++;
-//			compileHelper.changeCounter(parenthesisCounter, code.get(lineNumber));
+//			CompileHelper.changeCounter(bracketsCount, code.get(lineNumber));
 		}
 		mySubBlocks.add(new BlockCompiler(startOfSubblock, lineNumber, myCompiler, this));
 		return lineNumber;
