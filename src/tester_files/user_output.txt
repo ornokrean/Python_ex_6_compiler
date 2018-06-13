@@ -1,606 +1,623 @@
-20:52:11
+10:40:22
 
 school solution#User solution#result#Test name
 
 
-while testing /BaraksTests/variables/74.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+void foo() {
-int a = 3;
-if (true) {
-}
-int x = a;
-return;
-}
-Index: 8, Size: 7
-
-
 while testing /SchoolTests/test411.sjava, Your program printed something that is not '1' or '0'.
 The prints (or errors) were:
-+int a =               5;
-Index: 8, Size: 1
-1
-
-
-while testing /BaraksTests/variables/15.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+int eger = 8;
-char mander = 'a';
-double d = "banana";
-String attached = "why";
-boolean sheu = true;
-Index: 8, Size: 5
++FileCompiler: 
+variables = null,
+bracketsCount = [0, 0],
+functionsList = null,
+oldCurlyBracketCount = 0,
+compileHelper = oop.ex6.main.Compiler.CompileHelper@383534aa
+Code:
+0:|    int a =               5;
 
 
 while testing /SchoolTests/test454.sjava, Your program printed something that is not '1' or '0'.
 The prints (or errors) were:
-+final int a = 5;
++my start is :1,my end is :4
+************
 void foo() {
 a = 4;
 return;
 }
-Index: 8, Size: 5
-1
+************
 
-
-while testing /BaraksTests/variables/50.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+int a = 3;
-double b = a;
-Index: 8, Size: 2
+FileCompiler: 
+variables = null,
+bracketsCount = [0, 0],
+functionsList = null,
+oldCurlyBracketCount = 1,
+compileHelper = oop.ex6.main.Compiler.CompileHelper@6bc168e5
+Code:
+0:|    final int a = 5;
+1:|    void foo() {
+2:|    a = 4;
+3:|    return;
+4:|    }
 
 
 while testing /SchoolTests/test264.sjava, Your program printed something that is not '1' or '0'.
 The prints (or errors) were:
-+void foo(int a) {
++my start is :0,my end is :2
+************
+void foo(int a) {
 return 8;
 }
-Index: 8, Size: 3
-1
+************
 
-
-while testing /BaraksTests/variables/90.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+private int x = 3;
-Index: 8, Size: 1
+FileCompiler: 
+variables = null,
+bracketsCount = [0, 0],
+functionsList = null,
+oldCurlyBracketCount = 1,
+compileHelper = oop.ex6.main.Compiler.CompileHelper@7b3300e5
+Code:
+0:|    void foo(int a) {
+1:|    return 8;
+2:|    }
 
 
 while testing /SchoolTests/test221.sjava, Your program printed something that is not '1' or '0'.
 The prints (or errors) were:
-+void foo() {
++my start is :0,my end is :3
+************
+void foo() {
 String a;
 return;
 }
-Index: 8, Size: 4
-1
+************
 
-
-while testing /BaraksTests/variables/28.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+int a;
-int b = a;
-Index: 8, Size: 2
-
-
-while testing /BaraksTests/variables/92.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+static int x = 3;
-Index: 8, Size: 1
+FileCompiler: 
+variables = null,
+bracketsCount = [0, 0],
+functionsList = null,
+oldCurlyBracketCount = 1,
+compileHelper = oop.ex6.main.Compiler.CompileHelper@2e5c649
+Code:
+0:|    void foo() {
+1:|    String a;
+2:|    return;
+3:|    }
 
 
 while testing /SchoolTests/test469.sjava, Your program printed something that is not '1' or '0'.
 The prints (or errors) were:
-+void Ab() {
++my start is :0,my end is :2
+************
+void Ab() {
 return;
 }
-Index: 8, Size: 3
-1
+************
 
-
-while testing /BaraksTests/variables/17.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+int eger = 8;
-char mander = 'a';
-double d = 0;
-String attached = '3';
-boolean sheu = true;
-Index: 8, Size: 5
+FileCompiler: 
+variables = null,
+bracketsCount = [0, 0],
+functionsList = null,
+oldCurlyBracketCount = 1,
+compileHelper = oop.ex6.main.Compiler.CompileHelper@136432db
+Code:
+0:|    void Ab() {
+1:|    return;
+2:|    }
 
 
 while testing /SchoolTests/test301.sjava, Your program printed something that is not '1' or '0'.
 The prints (or errors) were:
-+void foo() {
++my start is :0,my end is :5
+************
+void foo() {
 boolean b = true;
 if (b) {
 }
+my start is :2,my end is :3
+************
+if (b) {
+}
+************
 return;
 }
-Index: 8, Size: 6
-1
+************
 
-
-while testing /BaraksTests/variables/52.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+double a='a';
-double b = a;
-Index: 8, Size: 2
+FileCompiler: 
+variables = null,
+bracketsCount = [0, 0],
+functionsList = null,
+oldCurlyBracketCount = 1,
+compileHelper = oop.ex6.main.Compiler.CompileHelper@7382f612
+Code:
+0:|    void foo() {
+1:|    boolean b = true;
+2:|    if (b) {
+3:|    }
+4:|    return;
+5:|    }
 
 
 while testing /SchoolTests/test045.sjava, Your program printed something that is not '1' or '0'.
 The prints (or errors) were:
-+char a = 0.5;
-Index: 8, Size: 1
-1
-
-
-while testing /BaraksTests/variables/33.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+String a = "a";
-int b = a;
-Index: 8, Size: 2
++FileCompiler: 
+variables = null,
+bracketsCount = [0, 0],
+functionsList = null,
+oldCurlyBracketCount = 0,
+compileHelper = oop.ex6.main.Compiler.CompileHelper@1055e4af
+Code:
+0:|    char a = 0.5;
 
 
 while testing /SchoolTests/test238.sjava, Your program printed something that is not '1' or '0'.
 The prints (or errors) were:
-+void foo() {
++my start is :0,my end is :3
+************
+void foo() {
 final double a;
 return;
 }
-Index: 8, Size: 4
-1
+************
 
-
-while testing /BaraksTests/variables/76.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+void foo() {
-int a = 3;
-if (true) {
-while (true) {
-int x = a;
-}
-}
-return;
-}
-bad end of block
+FileCompiler: 
+variables = null,
+bracketsCount = [0, 0],
+functionsList = null,
+oldCurlyBracketCount = 1,
+compileHelper = oop.ex6.main.Compiler.CompileHelper@3caeaf62
+Code:
+0:|    void foo() {
+1:|    final double a;
+2:|    return;
+3:|    }
 
 
 while testing /SchoolTests/test024.sjava, Your program printed something that is not '1' or '0'.
 The prints (or errors) were:
-+String a = 0.5;
-Index: 8, Size: 1
-1
-
-
-while testing /BaraksTests/variables/37.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+int a = 3;
-char b = a;
-Index: 8, Size: 2
++FileCompiler: 
+variables = null,
+bracketsCount = [0, 0],
+functionsList = null,
+oldCurlyBracketCount = 0,
+compileHelper = oop.ex6.main.Compiler.CompileHelper@e6ea0c6
+Code:
+0:|    String a = 0.5;
 
 
 while testing /SchoolTests/test061.sjava, Your program printed something that is not '1' or '0'.
 The prints (or errors) were:
-+void a;
-Index: 8, Size: 1
-1
-
-
-while testing /BaraksTests/variables/72.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+void foo() {
-int x = a;
-return;
-}
-double a = 3;
-Index: 8, Size: 5
++FileCompiler: 
+variables = null,
+bracketsCount = [0, 0],
+functionsList = null,
+oldCurlyBracketCount = 0,
+compileHelper = oop.ex6.main.Compiler.CompileHelper@6a38e57f
+Code:
+0:|    void a;
 
 
 while testing /SchoolTests/test325.sjava, Your program printed something that is not '1' or '0'.
 The prints (or errors) were:
-+void foo() {
++my start is :0,my end is :5
+************
+void foo() {
 boolean b = true;
 if (b || false) {
 }
+my start is :2,my end is :3
+************
+if (b || false) {
+}
+************
 return;
 }
-Index: 8, Size: 6
-1
+************
 
-
-while testing /BaraksTests/variables/13.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+int eger = 8;
-char mander = 'a';
-double d = '3';
-String attached = "why";
-boolean sheu = true;
-Index: 8, Size: 5
+FileCompiler: 
+variables = null,
+bracketsCount = [0, 0],
+functionsList = null,
+oldCurlyBracketCount = 1,
+compileHelper = oop.ex6.main.Compiler.CompileHelper@5577140b
+Code:
+0:|    void foo() {
+1:|    boolean b = true;
+2:|    if (b || false) {
+3:|    }
+4:|    return;
+5:|    }
 
 
 while testing /SchoolTests/test408.sjava, Your program printed something that is not '1' or '0'.
 The prints (or errors) were:
-+void foo() {
++my start is :0,my end is :4
+************
+void foo() {
 int a;
 int a;
 return;
 }
-Index: 8, Size: 5
-1
+************
 
-
-while testing /BaraksTests/variables/56.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+boolean a,b,c;
-Index: 8, Size: 1
+FileCompiler: 
+variables = null,
+bracketsCount = [0, 0],
+functionsList = null,
+oldCurlyBracketCount = 1,
+compileHelper = oop.ex6.main.Compiler.CompileHelper@1c6b6478
+Code:
+0:|    void foo() {
+1:|    int a;
+2:|    int a;
+3:|    return;
+4:|    }
 
 
 while testing /SchoolTests/test435.sjava, Your program printed something that is not '1' or '0'.
 The prints (or errors) were:
-+bad code syntax in line 1
-1
-
-
-while testing /BaraksTests/variables/11.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+int eger = 8;
-char mander = 'a';
-double d = 0.7D;
-String attached = "why";
-boolean sheu = true;
-Index: 8, Size: 5
++java.lang.Exception: bad code syntax in line 1
+	at oop.ex6.main.Compiler.FileCompiler.validateLine(FileCompiler.java:70)
+	at oop.ex6.main.Compiler.FileCompiler.initiateCompiler(FileCompiler.java:90)
+	at oop.ex6.main.Compiler.FileCompiler.<init>(FileCompiler.java:52)
+	at oop.ex6.main.Sjavac.main(Sjavac.java:26)
+	at Tester_ex6_oop.runTestWithOnUser(Tester_ex6_oop.java:279)
+	at Tester_ex6_oop.doOneTest(Tester_ex6_oop.java:184)
+	at Tester_ex6_oop.runAllTests(Tester_ex6_oop.java:78)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:68)
+	at com.intellij.rt.execution.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:47)
+	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:242)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:70)
 
 
 while testing /SchoolTests/test470.sjava, Your program printed something that is not '1' or '0'.
 The prints (or errors) were:
-+void _b() {
++my start is :0,my end is :2
+************
+void _b() {
 return;
 }
-Index: 8, Size: 3
-1
+************
 
-
-while testing /BaraksTests/variables/54.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+boolean a = true, b = false;
-Index: 8, Size: 1
+FileCompiler: 
+variables = null,
+bracketsCount = [0, 0],
+functionsList = null,
+oldCurlyBracketCount = 1,
+compileHelper = oop.ex6.main.Compiler.CompileHelper@4ac68d3e
+Code:
+0:|    void _b() {
+1:|    return;
+2:|    }
 
 
 while testing /SchoolTests/test019.sjava, Your program printed something that is not '1' or '0'.
 The prints (or errors) were:
-+final boolean a = true;
-Index: 8, Size: 1
-1
-
-
-while testing /BaraksTests/variables/69.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+int a = 3;
-void foo() {
-int x = a;
-return;
-}
-Index: 8, Size: 5
++FileCompiler: 
+variables = null,
+bracketsCount = [0, 0],
+functionsList = null,
+oldCurlyBracketCount = 0,
+compileHelper = oop.ex6.main.Compiler.CompileHelper@277c0f21
+Code:
+0:|    final boolean a = true;
 
 
 while testing /SchoolTests/test104.sjava, Your program printed something that is not '1' or '0'.
 The prints (or errors) were:
-+bad code syntax in line 0
-1
-
-
-while testing /BaraksTests/variables/94.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+boolean x = 3 == 3;
-Index: 8, Size: 1
++java.lang.Exception: bad code syntax in line 0
+	at oop.ex6.main.Compiler.FileCompiler.validateLine(FileCompiler.java:70)
+	at oop.ex6.main.Compiler.FileCompiler.initiateCompiler(FileCompiler.java:90)
+	at oop.ex6.main.Compiler.FileCompiler.<init>(FileCompiler.java:52)
+	at oop.ex6.main.Sjavac.main(Sjavac.java:26)
+	at Tester_ex6_oop.runTestWithOnUser(Tester_ex6_oop.java:279)
+	at Tester_ex6_oop.doOneTest(Tester_ex6_oop.java:184)
+	at Tester_ex6_oop.runAllTests(Tester_ex6_oop.java:78)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:68)
+	at com.intellij.rt.execution.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:47)
+	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:242)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:70)
 
 
 while testing /SchoolTests/test205.sjava, Your program printed something that is not '1' or '0'.
 The prints (or errors) were:
-+bad code syntax in line 2
-1
-
-
-while testing /BaraksTests/variables/08.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+int eger = 8;
-char mander = 0;
-double d = 0.7;
-String attached = "why";
-boolean sheu = true;
-Index: 8, Size: 5
++java.lang.Exception: bad code syntax in line 1
+	at oop.ex6.main.Compiler.FileCompiler.validateLine(FileCompiler.java:70)
+	at oop.ex6.main.Compiler.FileCompiler.initiateCompiler(FileCompiler.java:90)
+	at oop.ex6.main.Compiler.FileCompiler.<init>(FileCompiler.java:52)
+	at oop.ex6.main.Sjavac.main(Sjavac.java:26)
+	at Tester_ex6_oop.runTestWithOnUser(Tester_ex6_oop.java:279)
+	at Tester_ex6_oop.doOneTest(Tester_ex6_oop.java:184)
+	at Tester_ex6_oop.runAllTests(Tester_ex6_oop.java:78)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:68)
+	at com.intellij.rt.execution.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:47)
+	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:242)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:70)
 
 
 while testing /SchoolTests/test437.sjava, Your program printed something that is not '1' or '0'.
 The prints (or errors) were:
-+bad code syntax in line 4
-1
-
-
-while testing /BaraksTests/variables/35.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+char a = '3';
-char b = a;
-Index: 8, Size: 2
++java.lang.Exception: bad code syntax in line 1
+	at oop.ex6.main.Compiler.FileCompiler.validateLine(FileCompiler.java:70)
+	at oop.ex6.main.Compiler.FileCompiler.initiateCompiler(FileCompiler.java:90)
+	at oop.ex6.main.Compiler.FileCompiler.<init>(FileCompiler.java:52)
+	at oop.ex6.main.Sjavac.main(Sjavac.java:26)
+	at Tester_ex6_oop.runTestWithOnUser(Tester_ex6_oop.java:279)
+	at Tester_ex6_oop.doOneTest(Tester_ex6_oop.java:184)
+	at Tester_ex6_oop.runAllTests(Tester_ex6_oop.java:78)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:68)
+	at com.intellij.rt.execution.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:47)
+	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:242)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:70)
 
 
 while testing /SchoolTests/test472.sjava, Your program printed something that is not '1' or '0'.
 The prints (or errors) were:
-+int a;
++my start is :1,my end is :3
+************
 void a() {
 return;
 }
-Index: 8, Size: 4
-1
+************
 
-
-while testing /BaraksTests/variables/70.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+void foo() {
-int x = a;
-return;
-}
-int a = 3;
-Index: 8, Size: 5
+FileCompiler: 
+variables = null,
+bracketsCount = [0, 0],
+functionsList = null,
+oldCurlyBracketCount = 1,
+compileHelper = oop.ex6.main.Compiler.CompileHelper@7a46a697
+Code:
+0:|    int a;
+1:|    void a() {
+2:|    return;
+3:|    }
 
 
 while testing /SchoolTests/test242.sjava, Your program printed something that is not '1' or '0'.
 The prints (or errors) were:
-+void foo() {
++my start is :0,my end is :3
+************
+void foo() {
 char a = 'a';
 return;
 }
-Index: 8, Size: 4
-1
+************
 
-
-while testing /BaraksTests/structure/04.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+Index: 8, Size: 0
+FileCompiler: 
+variables = null,
+bracketsCount = [0, 0],
+functionsList = null,
+oldCurlyBracketCount = 1,
+compileHelper = oop.ex6.main.Compiler.CompileHelper@5f205aa
+Code:
+0:|    void foo() {
+1:|    char a = 'a';
+2:|    return;
+3:|    }
 
 
 while testing /SchoolTests/test207.sjava, Your program printed something that is not '1' or '0'.
 The prints (or errors) were:
-+void foo() {
++my start is :0,my end is :3
+************
+void foo() {
 int a = hhh;
 return;
 }
-Index: 8, Size: 4
-1
+************
 
-
-while testing /BaraksTests/structure/20.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+problem with {}()
+FileCompiler: 
+variables = null,
+bracketsCount = [0, 0],
+functionsList = null,
+oldCurlyBracketCount = 1,
+compileHelper = oop.ex6.main.Compiler.CompileHelper@6d86b085
+Code:
+0:|    void foo() {
+1:|    int a = hhh;
+2:|    return;
+3:|    }
 
 
 while testing /SchoolTests/test106.sjava, Your program printed something that is not '1' or '0'.
 The prints (or errors) were:
-+void foo() {
++my start is :0,my end is :2
+************
+void foo() {
 return;
 }
-Index: 8, Size: 3
-1
+************
 
-
-while testing /BaraksTests/structure/22.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+bad code syntax in line 6
+FileCompiler: 
+variables = null,
+bracketsCount = [0, 0],
+functionsList = null,
+oldCurlyBracketCount = 1,
+compileHelper = oop.ex6.main.Compiler.CompileHelper@75828a0f
+Code:
+0:|    void foo() {
+1:|    return;
+2:|    }
 
 
 while testing /SchoolTests/test327.sjava, Your program printed something that is not '1' or '0'.
 The prints (or errors) were:
-+void foo() {
++my start is :0,my end is :6
+************
+void foo() {
 boolean a = true;
 int b = 1;
 while (a || b) {
 }
+my start is :3,my end is :4
+************
+while (a || b) {
+}
+************
 return;
 }
-Index: 8, Size: 7
-1
+************
 
-
-while testing /BaraksTests/structure/06.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+int x;
-Index: 8, Size: 1
+FileCompiler: 
+variables = null,
+bracketsCount = [0, 0],
+functionsList = null,
+oldCurlyBracketCount = 1,
+compileHelper = oop.ex6.main.Compiler.CompileHelper@3abfe836
+Code:
+0:|    void foo() {
+1:|    boolean a = true;
+2:|    int b = 1;
+3:|    while (a || b) {
+4:|    }
+5:|    return;
+6:|    }
 
 
 while testing /SchoolTests/test026.sjava, Your program printed something that is not '1' or '0'.
 The prints (or errors) were:
-+final String a;
-Index: 8, Size: 1
-1
++FileCompiler: 
+variables = null,
+bracketsCount = [0, 0],
+functionsList = null,
+oldCurlyBracketCount = 0,
+compileHelper = oop.ex6.main.Compiler.CompileHelper@2ff5659e
+Code:
+0:|    final String a;
 
 
 while testing /SchoolTests/test063.sjava, Your program printed something that is not '1' or '0'.
 The prints (or errors) were:
-+void a = 0.55;
-Index: 8, Size: 1
-1
-
-
-while testing /BaraksTests/structure/02.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+bad comment in line 1
++FileCompiler: 
+variables = null,
+bracketsCount = [0, 0],
+functionsList = null,
+oldCurlyBracketCount = 0,
+compileHelper = oop.ex6.main.Compiler.CompileHelper@77afea7d
+Code:
+0:|    void a = 0.55;
 
 
 while testing /SchoolTests/test002.sjava, Your program printed something that is not '1' or '0'.
 The prints (or errors) were:
-+int a = 5;
-Index: 8, Size: 1
-1
-
-
-while testing /BaraksTests/structure/24.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+void foo() {
-if (true);
-return;
-}
-Index: 8, Size: 4
++FileCompiler: 
+variables = null,
+bracketsCount = [0, 0],
+functionsList = null,
+oldCurlyBracketCount = 0,
+compileHelper = oop.ex6.main.Compiler.CompileHelper@161cd475
+Code:
+0:|    int a = 5;
 
 
 while testing /SchoolTests/test047.sjava, Your program printed something that is not '1' or '0'.
 The prints (or errors) were:
-+char a = 'hhh';
-Index: 8, Size: 1
-1
-
-
-while testing /BaraksTests/structure/19.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+void foo() {
-return;
-problem with {}()
++FileCompiler: 
+variables = null,
+bracketsCount = [0, 0],
+functionsList = null,
+oldCurlyBracketCount = 0,
+compileHelper = oop.ex6.main.Compiler.CompileHelper@532760d8
+Code:
+0:|    char a = 'hhh';
 
 
 while testing /SchoolTests/test303.sjava, Your program printed something that is not '1' or '0'.
 The prints (or errors) were:
-+void foo() {
++my start is :0,my end is :4
+************
+void foo() {
 if (false) {
 }
+my start is :1,my end is :2
+************
+if (false) {
+}
+************
 return;
 }
-Index: 8, Size: 5
-1
+************
 
-
-while testing /BaraksTests/structure/23.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+bad code syntax in line 2
-
-
-while testing /SchoolTests/test413.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+foo                (            5          , 7   );
-void foo(int b, int c) {
-return;
-}
-Index: 8, Size: 4
-1
-
-
-while testing /BaraksTests/structure/07.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+int x ;
-Index: 8, Size: 1
-
-
-while testing /BaraksTests/structure/05.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+bad code syntax in line 1
-
-
-while testing /SchoolTests/test456.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+void foo() {
-final int a = 5;
-a = 6;
-return;
-}
-Index: 8, Size: 5
-1
-
-
-while testing /BaraksTests/structure/21.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+bad code syntax in line 2
-
-
-while testing /SchoolTests/test266.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+int a = 5;
-void foo() {
-a = 4;
-return;
-}
-Index: 8, Size: 5
-1
-
-
-while testing /BaraksTests/structure/18.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+bad code syntax in line 3
-
-
-while testing /SchoolTests/test223.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+void foo() {
-String a = 5;
-return;
-}
-Index: 8, Size: 4
-1
-
-
-while testing /BaraksTests/structure/25.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+bad code syntax in line 5
-
-
-while testing /SchoolTests/test307.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+void foo() {
-char b = '5';
-if (b) {
-}
-return;
-}
-Index: 8, Size: 6
-1
-
-
-while testing /BaraksTests/structure/01.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+Index: 8, Size: 0
-
-
-while testing /SchoolTests/test006.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+int a = "hello";
-Index: 8, Size: 1
-1
-
-
-while testing /BaraksTests/structure/03.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+Index: 8, Size: 0
-
-
-while testing /SchoolTests/test043.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+char a = '%';
-Index: 8, Size: 1
-1
-
-
-while testing /BaraksTests/structure/16.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+bad code syntax in line 0
-
-
-while testing /SchoolTests/test262.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+int a = 5;
-void foo() {
-return a;
-}
-Index: 8, Size: 4
-1
-
-
-while testing /BaraksTests/structure/14.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+bad code syntax in line 1
-
-
-while testing /SchoolTests/test227.sjava, Your program printed something that is not '1' or '0'.
-The prints (or errors) were:
-+void foo() {
-final String a = "hhh";
-return;
-}
-Index: 8, Size: 4
-1
+FileCompiler: 
+variables = null,
+bracketsCount = [0, 0],
+functionsList = null,
+oldCurlyBracketCount = 1,
+compileHelper = oop.ex6.main.Compiler.CompileHelper@57fa26b7
+Code:
+0:|    void foo() {
+1:|    if (false) {
+2:|    }
+3:|    return;
+4:|    }
 

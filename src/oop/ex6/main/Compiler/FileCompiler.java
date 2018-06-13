@@ -88,23 +88,25 @@ public class FileCompiler {
 		// FIX TODO FIX what to do with globals? which block will handle?
 		while ((currentCodeLine = codeReader.readLine()) != null) {
 			if (validateLine(currentCodeLine)) {
-				//this is a valid line
+				//this is a valid line, add it to the code:
 				code.add(currentCodeLine.replace("\t", ""));
 				// compile this line and it's sub-blocks:
 				compileHelper.compileLine();
-				// we know the code is valid, no comment and can be any code line:
 				lineNum++;
 			}
 		}
 		// check counter at the end
 		CompileHelper.checkCounter(bracketsCount[0] != 0, bracketsCount[1] != 0);
+		// close the BufferedReader
 		codeReader.close();
+
+
 		// fix for test only
 		System.out.println(this);
 	}
 
 
-	public void compile() throws Exception {
+	public void  compile() throws Exception {
 //		mySubBlocks.add(new BlockCompiler(1,8,this));
 
 
