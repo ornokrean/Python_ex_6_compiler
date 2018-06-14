@@ -1,6 +1,5 @@
-int x;
+int a = 3;
 void foo() {
-	int x;
-	int x;
+	int x = a;
 	return;
 }

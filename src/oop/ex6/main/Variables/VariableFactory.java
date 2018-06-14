@@ -5,100 +5,105 @@ import java.util.regex.Pattern;
 
 
 public class VariableFactory {
-    private static final String BAD_VARIABLE_DECLERATION = "ERROR: Wrong type variable in line : ";
+	private static final String BAD_VARIABLE_DECLERATION = "ERROR: Wrong type variable in line : ";
 
-    enum typeCases{
+	public static scopeVariable variableFactory(boolean finalFlag, String type, String varName, String varValue) throws Exception {
 
-        BOOLEAN("boolean"), INT("int"), DOUBLE("double"), STRING("String"), CHAR("Char"),ISFINAL("final"),DECLARATION("declaration");
-
-        private final String myType;
-
-        private final String WORDREGEX = "\\b[a-zA-z_0-9]*\\b";
+		if (type.equals(typeCases.BOOLEAN.myType)) {
+			booleanHelper(varValue);
+			return new scopeVariable(finalFlag, varName, type);
 
 
-        typeCases(String string) {myType = string; }
-        public String getMyType() {return myType;}
-    }
+		} else if (type.equals(typeCases.INT.myType)) {
+			intHelper(varValue);
+			return new scopeVariable(finalFlag, varName, type);
+
+
+		} else if (type.equals(typeCases.DOUBLE.myType)) {
+			doubleHelper(varValue);
+			return new scopeVariable(finalFlag, varName, type);
+
+
+		} else if (type.equals(typeCases.STRING.myType)) {
+			stringHelper(varValue);
+			return new scopeVariable(finalFlag, varName, type);
+
+		} else if (type.equals(typeCases.CHAR.myType)) {
+			charHelper(varValue);
+			return new scopeVariable(finalFlag, varName, type);
+		} else {
+			throw new Exception(BAD_VARIABLE_DECLERATION);
+		}
+	}
 //    private static final String[] availableTypes = {"boolean","int","double","String","Char"};
 
+	private static int intHelper(String varValue)throws Exception  {
+		try {
+			return Integer.parseInt(varValue);
+		} catch (NumberFormatException e) {
+			throw new Exception("bad int");
+		}
+	}
 
-    public static scopeVariable variableFactory(boolean finalFlag, String type, String varName, String varValue) throws ExceptionInInitializerError{
+	private static double doubleHelper(String varValue)throws Exception  {
+		try {
+			return Double.parseDouble(varValue);
+		} catch (NumberFormatException e) {
+			throw new Exception("bad double");
+		}
+	}
 
-        if(type.equals(typeCases.BOOLEAN.myType)){
-            booleanHelper(varValue);
-            return new scopeVariable(finalFlag,varName,type);
+	private static Boolean booleanHelper(String varValue) throws Exception {
+		Pattern p = Pattern.compile("(true|false|[-]?[0-9]+[.]?[0-9]*)");
+		Matcher m = p.matcher(varValue);
+		if (!(m.matches())) {
+			throw new Exception("bad boolean");
+		}
 
+		if (varValue.equals("true") || varValue.equals("false")) {
+			return Boolean.parseBoolean(varValue);
+		} else {
+			return (Double.parseDouble(varValue) != 0.0);
+		}
+	}
 
-        }else if(type.equals(typeCases.INT.myType)){
-            intHelper(varValue);
-            return new scopeVariable(finalFlag,varName,type);
+	private static String stringHelper(String varValue)throws Exception  {
+		Pattern p = Pattern.compile("[\"][^\"]*[\"]");
+		Matcher m = p.matcher(varValue);
+		if (!(m.matches())) {
+			throw new Exception("bad string");
+		}
 
+		// to check boundaries.
+		return varValue.substring(1, varValue.length() - 1);
 
-        }else if(type.equals(typeCases.DOUBLE.myType)){
-            doubleHelper(varValue);
-            return new scopeVariable(finalFlag,varName,type);
+	}
 
+	private static char charHelper(String varValue)throws Exception  {
+		Pattern p = Pattern.compile("[\'][^\'][\']");
+		Matcher m = p.matcher(varValue);
+		if (!(m.matches())) {
+			throw new Exception("bad char");
+		}
 
-        }else if(type.equals(typeCases.STRING.myType)){
-            stringHelper(varValue);
-            return new scopeVariable(finalFlag,varName,type);
+		// to check boundaries.
+		char charVal = varValue.charAt(1);
+		return charVal;
+	}
 
-        }else if(type.equals(typeCases.CHAR.myType)){
-            charHelper(varValue);
-            return new scopeVariable(finalFlag,varName,type);
-        }
-        else {
-            throw new ExceptionInInitializerError(BAD_VARIABLE_DECLERATION);
-        }
-    }
+	enum typeCases {
 
+		BOOLEAN("boolean"), INT("int"), DOUBLE("double"), STRING("String"), CHAR("char"), ISFINAL("final"),
+		DECLARATION("declaration");
 
-    private static int intHelper(String varValue) {
-        try{
-            return Integer.parseInt(varValue);
-        }catch (NumberFormatException e){
-            throw new ExceptionInInitializerError("bad int");
-        }
-    }
+		private final String myType;
 
-    private static double doubleHelper(String varValue) {
-        try{
-            return Double.parseDouble(varValue);
-        }catch (NumberFormatException e){
-            throw new ExceptionInInitializerError("bad double");
-        }
-    }
+		typeCases(String string) {
+			myType = string;
+		}
 
-    private static Boolean booleanHelper(String varValue){
-        Pattern p = Pattern.compile("(true|false|[-]?[0-9]+[.]?[0-9]*)\b");
-        Matcher m = p.matcher(varValue);
-        if(!(m.matches())){ throw new ExceptionInInitializerError("bad boolean");}
-
-        if(varValue.equals("true")||varValue.equals("false")){
-            return Boolean.parseBoolean(varValue);
-        }
-        else {
-            return (Double.parseDouble(varValue) != 0.0);
-        }
-    }
-
-    private static String stringHelper(String varValue){
-        Pattern p = Pattern.compile("[\"][^\"]*[\"]");
-        Matcher m = p.matcher(varValue);
-        if(!(m.matches())){throw new ExceptionInInitializerError("bad string");}
-
-        // to check boundaries.
-        return varValue.substring(1,varValue.length()-1);
-
-    }
-
-    private static char  charHelper(String varValue){
-        Pattern p = Pattern.compile("[\'][^\'][\']");
-        Matcher m = p.matcher(varValue);
-        if(!(m.matches())){throw new ExceptionInInitializerError("bad char");}
-
-        // to check boundaries.
-        char charVal = varValue.charAt(1);
-        return charVal;
-    }
+		public String getMyType() {
+			return myType;
+		}
+	}
 }

@@ -22,6 +22,17 @@ public  class scopeVariable {
 	String myType;
 	boolean isAssigned = true;
 
+	enum defaultVal{
+
+		BOOLEAN("boolean"), INT("int"), DOUBLE("double"), STRING("String"), CHAR("char"),ISFINAL("final"),
+		DECLARATION("declaration");
+
+		private final String myType;
+
+		defaultVal(String string) {myType = string; }
+		public String getType() {return myType;}
+	}
+
 
 	public scopeVariable(boolean isFinal, String name, String type) {
 		this.isFinal = isFinal;
@@ -29,9 +40,14 @@ public  class scopeVariable {
 		this.myType =type;
 	}
 
-	public scopeVariable(boolean isFinal, String name, String type,boolean isAssigned) {
+	public scopeVariable(boolean isFinal, String name, String type,boolean isAssigned) throws Exception{
 		this(isFinal,name,type);
+		if (isFinal && !isAssigned) {
+			System.out.println(isAssigned + " " + isFinal);
+			throw new Exception("final with no value");
+		}
 		this.isAssigned = isAssigned;
+
 	}
 
 	public boolean isFinal() {
@@ -48,6 +64,17 @@ public  class scopeVariable {
 
 	public boolean isAssigned() {
 		return isAssigned;
+	}
+	public String getDefaultVal(){
+		if(myType.equals(defaultVal.STRING.getType())){
+			return "\"a-string\"";
+		}
+		if (myType.equals(defaultVal.CHAR.getType())){
+			return "\'a\'";
+		}
+		else {
+			return "0";
+		}
 	}
 }
 

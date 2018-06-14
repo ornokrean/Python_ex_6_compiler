@@ -4,6 +4,8 @@ package oop.ex6.main.Compiler;
 import oop.ex6.main.Variables.scopeVariable;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,20 +13,28 @@ import static oop.ex6.main.Variables.VariableFactory.variableFactory;
 
 public class BlockCompiler extends FileCompiler {
 
-	static final String NAME_VAR = "[\\s]*(([a-zA-Z]|[_][\\w])[\\w]*)[\\s]*";
-	private static final String VAR_ASSIGNMENT = NAME_VAR + "[\\s]+[=].*";
-	private static final String VAR_DECLERATION = "(final)?[\\s]+(int|double|char|boolean|String)[\\s]+";
-	private static final String BOOLEAN_VALUE = "(true|false|[-]?[0-9]+[.]?[0-9]*|[-]?[.][0-9]+)\b";
+	static final String NAME_VAR = "([\\s]*(([a-zA-Z]|[_][\\w])[\\w]*)[\\s]*)";
+	//	private static final String VAR_ASSIGNMENT = NAME_VAR + "[\\s]+[=].*";
+//	private static final String VAR_DECLERATION = "((final )?[\\s]*(int|double|char|boolean|String)[\\s]+)";
+	private static final String BOOLEAN_VALUE = "(true|false|[-]?[0-9]+[.]?[0-9]*|[-]?[.][0-9]+)";
 	private static final String STRING_VALUE = "([\"][^\"]*[\"])";
 	private static final String CHAR_VALUE = "([\'][^\'][\'])";
-	private static final String SOME_PRIMITIVE = "([\\s]*(([a-zA-Z]*|[_])[\\w]+)[\\s]*[=])[\\s]*((true|false|[-]?[0-9]" +
-			"+[.]?[0-9]*)|(['][^']['])|([\"][^\"]*[\"]))";
+	//	private static final String SOME_PRIMITIVE = "(" + NAME_VAR + "[=][\\s]*" + "" + BOOLEAN_VALUE + "|" +
+//			CHAR_VALUE + "|" + STRING_VALUE + ")";
+	private static final String SOME_PRIMITIVE = "(" + NAME_VAR + "[=][\\s]*" +
+			"(" + BOOLEAN_VALUE + "|" + CHAR_VALUE + "|" + STRING_VALUE + "))[\\s]*";
+//	String new11 = "("+NAME_VAR+"[=][\\s]*"+BOOLEAN_VALUE+"|"+CHAR_VALUE+"|"+STRING_VALUE+")";
 
 
 	protected FileCompiler myCompiler;
 
 	boolean isFunctionBlock = false;
+	int start;
+	int end;
+	HashMap<String, scopeVariable> scopeVariables = new HashMap<>();
+	HashSet<String> functionsList;
 	private BlockCompiler parentBlock = null;
+
 
 	public BlockCompiler(int start, int end, FileCompiler myCompiler, Boolean isFunctionBlock) throws Exception {
 		this.compileHelper = new CompileHelper(this);
@@ -37,12 +47,14 @@ public class BlockCompiler extends FileCompiler {
 		// compile first line
 	}
 
-
 	public BlockCompiler(int start, int end, FileCompiler myCompiler, BlockCompiler parentBlock) throws Exception {
 		this(start, end, myCompiler, false);
 		this.parentBlock = parentBlock;
 	}
 
+	void setParentBlock(BlockCompiler parentBlock) {
+		this.parentBlock = parentBlock;
+	}
 
 	void initiateBlock() throws IOException, Exception {
 		for (int i = start + 1; i < end; i++) {
@@ -69,17 +81,19 @@ public class BlockCompiler extends FileCompiler {
 		int i = this.start;
 		for (BlockCompiler b : mySubBlocks) {
 			while (i < b.start) {
-				System.out.println("checking: "+code.get(i));
+//				System.out.println("checking: " + code.get(i));
 				getLineCase(i);
 				i++;
 			}
 			i = b.end + 1;
 		}
 		while (i <= this.end) {
-			System.out.println("checking: "+code.get(i));
+//			System.out.println("checking: " + code.get(i));
 			getLineCase(i);
 			i++;
 		}
+//		System.out.println(this.scopeVariables);
+
 	}
 
 	private int subBlockGeneretor(int lineNumber) throws Exception {
@@ -127,15 +141,16 @@ public class BlockCompiler extends FileCompiler {
 		}
 
 		// var declaration call case.
-		p = Pattern.compile("[\\s]*("+ VAR_DECLERATION + ")?");
+//		p = Pattern.compile("[\\s]*"+ VAR_DECLERATION + "");
+		p = Pattern.compile("[\\s]*((final )?[\\s]*(int|double|char|boolean|String)[\\s]+).*");
 		m = p.matcher(line);
 		if (m.matches()) {
-			String lineType = m.group(2); // getting the type of the declaration.
+			String lineType = m.group(3); // getting the type of the declaration.
 			boolean isFinal = false;
-			if(m.group(1) != null){
+			if (m.group(2) != null) {
 				isFinal = true;
 			}
-			varDeclarationCase(line,lineType,isFinal);
+			varDeclarationCase(line, lineType, isFinal);
 			return lineNum;
 		}
 
@@ -158,60 +173,68 @@ public class BlockCompiler extends FileCompiler {
 		throw new Exception("No match for line");
 	}
 
-	private void varDeclarationCase(String line,String lineType,boolean isFinal) throws Exception{
-		String[] varsDeclared = splitSignature(line,lineType,";",",");
+	private void varDeclarationCase(String line, String lineType, boolean isFinal) throws Exception {
+		String[] varsDeclared = splitSignature(line, lineType, ";", ",");
 
-		for (String var:varsDeclared
-			 ) {
-			if(var.equals("")){
+		for (String var : varsDeclared) {
+			if (var.equals("")) {
 				throw new Exception("bad var assignment");
 			}
 
 
-			Pattern p  = Pattern.compile(NAME_VAR);
-			Matcher m  = p.matcher(var);
-			if(m.matches()){
-			    // need to check that the variable does'ent exist already.
-				scopeVariables.put( m.group(1),new scopeVariable(isFinal,m.group(1),lineType,false));
+			Pattern p = Pattern.compile(NAME_VAR);
+			Matcher m = p.matcher(var);
+			if (m.matches()) {
+
+				// need to check that the variable does'ent exist already.
+				scopeVariables.put(m.group(1), new scopeVariable(isFinal, m.group(1), lineType, false));
 				continue;
 			}
 
-			// need to check that the variable has not been assigned
-            p  = Pattern.compile(NAME_VAR+ "[=]" +NAME_VAR);
-			m  = p.matcher(var);
-            if(m.matches()){
-				//group 3 here is the name of the assigned-to variable, and group 1 is the new variable name.
-				scopeVariable assignedVar = getVarInScope(m.group(3));
+			p = Pattern.compile(SOME_PRIMITIVE);
+			m = p.matcher(var);
+			if (m.matches()) {
 
-				if(assignedVar.isAssigned() && assignedVar.getMyType().equals(lineType)){
-					scopeVariables.put( m.group(1),new scopeVariable(isFinal,m.group(1),lineType));
+				// group 2 here is the name, and group 4 here is the var assignment.
+				scopeVariable result = variableFactory(isFinal, lineType, m.group(3), m.group(5));
+				scopeVariables.put(result.getName(), result);
+				continue;
+			}
+
+
+
+			// need to check that the variable has not been assigned
+			p = Pattern.compile(NAME_VAR + "[=]" + NAME_VAR);
+			m = p.matcher(var);
+			if (m.matches()) {
+
+				//group 3 here is the name of the assigned-to variable, and group 1 is the new variable name.
+				scopeVariable assignedVar = getVarInScope(m.group(5));
+				if (assignedVar.isAssigned()) {
+					scopeVariable result = variableFactory(isFinal, lineType, m.group(2), assignedVar.getDefaultVal());
+					scopeVariables.put(m.group(2),result);
 					continue;
 				}
+				break;
 
-				throw  new Exception("invalid assignment in line"+code.indexOf(line)+"of new variable with old one");
-            }
+			}
+			throw new Exception("invalid assignment in line" + code.indexOf(line) + "of new variable with old one");
 
-			p  = Pattern.compile(SOME_PRIMITIVE);
-			m  = p.matcher(var);
-			// group 2 here is the name, and group 4 here is the var assignment.
-			scopeVariable result = variableFactory(isFinal,lineType,m.group(2),m.group(4));
-			scopeVariables.put( m.group(2),result);
+
 		}
 
 	}
 
-	private scopeVariable getVarInScope(String varName) throws Exception{
-	   BlockCompiler currentBlock = this;
-	   while (currentBlock != null){
-	   	if(currentBlock.scopeVariables.containsKey(varName)){
-	   		return scopeVariables.get(varName);
+	private scopeVariable getVarInScope(String varName) throws Exception {
+		BlockCompiler currentBlock = this;
+		while (currentBlock != null) {
+			if (currentBlock.scopeVariables.containsKey(varName)) {
+				return scopeVariables.get(varName);
+			}
+			currentBlock = parentBlock;
 		}
-		currentBlock = parentBlock;
-       }
-       throw new Exception("variable not in scope");
-    }
-
-
+		throw new Exception("variable not in scope");
+	}
 
 
 	private void checkReturnStatement() throws Exception {

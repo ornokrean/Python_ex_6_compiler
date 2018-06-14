@@ -12,9 +12,9 @@ public class  Sjavac {
      * screen and exit.
      * @param input The input that the program gets.
      */
-    private static void checkInput(String[] input) throws IOException{
+    private static void checkInput(String[] input) throws Exception{
         if (input.length != INPUT_SIZE) {
-            throw new IOException(BAD_INPUT_ERROR);
+            throw new Exception(BAD_INPUT_ERROR);
         }
         // TODO to check is it a valid path!!!
     }
@@ -26,10 +26,18 @@ public class  Sjavac {
             compiler.compile();
             System.out.println(0);
 
-        //TODO we need to separate into IO errors and Compilation Errors
-        }catch (Exception e){
+            //TODO we need to separate into IO errors and Compilation Errors
+        }
+        catch (IOException e){
+            System.out.println(2);
 //            System.err.println(e.getMessage());
+//            throw e;
+
+        }catch (Exception e){
+            System.out.println(1);
+            System.err.println(e.getMessage());
             throw e;
+
         }
     }
 

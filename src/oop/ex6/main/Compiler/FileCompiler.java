@@ -1,14 +1,11 @@
 package oop.ex6.main.Compiler;
 
 
-import oop.ex6.main.Variables.scopeVariable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,18 +23,15 @@ public class FileCompiler {
 	private static final Pattern COMMENT_PATTERN = Pattern.compile(COMMENT_REGEX);
 	//	private static final String NO_COMMENT_REGEX = "([^\\/]{2}.*|})";
 //	private static final Pattern NO_COMMENT_PATTERN = Pattern.compile(NO_COMMENT_REGEX);
-	HashMap<String,scopeVariable> scopeVariables;
 	ArrayList<BlockCompiler> mySubBlocks = new ArrayList<>();
 	int[] bracketsCount = {0, 0};
 	ArrayList<String> code = new ArrayList<>();
-	HashSet<String> functionsList;
 	String currentCodeLine;
 	int oldCurlyBracketCount;
 	int lineNum;
 	int blockStartIndex;
 	CompileHelper compileHelper;
-	int start;
-	int end;
+	BlockCompiler globalScope;
 
 	/**
 	 * default constructor
@@ -90,7 +84,6 @@ public class FileCompiler {
 	 * @throws Exception   if there is a syntax error
 	 */
 	void initiateCompiler(BufferedReader codeReader) throws IOException, Exception {
-		this.start = 0;
 		// FIX TODO FIX what to do with globals? which block will handle?
 		while ((currentCodeLine = codeReader.readLine()) != null) {
 			if (validateLine(currentCodeLine)) {
@@ -101,9 +94,14 @@ public class FileCompiler {
 				lineNum++;
 			}
 		}
-		this.end = lineNum - 1;
+		this.globalScope = new BlockCompiler(0,lineNum-1,this,false);
+		this.globalScope.mySubBlocks = this.mySubBlocks;
+		for (BlockCompiler block: this.globalScope.mySubBlocks) {
+			block.setParentBlock(this.globalScope);
+		}
 		// check counter at the end
 		CompileHelper.checkCounter(bracketsCount[0] != 0, bracketsCount[1] != 0);
+
 		// close the BufferedReader
 		codeReader.close();
 
@@ -135,12 +133,10 @@ public class FileCompiler {
 
 
 	public void compile() throws Exception {
-//		mySubBlocks.add(new BlockCompiler(1,8,this));
-
-
-//		for (BlockCompiler block : mySubBlocks) {
-//			block.compile();
-//		}
+		this.globalScope.compile();
+		for (BlockCompiler block : mySubBlocks) {
+			block.compile();
+		}
 	}
 
 
@@ -155,11 +151,9 @@ public class FileCompiler {
 			lineNum++;
 		}
 		return "\nFileCompiler: " +
-				"\nscopeVariables = " + scopeVariables +
 //				",\nmySubBlocks=" + mySubBlocks +
 				",\nbracketsCount = " + Arrays.toString(bracketsCount) +
 //				", code=" + code +
-				",\nfunctionsList = " + functionsList +
 				",\noldCurlyBracketCount = " + oldCurlyBracketCount +
 				",\ncompileHelper = " + compileHelper +
 				"\nCode:\n" + out;
