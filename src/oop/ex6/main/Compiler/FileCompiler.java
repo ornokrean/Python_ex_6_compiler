@@ -14,13 +14,15 @@ import java.util.regex.Pattern;
 public class FileCompiler {
 
 	public static final String EMPTY_LINE = "";
+	static final String TAB_CHAR = "\t";
+	//todo this is for the if inside, returns an array of the conditions.
+
 	private static final String CODE_REGEX = "[\\s]*(?:(?:(?:(?:void|if|while).*\\{)|\\}|.*[;]))";
 	private static final Pattern CODE_PATTERN = Pattern.compile(CODE_REGEX);
 	private static final String BAD_COMMENT_REGEX = "([\\s].*|[/*]+)";
 	private static final Pattern BAD_COMMENT_PATTERN = Pattern.compile(BAD_COMMENT_REGEX);
 	private static final String COMMENT_REGEX = "[\\s]*([/]|[/*])+.*";
 	private static final Pattern COMMENT_PATTERN = Pattern.compile(COMMENT_REGEX);
-	static final String TAB_CHAR = "\t";
 	//	private static final String NO_COMMENT_REGEX = "([^\\/]{2}.*|})";
 //	private static final Pattern NO_COMMENT_PATTERN = Pattern.compile(NO_COMMENT_REGEX);
 	HashSet<scopeVariable> scopeVariables;
@@ -35,6 +37,7 @@ public class FileCompiler {
 	CompileHelper compileHelper;
 	int start;
 	int end;
+
 	/**
 	 * default constructor
 	 */
@@ -97,7 +100,7 @@ public class FileCompiler {
 				lineNum++;
 			}
 		}
-		this.end = lineNum-1;
+		this.end = lineNum - 1;
 		// check counter at the end
 		CompileHelper.checkCounter(bracketsCount[0] != 0, bracketsCount[1] != 0);
 		// close the BufferedReader
@@ -112,17 +115,25 @@ public class FileCompiler {
 //
 //		}
 	}
-
-//todo this is for the if inside, returns an array of the conditions.
 	final static String FUNC_DELIMITER = ",";
 	final static String LOOP_DELIMITER = "\\|\\||&&";
-	String[] splitSignature(String signature, String delimiter) {
-		return  signature.substring(signature.indexOf('(')+1,signature.indexOf(')')).split(delimiter,-1);
+	String[] splitSignature(String signature, String start, String end, String delimiter) {
+		return signature.substring(signature.indexOf(start) + start.length(), signature.indexOf(end)).split
+				(delimiter,
+				-1);
+	}
+
+	void checkFunc(String line) {
+		Pattern p = Pattern.compile("[\\s][a-zA-Z]+[\\w]*");
+		Matcher m = p.matcher(line);
+		m.find();
+		// start +1 because the group finds the " " before and we don't want it
+		String name = line.substring(m.start() + 1, m.end());
+		String[] vars = splitSignature(line, "(", ")", FUNC_DELIMITER);
 	}
 
 
-
-	public void  compile() throws Exception {
+	public void compile() throws Exception {
 //		mySubBlocks.add(new BlockCompiler(1,8,this));
 
 
@@ -160,7 +171,7 @@ public class FileCompiler {
 				System.out.println(code.get(i));
 				i++;
 			}
-			i = b.end+1;
+			i = b.end + 1;
 		}
 		while (i <= this.end) {
 			System.out.println(code.get(i));
