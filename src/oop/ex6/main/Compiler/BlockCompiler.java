@@ -10,12 +10,11 @@ public class BlockCompiler extends FileCompiler {
 	private static final String VAR_ASSIGNMENT = "(([a-zA-Z]*|[_])[\\w]+)[\\s]+[=].*";
 	private static final String VAR_DECLERATION = "(final)?[\\s]+(int|double|char|boolean|String)[\\s].*";
 	protected FileCompiler myCompiler;
-	int start;
-	int end;
+
 	boolean isFunctionBlock = false;
 	private BlockCompiler parentBlock = null;
 
-	public BlockCompiler(int start, int end, FileCompiler myCompiler, Boolean isFunctionBlock) throws Exception{
+	public BlockCompiler(int start, int end, FileCompiler myCompiler, Boolean isFunctionBlock) throws Exception {
 		this.compileHelper = new CompileHelper(this);
 		this.start = start;
 		this.end = end;
@@ -27,27 +26,19 @@ public class BlockCompiler extends FileCompiler {
 	}
 
 
-	public BlockCompiler(int start, int end, FileCompiler myCompiler, BlockCompiler parentBlock) throws  Exception{
+	public BlockCompiler(int start, int end, FileCompiler myCompiler, BlockCompiler parentBlock) throws Exception {
 		this(start, end, myCompiler, false);
 		this.parentBlock = parentBlock;
 	}
 
 
 	void initiateBlock() throws IOException, Exception {
-		System.out.println("my start is :"+start+",my end is :"+end);
-
-		System.out.println("************");
-		System.out.println(code.get(start));
-		for (int i = start+1; i < end; i++) {
+		for (int i = start + 1; i < end; i++) {
 			currentCodeLine = code.get(i);
-
-
-			System.out.println(code.get(i));
 			lineNum = i;
 			compileHelper.compileLine();
 		}
-		System.out.println(code.get(end));
-		System.out.println("************");
+
 	}
 
 	@Override
@@ -146,6 +137,7 @@ public class BlockCompiler extends FileCompiler {
 		}
 	}
 
-	enum LineCase {IF_WHILE, FUNCTION_CALL, VAR_USAGE, RETURN, END_BLOCK, NO_MATCH}
+
+	//	enum LineCase {IF_WHILE, FUNCTION_CALL, VAR_USAGE, RETURN, END_BLOCK, NO_MATCH}
 
 }

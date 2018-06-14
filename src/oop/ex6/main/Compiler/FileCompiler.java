@@ -20,6 +20,7 @@ public class FileCompiler {
 	private static final Pattern BAD_COMMENT_PATTERN = Pattern.compile(BAD_COMMENT_REGEX);
 	private static final String COMMENT_REGEX = "[\\s]*([/]|[/*])+.*";
 	private static final Pattern COMMENT_PATTERN = Pattern.compile(COMMENT_REGEX);
+	static final String TAB_CHAR = "\t";
 	//	private static final String NO_COMMENT_REGEX = "([^\\/]{2}.*|})";
 //	private static final Pattern NO_COMMENT_PATTERN = Pattern.compile(NO_COMMENT_REGEX);
 	HashSet<Variable> variables;
@@ -32,7 +33,8 @@ public class FileCompiler {
 	int lineNum;
 	int blockStartIndex;
 	CompileHelper compileHelper;
-
+	int start;
+	int end;
 	/**
 	 * default constructor
 	 */
@@ -84,17 +86,18 @@ public class FileCompiler {
 	 * @throws Exception   if there is a syntax error
 	 */
 	void initiateCompiler(BufferedReader codeReader) throws IOException, Exception {
-
+		this.start = 0;
 		// FIX TODO FIX what to do with globals? which block will handle?
 		while ((currentCodeLine = codeReader.readLine()) != null) {
 			if (validateLine(currentCodeLine)) {
 				//this is a valid line, add it to the code:
-				code.add(currentCodeLine.replace("\t", ""));
+				code.add(currentCodeLine.replace(TAB_CHAR, ""));
 				// compile this line and it's sub-blocks:
 				compileHelper.compileLine();
 				lineNum++;
 			}
 		}
+		this.end = lineNum-1;
 		// check counter at the end
 		CompileHelper.checkCounter(bracketsCount[0] != 0, bracketsCount[1] != 0);
 		// close the BufferedReader
@@ -103,6 +106,11 @@ public class FileCompiler {
 
 		// fix for test only
 		System.out.println(this);
+//		iter();
+//		for (BlockCompiler b: mySubBlocks) {
+//			b.iter();
+//
+//		}
 	}
 
 
@@ -135,5 +143,20 @@ public class FileCompiler {
 				",\noldCurlyBracketCount = " + oldCurlyBracketCount +
 				",\ncompileHelper = " + compileHelper +
 				"\nCode:\n" + out;
+	}
+
+	void iter() {
+		int i = this.start;
+		for (BlockCompiler b : mySubBlocks) {
+			while (i < b.start) {
+				System.out.println(code.get(i));
+				i++;
+			}
+			i = b.end+1;
+		}
+		while (i <= this.end) {
+			System.out.println(code.get(i));
+			i++;
+		}
 	}
 }

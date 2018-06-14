@@ -1,4 +1,4 @@
-final char c = 'b';
+final char a = '1';
 void foo() {
     int c,d =2;
 	while(true) {
@@ -9,15 +9,15 @@ void foo() {
 	}
 	return;
 }
-final char c = 'b';
+final char b = '2';
 
 void boo(int a, int b, int c1, String d) {
 	char e = c;
 	return;
 }
-final char c = 'b';
+final char c = '3';
 
 void doo(int a1, int a2){
 	return;
 }
-final char c = 'b';
+final char d = '4';
