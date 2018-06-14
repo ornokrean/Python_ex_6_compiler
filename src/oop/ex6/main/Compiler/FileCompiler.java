@@ -113,6 +113,14 @@ public class FileCompiler {
 //		}
 	}
 
+//todo this is for the if inside, returns an array of the conditions.
+	final static String FUNC_DELIMITER = ",";
+	final static String LOOP_DELIMITER = "\\|\\||&&";
+	String[] splitSignature(String signature, String delimiter) {
+		return  signature.substring(signature.indexOf('(')+1,signature.indexOf(')')).split(delimiter,-1);
+	}
+
+
 
 	public void  compile() throws Exception {
 //		mySubBlocks.add(new BlockCompiler(1,8,this));
