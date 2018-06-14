@@ -24,34 +24,28 @@ public class VariableFactory {
 
     public static scopeVariable variableFactory(boolean finalFlag, String type, String varName, String varValue) throws ExceptionInInitializerError{
 
-
-
-
-
-
-
         if(type.equals(typeCases.BOOLEAN.myType)){
-            Boolean bool = booleanHelper(varValue);
-            return new scopeVariable<>(finalFlag,varName,bool);
+            booleanHelper(varValue);
+            return new scopeVariable(finalFlag,varName,type);
 
 
         }else if(type.equals(typeCases.INT.myType)){
-            int num = intHelper(varValue);
-            return new scopeVariable<>(finalFlag,varName,num);
+            intHelper(varValue);
+            return new scopeVariable(finalFlag,varName,type);
 
 
         }else if(type.equals(typeCases.DOUBLE.myType)){
-            double num = doubleHelper(varValue);
-            return new scopeVariable<>(finalFlag,varName,num);
+            doubleHelper(varValue);
+            return new scopeVariable(finalFlag,varName,type);
 
 
         }else if(type.equals(typeCases.STRING.myType)){
-            String string = stringHelper(varValue);
-            return new scopeVariable<>(finalFlag,varName,string);
+            stringHelper(varValue);
+            return new scopeVariable(finalFlag,varName,type);
 
         }else if(type.equals(typeCases.CHAR.myType)){
-            char charVar = charHelper(varValue);
-            return new scopeVariable<>(finalFlag,varName,charVar);
+            charHelper(varValue);
+            return new scopeVariable(finalFlag,varName,type);
         }
         else {
             throw new ExceptionInInitializerError(BAD_VARIABLE_DECLERATION);
