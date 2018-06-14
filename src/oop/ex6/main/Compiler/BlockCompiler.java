@@ -58,13 +58,28 @@ public class BlockCompiler extends FileCompiler {
 		// first off we check if the last 2 lines contains the return and "}"  statement.
 		checkReturnStatement();
 		//check signature
-		int i = start;
-		while (i < end - 1) {
-			i++;
-			i = getLineCase(i);
-			for (BlockCompiler subblock : mySubBlocks) {
-				subblock.compile();
+//		int i = start;
+//		while (i < end - 1) {
+//			i++;
+//			i = getLineCase(i);
+//			for (BlockCompiler subblock : mySubBlocks) {
+//				subblock.compile();
+//			}
+//		}
+		int i = this.start;
+		for (BlockCompiler b : mySubBlocks) {
+			while (i < b.start) {
+				System.out.println("checking"+code.get(i));
+				getLineCase(i);
+				i++;
 			}
+			i = b.end + 1;
+		}
+		while (i <= this.end) {
+
+			System.out.println("checking"+code.get(i));
+			getLineCase(i);
+			i++;
 		}
 	}
 
@@ -117,11 +132,11 @@ public class BlockCompiler extends FileCompiler {
 		m = p.matcher(line);
 		if (m.matches()) {
 			String lineType = m.group(2); // getting the type of the declaration.
-			boolean isfinal = false;
+			boolean isFinal = false;
 			if(m.group(1) != null){
-				isfinal = true;
+				isFinal = true;
 			}
-			varDeclarationCase(line,lineType,isfinal);
+			varDeclarationCase(line,lineType,isFinal);
 			return lineNum;
 		}
 
@@ -162,7 +177,7 @@ public class BlockCompiler extends FileCompiler {
 				continue;
 			}
 
-//			 need to check that the variable has not been assigned
+			// need to check that the variable has not been assigned
             p  = Pattern.compile(NAME_VAR+ "[=]" +NAME_VAR);
 			m  = p.matcher(var);
             if(m.matches()){
