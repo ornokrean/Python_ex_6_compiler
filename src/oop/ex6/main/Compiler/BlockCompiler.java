@@ -69,15 +69,8 @@ public class BlockCompiler extends FileCompiler {
 	public void compile() throws Exception {
 		// first off we check if the last 2 lines contains the return and "}"  statement.
 		checkReturnStatement();
-		//check signature
-//		int i = start;
-//		while (i < end - 1) {
-//			i++;
-//			i = getLineCase(i);
-//			for (BlockCompiler subblock : mySubBlocks) {
-//				subblock.compile();
-//			}
-//		}
+		//TODO check signature
+
 		int i = this.start;
 		for (BlockCompiler b : mySubBlocks) {
 			while (i < b.start) {
@@ -112,6 +105,7 @@ public class BlockCompiler extends FileCompiler {
 	}
 
 	private void isVarUsageValid(String line) throws Exception {
+
 		throw new Exception("bad variable usage input");
 	}
 
@@ -181,21 +175,31 @@ public class BlockCompiler extends FileCompiler {
 				throw new Exception("bad var assignment");
 			}
 
-
 			Pattern p = Pattern.compile(NAME_VAR);
 			Matcher m = p.matcher(var);
 			if (m.matches()) {
 
-				// need to check that the variable does'ent exist already.
+				// need to check that the variable does'nt exist already.
+				//TODO Tell or im trying and catching here to check that the variable doesnot exist in the scope!!!
+				scopeVariable s = null;
+				try {
+					s = getVarInScope(var);
+				}catch (Exception e){
+					// it is not in the scope
+				}
+				if(s != null){throw new Exception("decralring a variable that has  already been declared.");}
+
+
 				scopeVariables.put(m.group(1), new scopeVariable(isFinal, m.group(1), lineType, false));
 				continue;
 			}
+
 
 			p = Pattern.compile(SOME_PRIMITIVE);
 			m = p.matcher(var);
 			if (m.matches()) {
 
-				// group 2 here is the name, and group 4 here is the var assignment.
+				// group  here is the name, and group  here is the var assignment.
 				scopeVariable result = variableFactory(isFinal, lineType, m.group(3), m.group(5));
 				scopeVariables.put(result.getName(), result);
 				continue;
@@ -208,7 +212,7 @@ public class BlockCompiler extends FileCompiler {
 			m = p.matcher(var);
 			if (m.matches()) {
 
-				//group 3 here is the name of the assigned-to variable, and group 1 is the new variable name.
+				//group  here is the name of the assigned-to variable, and group  is the new variable name.
 				scopeVariable assignedVar = getVarInScope(m.group(5));
 				if (assignedVar.isAssigned()) {
 					scopeVariable result = variableFactory(isFinal, lineType, m.group(2), assignedVar.getDefaultVal());
@@ -218,7 +222,7 @@ public class BlockCompiler extends FileCompiler {
 				break;
 
 			}
-			throw new Exception("invalid assignment in line" + code.indexOf(line) + "of new variable with old one");
+			throw new Exception("invalid assignment in line" + code.indexOf(line) + " of new variable with old one");
 
 
 		}
