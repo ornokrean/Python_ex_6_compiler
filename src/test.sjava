@@ -1,0 +1,11 @@
+int a = 06;
+void foo (int b){
+    if (true){
+    String r = "";
+
+
+    return;
+    }
+return;
+}
+//cd downloads && java oop/ex6/main/Sjavac /Users/or/Desktop/CS/Java/ex6/src/test.sjava
