@@ -70,7 +70,7 @@ public class VariableFactory {
     }
 
     private static Boolean booleanHelper(String varValue){
-        Pattern p = Pattern.compile("(true|false|[-]?[0-9]+[.]?[0-9]*|[-]?[.][0-9]+)\b");
+        Pattern p = Pattern.compile("(true|false|[-]?[0-9]+[.]?[0-9]*)\b");
         Matcher m = p.matcher(varValue);
         if(!(m.matches())){ throw new ExceptionInInitializerError("bad boolean");}
 

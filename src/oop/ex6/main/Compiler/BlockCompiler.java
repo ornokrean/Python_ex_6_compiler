@@ -7,11 +7,19 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static oop.ex6.main.Variables.VariableFactory.variableFactory;
+
 public class BlockCompiler extends FileCompiler {
 
-	static final String NAME_VAR = "[\\s]*(([a-zA-Z]*|[_])[\\w]+)[\\s]*";
+	static final String NAME_VAR = "[\\s]*(([a-zA-Z]|[_][\\w])[\\w]*)[\\s]*";
 	private static final String VAR_ASSIGNMENT = NAME_VAR + "[\\s]+[=].*";
 	private static final String VAR_DECLERATION = "(final)?[\\s]+(int|double|char|boolean|String)[\\s]+";
+	private static final String BOOLEAN_VALUE = "(true|false|[-]?[0-9]+[.]?[0-9]*|[-]?[.][0-9]+)\b";
+	private static final String STRING_VALUE = "([\"][^\"]*[\"])";
+	private static final String CHAR_VALUE = "([\'][^\'][\'])";
+	private static final String SOME_PRIMITIVE = "([\\s]*(([a-zA-Z]*|[_])[\\w]+)[\\s]*[=])[\\s]*((true|false|[-]?[0-9]" +
+			"+[.]?[0-9]*)|(['][^']['])|([\"][^\"]*[\"]))";
+
 
 	protected FileCompiler myCompiler;
 
@@ -104,7 +112,6 @@ public class BlockCompiler extends FileCompiler {
 			return lineNum;
 		}
 
-// (" + NAME_VAR + "[\\s]+[,]?)+[=].*"
 		// var declaration call case.
 		p = Pattern.compile("[\\s]*("+ VAR_DECLERATION + ")?");
 		m = p.matcher(line);
@@ -114,9 +121,8 @@ public class BlockCompiler extends FileCompiler {
 			if(m.group(1) != null){
 				isfinal = true;
 			}
-
 			varDeclarationCase(line,lineType,isfinal);
-			return 0;
+			return lineNum;
 		}
 
 		// existing var usage call case.
@@ -124,7 +130,7 @@ public class BlockCompiler extends FileCompiler {
 		m = p.matcher(line);
 		if (m.matches()) {
 			isVarUsageValid(line);
-			return 0;
+			return lineNum;
 		}
 
 
@@ -132,43 +138,67 @@ public class BlockCompiler extends FileCompiler {
 		p = Pattern.compile("[a-zA-Z][\\w]*[(].*[)][\\s]*(;|[{])");
 		m = p.matcher(line);
 		if (m.matches()) {
-			return 0;
+			return lineNum;
 		}
 
 		throw new Exception("No match for line");
 	}
 
-	private void varDeclarationCase(String line,String lineType,boolean isfinal) {
-		line = line.substring(line.indexOf(lineType),line.indexOf(";"));
-		String[] varsDeclared = line.split(",");
+	private void varDeclarationCase(String line,String lineType,boolean isFinal) throws Exception{
+		String[] varsDeclared = splitSignature(line,lineType,";",",");
+
 		for (String var:varsDeclared
 			 ) {
+			if(var.equals("")){
+				throw new Exception("bad var assignment");
+			}
+
 
 			Pattern p  = Pattern.compile(NAME_VAR);
-			Matcher m  = p.matcher(line);
+			Matcher m  = p.matcher(var);
 			if(m.matches()){
 			    // need to check that the variable does'ent exist already.
-				scopeVariables.add( new scopeVariable(isfinal,m.group(1),lineType,false));
+				scopeVariables.put( m.group(1),new scopeVariable(isFinal,m.group(1),lineType,false));
 				continue;
 			}
-			// need to check that the variable has not been assigned
 
-            p  = Pattern.compile(NAME_VAR+"[=]"+NAME_VAR);
-			m  = p.matcher(line);
+//			 need to check that the variable has not been assigned
+            p  = Pattern.compile(NAME_VAR+ "[=]" +NAME_VAR);
+			m  = p.matcher(var);
             if(m.matches()){
+				//group 3 here is the name of the assigned-to variable, and group 1 is the new variable name.
+				scopeVariable assignedVar = getVarInScope(m.group(3));
 
+				if(assignedVar.isAssigned() && assignedVar.getMyType().equals(lineType)){
+					scopeVariables.put( m.group(1),new scopeVariable(isFinal,m.group(1),lineType));
+					continue;
+				}
+
+				throw  new Exception("invalid assignment in line"+code.indexOf(line)+"of new variable with old one");
             }
 
+			p  = Pattern.compile(SOME_PRIMITIVE);
+			m  = p.matcher(var);
+			// group 2 here is the name, and group 4 here is the var assignment.
+			scopeVariable result = variableFactory(isFinal,lineType,m.group(2),m.group(4));
+			scopeVariables.put( m.group(2),result);
 		}
+
 	}
 
-	private scopeVariable getVarInScope(String varName){
-	   scopeVariable result;
+	private scopeVariable getVarInScope(String varName) throws Exception{
 	   BlockCompiler currentBlock = this;
-	   while (this.parentBlock != null){
+	   while (currentBlock != null){
+	   	if(currentBlock.scopeVariables.containsKey(varName)){
+	   		return scopeVariables.get(varName);
+		}
+		currentBlock = parentBlock;
        }
-       return null;
+       throw new Exception("variable not in scope");
     }
+
+
+
 
 	private void checkReturnStatement() throws Exception {
 		if (isFunctionBlock) {

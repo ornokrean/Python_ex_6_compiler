@@ -45,5 +45,9 @@ public  class scopeVariable {
 	public String getMyType() {
 		return myType;
 	}
+
+	public boolean isAssigned() {
+		return isAssigned;
+	}
 }
 

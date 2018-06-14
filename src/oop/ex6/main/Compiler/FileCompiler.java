@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,7 +26,7 @@ public class FileCompiler {
 	private static final Pattern COMMENT_PATTERN = Pattern.compile(COMMENT_REGEX);
 	//	private static final String NO_COMMENT_REGEX = "([^\\/]{2}.*|})";
 //	private static final Pattern NO_COMMENT_PATTERN = Pattern.compile(NO_COMMENT_REGEX);
-	HashSet<scopeVariable> scopeVariables;
+	HashMap<String,scopeVariable> scopeVariables;
 	ArrayList<BlockCompiler> mySubBlocks = new ArrayList<>();
 	int[] bracketsCount = {0, 0};
 	ArrayList<String> code = new ArrayList<>();
