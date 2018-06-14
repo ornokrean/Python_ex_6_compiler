@@ -1,5 +1,7 @@
 package oop.ex6.main.Compiler;
 
+import oop.ex6.main.Variables.Variable;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -52,8 +54,7 @@ public class CompileHelper {
 	private void updateCounter() {
 		int lineLen = compiler.currentCodeLine.length();
 
-		compiler.bracketsCount[0] += lineLen - compiler.currentCodeLine.replace(CURLY_OPEN, EMPTY_STR)
-				.length();
+		compiler.bracketsCount[0] += lineLen - compiler.currentCodeLine.replace(CURLY_OPEN, EMPTY_STR).length();
 
 		compiler.bracketsCount[0] -= lineLen - compiler.currentCodeLine.replace(CURLY_CLOSE, EMPTY_STR)
 				.length();
@@ -98,16 +99,22 @@ public class CompileHelper {
 
 
 	// (([a-zA-Z]*|[_])[\w]+)[\s]+[=].*) regex for var name.
+//(final)?[\s]*(int|double|char|boolean|String)[\s].*|
 
 
-	//	static Variable checkVariableAssignment(String line){
-//		// is it a new variable declaration?
-//		Pattern p  = Pattern.compile("(final)?[\\s]*(int|double|char|boolean|String)[\\s].*|");
-//		Matcher m = p.matcher(line);
-//		if(m.matches()){
-//
-//		}
-//		return null;
-//	}
+
+	static Variable checkVariableAssignment(String line){
+	// is a an assignment with a previously defined value.
+	Pattern p  = Pattern.compile("([\\s]*[a-zA-Z]*|[_])[\\w]+[\\s]*");
+	String assignmentVal = line.substring(line.indexOf('=')+1,line.indexOf(';'));
+
+	//it is a variable assignment with other variable
+	Matcher m = p.matcher(line);
+	if(m.matches()){
+		// check in variables
+	}
+//	Variable var =  variableFactory(a,v,c,assignmentVal);
+	return null;
+	}
 
 }

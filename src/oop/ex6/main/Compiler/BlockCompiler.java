@@ -7,8 +7,10 @@ import java.util.regex.Pattern;
 
 public class BlockCompiler extends FileCompiler {
 
-	private static final String VAR_ASSIGNMENT = "(([a-zA-Z]*|[_])[\\w]+)[\\s]+[=].*";
-	private static final String VAR_DECLERATION = "(final)?[\\s]+(int|double|char|boolean|String)[\\s].*";
+	static final String NAME_VAR = "(([a-zA-Z]*|[_])[\\w]+)";
+	private static final String VAR_ASSIGNMENT = NAME_VAR + "[\\s]+[=].*";
+	private static final String VAR_DECLERATION = "(final)?[\\s]+(int|double|char|boolean|String)[\\s]+";
+
 	protected FileCompiler myCompiler;
 
 	boolean isFunctionBlock = false;
@@ -71,7 +73,7 @@ public class BlockCompiler extends FileCompiler {
 		throw new Exception("bad boolean input");
 	}
 
-	private void isVarUsageValid() throws Exception {
+	private void isVarUsageValid(String line) throws Exception {
 		throw new Exception("bad variable usage input");
 	}
 
@@ -100,11 +102,21 @@ public class BlockCompiler extends FileCompiler {
 			return lineNum;
 		}
 
-
-		// var usage call case
-		p = Pattern.compile("((final)?[\\s]*(int|double|char|boolean|String)[\\s].*|(([a-zA-Z]*|[_])[\\w]+)[\\s]+[=].*)");
+// (" + NAME_VAR + "[\\s]+[,]?)+[=].*"
+		// var declaration call case.
+		p = Pattern.compile("[\\s]*("+ VAR_DECLERATION + ")?");
 		m = p.matcher(line);
 		if (m.matches()) {
+			String lineType = m.group(2); // getting the type of the declaration.
+			varDeclerationCase(line,lineType);
+			return 0;
+		}
+
+		// existing var usage call case.
+		p = Pattern.compile(NAME_VAR + "[\\s]*[=].*[;]");
+		m = p.matcher(line);
+		if (m.matches()) {
+			isVarUsageValid(line);
 			return 0;
 		}
 
@@ -117,6 +129,12 @@ public class BlockCompiler extends FileCompiler {
 		}
 
 		throw new Exception("No match for line");
+	}
+
+	private void varDeclerationCase(String line,String lineType) {
+		line = line.substring(line.indexOf(lineType),line.indexOf(";"));
+		String[] varsDeclared = line.split(",");
+
 	}
 
 	private void checkReturnStatement() throws Exception {
