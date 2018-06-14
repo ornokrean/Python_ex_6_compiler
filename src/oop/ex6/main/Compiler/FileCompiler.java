@@ -109,8 +109,8 @@ public class FileCompiler {
 
 
 		// fix for test only
-		System.out.println(this);
-//		iter();
+//		System.out.println(this);
+		iter();
 //		for (BlockCompiler b: mySubBlocks) {
 //			b.iter();
 //
@@ -169,13 +169,14 @@ public class FileCompiler {
 		int i = this.start;
 		for (BlockCompiler b : mySubBlocks) {
 			while (i < b.start) {
-				System.out.println(code.get(i));
+				System.out.println("checking: " + code.get(i));
+
 				i++;
 			}
 			i = b.end + 1;
 		}
 		while (i <= this.end) {
-			System.out.println(code.get(i));
+			System.out.println("checking: " + code.get(i));
 			i++;
 		}
 	}

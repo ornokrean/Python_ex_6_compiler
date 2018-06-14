@@ -1,7 +1,9 @@
 final char a = '1';
 void foo() {
+//hello
     int c,d =2;
 	while(true) {
+	//hello
 		if (boo(1,2,3,"S")) {
 			doo();
 			doo(c,d);
