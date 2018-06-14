@@ -27,7 +27,7 @@ public class VariableFactory {
         if(isFinal.equals(typeCases.ISFINAL.myType)){finalFlag = true;}
 
         if(type.equals(typeCases.BOOLEAN.myType)){
-            Boolean bool = bolleanHelper(varValue);
+            Boolean bool = booleanHelper(varValue);
             return new Variable<>(finalFlag,varName,bool);
 
 
@@ -71,7 +71,7 @@ public class VariableFactory {
         }
     }
 
-    private static Boolean bolleanHelper(String varValue){
+    private static Boolean booleanHelper(String varValue){
         Pattern p = Pattern.compile("(true|false|[-]?[0-9]+[.]?[0-9]*|[-]?[.][0-9]+)\b");
         Matcher m = p.matcher(varValue);
         if(!(m.matches())){ throw new ExceptionInInitializerError("bad boolean");}
