@@ -147,11 +147,28 @@ public class BlockCompiler extends FileCompiler {
 			Pattern p  = Pattern.compile(NAME_VAR);
 			Matcher m  = p.matcher(line);
 			if(m.matches()){
-				scopeVariables.add( new scopeVariable(isfinal,m.group(1),))
+			    // need to check that the variable does'ent exist already.
+				scopeVariables.add( new scopeVariable(isfinal,m.group(1),lineType,false));
+				continue;
 			}
+			// need to check that the variable has not been assigned
+
+            p  = Pattern.compile(NAME_VAR+"[=]"+NAME_VAR);
+			m  = p.matcher(line);
+            if(m.matches()){
+
+            }
 
 		}
 	}
+
+	private scopeVariable getVarInScope(String varName){
+	   scopeVariable result;
+	   BlockCompiler currentBlock = this;
+	   while (this.parentBlock != null){
+       }
+       return null;
+    }
 
 	private void checkReturnStatement() throws Exception {
 		if (isFunctionBlock) {
@@ -170,8 +187,5 @@ public class BlockCompiler extends FileCompiler {
 			}
 		}
 	}
-
-	private createDeclaredVar()
-	//	enum LineCase {IF_WHILE, FUNCTION_CALL, VAR_USAGE, RETURN, END_BLOCK, NO_MATCH}
 
 }

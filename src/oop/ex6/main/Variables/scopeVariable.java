@@ -16,20 +16,20 @@
 
 package oop.ex6.main.Variables;
 
-public  class scopeVariable<T> {
+public  class scopeVariable {
 	boolean isFinal;
 	String name;
-	T type;
+	String myType;
 	boolean isAssigned = true;
 
 
-	public scopeVariable(boolean isFinal, String name, T type) {
+	public scopeVariable(boolean isFinal, String name, String type) {
 		this.isFinal = isFinal;
 		this.name = name;
-		this.type = type;
+		this.myType =type;
 	}
 
-	public scopeVariable(boolean isFinal, String name, T type,boolean isAssigned) {
+	public scopeVariable(boolean isFinal, String name, String type,boolean isAssigned) {
 		this(isFinal,name,type);
 		this.isAssigned = isAssigned;
 	}
@@ -42,8 +42,8 @@ public  class scopeVariable<T> {
 		return name;
 	}
 
-	public T getType() {
-		return type;
+	public String getMyType() {
+		return myType;
 	}
 }
 
