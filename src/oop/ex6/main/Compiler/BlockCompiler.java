@@ -69,15 +69,14 @@ public class BlockCompiler extends FileCompiler {
 		int i = this.start;
 		for (BlockCompiler b : mySubBlocks) {
 			while (i < b.start) {
-				System.out.println("checking"+code.get(i));
+				System.out.println("checking: "+code.get(i));
 				getLineCase(i);
 				i++;
 			}
 			i = b.end + 1;
 		}
 		while (i <= this.end) {
-
-			System.out.println("checking"+code.get(i));
+			System.out.println("checking: "+code.get(i));
 			getLineCase(i);
 			i++;
 		}

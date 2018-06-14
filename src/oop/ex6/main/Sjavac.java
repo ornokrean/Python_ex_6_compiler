@@ -21,11 +21,10 @@ public class  Sjavac {
     public static void main(String[] args)throws Exception{
         try {
             checkInput(args);
-
             BufferedReader reader = new BufferedReader(new FileReader(args[PATH]));
             FileCompiler compiler = new FileCompiler(reader);
-
             compiler.compile();
+            System.out.println(0);
 
         //TODO we need to separate into IO errors and Compilation Errors
         }catch (Exception e){
