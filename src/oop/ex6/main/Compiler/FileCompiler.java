@@ -1,7 +1,7 @@
 package oop.ex6.main.Compiler;
 
 
-import oop.ex6.main.Variables.Variable;
+import oop.ex6.main.Variables.scopeVariable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class FileCompiler {
 	static final String TAB_CHAR = "\t";
 	//	private static final String NO_COMMENT_REGEX = "([^\\/]{2}.*|})";
 //	private static final Pattern NO_COMMENT_PATTERN = Pattern.compile(NO_COMMENT_REGEX);
-	HashSet<Variable> variables;
+	HashSet<scopeVariable> scopeVariables;
 	ArrayList<BlockCompiler> mySubBlocks = new ArrayList<>();
 	int[] bracketsCount = {0, 0};
 	ArrayList<String> code = new ArrayList<>();
@@ -135,7 +135,7 @@ public class FileCompiler {
 			lineNum++;
 		}
 		return "\nFileCompiler: " +
-				"\nvariables = " + variables +
+				"\nscopeVariables = " + scopeVariables +
 //				",\nmySubBlocks=" + mySubBlocks +
 				",\nbracketsCount = " + Arrays.toString(bracketsCount) +
 //				", code=" + code +

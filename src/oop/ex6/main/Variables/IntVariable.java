@@ -1,6 +1,6 @@
 //package oop.ex6.main.Variables;
 //
-//public class IntVariable extends Variable{
+//public class IntVariable extends scopeVariable{
 //	int value;
 //
 //	public IntVariable(int value){

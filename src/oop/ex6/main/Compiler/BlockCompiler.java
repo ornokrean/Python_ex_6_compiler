@@ -1,13 +1,15 @@
 package oop.ex6.main.Compiler;
 
 
+import oop.ex6.main.Variables.scopeVariable;
+
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class BlockCompiler extends FileCompiler {
 
-	static final String NAME_VAR = "(([a-zA-Z]*|[_])[\\w]+)";
+	static final String NAME_VAR = "[\\s]*(([a-zA-Z]*|[_])[\\w]+)[\\s]*";
 	private static final String VAR_ASSIGNMENT = NAME_VAR + "[\\s]+[=].*";
 	private static final String VAR_DECLERATION = "(final)?[\\s]+(int|double|char|boolean|String)[\\s]+";
 
@@ -108,12 +110,17 @@ public class BlockCompiler extends FileCompiler {
 		m = p.matcher(line);
 		if (m.matches()) {
 			String lineType = m.group(2); // getting the type of the declaration.
-			varDeclerationCase(line,lineType);
+			boolean isfinal = false;
+			if(m.group(1) != null){
+				isfinal = true;
+			}
+
+			varDeclarationCase(line,lineType,isfinal);
 			return 0;
 		}
 
 		// existing var usage call case.
-		p = Pattern.compile(NAME_VAR + "[\\s]*[=].*[;]");
+		p = Pattern.compile(NAME_VAR + "[=].*[;]");
 		m = p.matcher(line);
 		if (m.matches()) {
 			isVarUsageValid(line);
@@ -131,10 +138,19 @@ public class BlockCompiler extends FileCompiler {
 		throw new Exception("No match for line");
 	}
 
-	private void varDeclerationCase(String line,String lineType) {
+	private void varDeclarationCase(String line,String lineType,boolean isfinal) {
 		line = line.substring(line.indexOf(lineType),line.indexOf(";"));
 		String[] varsDeclared = line.split(",");
+		for (String var:varsDeclared
+			 ) {
 
+			Pattern p  = Pattern.compile(NAME_VAR);
+			Matcher m  = p.matcher(line);
+			if(m.matches()){
+				scopeVariables.add( new scopeVariable(isfinal,m.group(1),))
+			}
+
+		}
 	}
 
 	private void checkReturnStatement() throws Exception {
@@ -155,7 +171,7 @@ public class BlockCompiler extends FileCompiler {
 		}
 	}
 
-
+	private createDeclaredVar()
 	//	enum LineCase {IF_WHILE, FUNCTION_CALL, VAR_USAGE, RETURN, END_BLOCK, NO_MATCH}
 
 }

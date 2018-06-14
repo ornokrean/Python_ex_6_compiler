@@ -1,5 +1,5 @@
 //package oop.ex6.main.Variables;
 //
-//public class BooleanVariable extends Variable{
+//public class BooleanVariable extends scopeVariable{
 //	boolean value;
 //}

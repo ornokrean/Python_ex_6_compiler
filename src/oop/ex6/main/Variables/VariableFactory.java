@@ -9,7 +9,7 @@ public class VariableFactory {
 
     enum typeCases{
 
-        BOOLEAN("boolean"), INT("int"), DOUBLE("double"), STRING("String"), CHAR("Char"),ISFINAL("final");
+        BOOLEAN("boolean"), INT("int"), DOUBLE("double"), STRING("String"), CHAR("Char"),ISFINAL("final"),DECLARATION("declaration");
 
         private final String myType;
 
@@ -22,32 +22,36 @@ public class VariableFactory {
 //    private static final String[] availableTypes = {"boolean","int","double","String","Char"};
 
 
-    public static Variable variableFactory(String isFinal, String type, String varName,String varValue) throws ExceptionInInitializerError{
-        Boolean finalFlag = false;
-        if(isFinal.equals(typeCases.ISFINAL.myType)){finalFlag = true;}
+    public static scopeVariable variableFactory(boolean finalFlag, String type, String varName, String varValue) throws ExceptionInInitializerError{
+
+
+
+
+
+
 
         if(type.equals(typeCases.BOOLEAN.myType)){
             Boolean bool = booleanHelper(varValue);
-            return new Variable<>(finalFlag,varName,bool);
+            return new scopeVariable<>(finalFlag,varName,bool);
 
 
         }else if(type.equals(typeCases.INT.myType)){
             int num = intHelper(varValue);
-            return new Variable<>(finalFlag,varName,num);
+            return new scopeVariable<>(finalFlag,varName,num);
 
 
         }else if(type.equals(typeCases.DOUBLE.myType)){
             double num = doubleHelper(varValue);
-            return new Variable<>(finalFlag,varName,num);
+            return new scopeVariable<>(finalFlag,varName,num);
 
 
         }else if(type.equals(typeCases.STRING.myType)){
             String string = stringHelper(varValue);
-            return new Variable<>(finalFlag,varName,string);
+            return new scopeVariable<>(finalFlag,varName,string);
 
         }else if(type.equals(typeCases.CHAR.myType)){
             char charVar = charHelper(varValue);
-            return new Variable<>(finalFlag,varName,charVar);
+            return new scopeVariable<>(finalFlag,varName,charVar);
         }
         else {
             throw new ExceptionInInitializerError(BAD_VARIABLE_DECLERATION);

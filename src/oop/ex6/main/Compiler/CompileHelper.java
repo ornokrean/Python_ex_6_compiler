@@ -1,6 +1,6 @@
 package oop.ex6.main.Compiler;
 
-import oop.ex6.main.Variables.Variable;
+import oop.ex6.main.Variables.scopeVariable;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -103,7 +103,7 @@ public class CompileHelper {
 
 
 
-	static Variable checkVariableAssignment(String line){
+	static scopeVariable checkVariableAssignment(String line){
 	// is a an assignment with a previously defined value.
 	Pattern p  = Pattern.compile("([\\s]*[a-zA-Z]*|[_])[\\w]+[\\s]*");
 	String assignmentVal = line.substring(line.indexOf('=')+1,line.indexOf(';'));
@@ -111,9 +111,9 @@ public class CompileHelper {
 	//it is a variable assignment with other variable
 	Matcher m = p.matcher(line);
 	if(m.matches()){
-		// check in variables
+		// check in scopeVariables
 	}
-//	Variable var =  variableFactory(a,v,c,assignmentVal);
+//	scopeVariable var =  variableFactory(a,v,c,assignmentVal);
 	return null;
 	}
 
