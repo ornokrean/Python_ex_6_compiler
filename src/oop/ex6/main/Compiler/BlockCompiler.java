@@ -49,7 +49,7 @@ public class BlockCompiler extends FileCompiler {
 
 	void setParentBlock(BlockCompiler parentBlock) {
 		this.parentBlock = parentBlock;
-		isFunctionBlock = true;
+		this.isFunctionBlock = true;
 	}
 
 	void initiateBlock() throws IOException, Exception {

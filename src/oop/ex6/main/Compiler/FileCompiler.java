@@ -15,7 +15,7 @@ public class FileCompiler {
 	static final String TAB_CHAR = "\t";
 	//todo this is for the if inside, returns an array of the conditions.
 
-	private static final String CODE_REGEX = "[\\s]*(?:(?:(?:(?:void|if|while).*\\{)|\\}|.*[;]))";
+	private static final String CODE_REGEX = "[\\s]*(?:(?:(?:(?:void|if|while).*\\{)|\\}|.*[;][\\s]*))";
 	private static final Pattern CODE_PATTERN = Pattern.compile(CODE_REGEX);
 	private static final String BAD_COMMENT_REGEX = "([\\s].*|[/*]+)";
 	private static final Pattern BAD_COMMENT_PATTERN = Pattern.compile(BAD_COMMENT_REGEX);
@@ -122,11 +122,14 @@ public class FileCompiler {
 				-1);
 	}
 
-	String getFuncName(String line) {
-		Pattern p = Pattern.compile("[\\s][a-zA-Z]+[\\w]*");
+	String getFuncName(String line) throws Exception {
+		Pattern p = Pattern.compile("(void)[\\s]*([a-zA-Z]+[\\w]*).*");
 		Matcher m = p.matcher(line);
-		m.find();
-		return m.group().trim();
+		System.out.println("here");
+		if (m.matches()) {
+			return m.group(2).trim();
+		}
+		throw new Exception("illegal func name");
 	}
 
 
