@@ -115,21 +115,18 @@ public class FileCompiler {
 //		}
 	}
 	final static String FUNC_DELIMITER = ",";
-	final static String LOOP_DELIMITER = "\\|\\||&&";
+	final static String BOOL_DELIMITER = "\\|\\||&&";
 	String[] splitSignature(String signature, String start, String end, String delimiter) {
 		return signature.substring(signature.indexOf(start) + start.length(), signature.indexOf(end)).split
 				(delimiter,
 				-1);
 	}
 
-	void checkFunc(String line) {
+	String getFuncName(String line) {
 		Pattern p = Pattern.compile("[\\s][a-zA-Z]+[\\w]*");
 		Matcher m = p.matcher(line);
 		m.find();
-		// start +1 because the group finds the " " before and we don't want it
-		// TODO FIX maybe change to group() with trim the string before? check if it works
-		String name = line.substring(m.start() + 1, m.end());
-		String[] vars = splitSignature(line, "(", ")", FUNC_DELIMITER);
+		return m.group().trim();
 	}
 
 

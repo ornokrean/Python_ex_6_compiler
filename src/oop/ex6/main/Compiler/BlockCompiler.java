@@ -5,7 +5,6 @@ import oop.ex6.main.Variables.scopeVariable;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,7 +22,6 @@ public class BlockCompiler extends FileCompiler {
 //			CHAR_VALUE + "|" + STRING_VALUE + ")";
 	private static final String SOME_PRIMITIVE = "(" + NAME_VAR + "[=][\\s]*" +
 			"(" + BOOLEAN_VALUE + "|" + CHAR_VALUE + "|" + STRING_VALUE + "))[\\s]*";
-//	String new11 = "("+NAME_VAR+"[=][\\s]*"+BOOLEAN_VALUE+"|"+CHAR_VALUE+"|"+STRING_VALUE+")";
 
 
 	protected FileCompiler myCompiler;
@@ -32,7 +30,7 @@ public class BlockCompiler extends FileCompiler {
 	int start;
 	int end;
 	HashMap<String, scopeVariable> scopeVariables = new HashMap<>();
-	HashSet<String> functionsList;
+	static HashMap<String, String[]> functionsList = new HashMap<>();
 	private BlockCompiler parentBlock = null;
 
 
@@ -57,12 +55,60 @@ public class BlockCompiler extends FileCompiler {
 	}
 
 	void initiateBlock() throws IOException, Exception {
-		for (int i = start + 1; i < end; i++) {
-			currentCodeLine = code.get(i);
-			lineNum = i;
-			compileHelper.compileLine();
+		for (int i = this.start + 1; i < this.end; i++) {
+			this.currentCodeLine = this.code.get(i);
+			this.lineNum = i;
+			this.compileHelper.compileLine();
 		}
+		if (this.isFunctionBlock){
+			String funcDeclaration = this.code.get(this.start);
+			String name = getFuncName(funcDeclaration);
+			String[] vars = splitSignature(funcDeclaration, "(", ")", FUNC_DELIMITER);
+			functionsList.put(name,vars);
+		}
+	}
 
+	void checkValidFuncCall(String line) throws Exception{
+		String name = getFuncName(line);
+		String[] callVars = splitSignature(line, "(", ")", FUNC_DELIMITER);
+		if (functionsList.containsKey(name)) {
+			String[] validVars = functionsList.get(name);
+			checkFuncCallVars(callVars,validVars);
+		}
+		throw new Exception("Invalid func call");
+	}
+
+	void checkFuncCallVars(String[] callVars, String[] validVars) throws Exception{
+		if (callVars.length != validVars.length){
+			throw new Exception("Invalid func call - not same length as signature");
+		}
+		for (int i = 0; i < validVars.length; i++) {
+			checkEmptyVar(callVars[i], "Empty func call slot");
+			//TODO check vars is valid - same type of object or primitive
+			//(validVars[i],callVars[i]);
+
+		}
+	}
+
+	void checkBooleanCall(String line) throws Exception{
+		String[] checkVars = splitSignature(line, "(", ")", BOOL_DELIMITER);
+		for (String var : checkVars){
+			checkEmptyVar(var, "Empty boolean slot");
+			//TODO check if "var" is good = check if is boolean / double / int type of object or primitive.
+		}
+	}
+
+	/**
+	 * this function checks if the var given equals to EMPTY_LINE, meaning its an error, and throws an
+	 * Exception with the message s iff the var is equals EMPTY_LINE
+	 * @param var the var to check
+	 * @param s the message to throw.
+	 * @throws Exception
+	 */
+	private void checkEmptyVar(String var, String s) throws Exception {
+		if (var.equals(EMPTY_LINE)) {
+			throw new Exception(s);
+		}
 	}
 
 	@Override
@@ -171,9 +217,7 @@ public class BlockCompiler extends FileCompiler {
 		String[] varsDeclared = splitSignature(line, lineType, ";", ",");
 
 		for (String var : varsDeclared) {
-			if (var.equals("")) {
-				throw new Exception("bad var assignment");
-			}
+			checkEmptyVar(var, "bad var assignment");
 
 			Pattern p = Pattern.compile(NAME_VAR);
 			Matcher m = p.matcher(var);
