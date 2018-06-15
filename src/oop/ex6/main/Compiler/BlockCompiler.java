@@ -215,10 +215,9 @@ public class BlockCompiler extends FileCompiler {
 	}
 
 	private String declarationCallCase(String line, boolean insertVal) throws Exception {
-		Pattern p;
-		Matcher m;// var declaration call case.
-		p = Pattern.compile("[\\s]*((final )?[\\s]*(int|double|char|boolean|String)[\\s]+)" + NAME_VAR);
-		m = p.matcher(line);
+		// var declaration call case.
+		Pattern p = Pattern.compile("[\\s]*((final )?[\\s]*(int|double|char|boolean|String)[\\s]+)"+NAME_VAR+".*");
+		Matcher m = p.matcher(line);
 		if (m.matches()) {
 			String lineType = m.group(3); // getting the type of the declaration.
 			boolean isFinal = false;
