@@ -58,6 +58,10 @@ public class BlockCompiler extends FileCompiler {
 			lineNum = i;
 			compileHelper.compileLine();
 		}
+
+	}
+
+	private void checkSignature() throws Exception {
 		if (this.isFunctionBlock) {
 			String funcDeclaration = this.code.get(this.start);
 			String name = getFuncName(funcDeclaration);
@@ -102,6 +106,7 @@ public class BlockCompiler extends FileCompiler {
 	}
 
 	void checkBooleanCall(String line) throws Exception {
+		checkSignature();
 		String[] checkVars = splitSignature(line, "(", ")", BOOL_DELIMITER);
 		for (String var : checkVars) {
 			checkEmptyVar(var, "Empty boolean slot");
@@ -120,6 +125,10 @@ public class BlockCompiler extends FileCompiler {
 			}
 			throw new Exception("invalid boolean condition");
 
+		}
+		for (BlockCompiler subBlock:mySubBlocks
+			 ) {
+			subBlock.compile();
 		}
 	}
 

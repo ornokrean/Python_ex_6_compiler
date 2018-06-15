@@ -78,7 +78,7 @@ METHODS
 
 - Name := as defined for a variable.  but cannot start with [0-9] or "_".
 
-- Parameters := A list seperated by commas of : valid type and a valid variable name (that has no value!)
+- Parameters := A list separated by commas of : valid type and a valid variable name (that has no value!)
 
 - Only void methods are supported.
 
