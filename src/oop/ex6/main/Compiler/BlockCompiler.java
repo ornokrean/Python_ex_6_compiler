@@ -14,6 +14,7 @@ public class BlockCompiler extends FileCompiler {
 
     final static String FUNC_DELIMITER = ",";
     final static String BOOL_DELIMITER = "\\|\\||&&";
+
     static final String NAME_VAR = "([\\s]*(([a-zA-Z]|[_][\\w])[\\w]*)[\\s]*)";
     //	private static final String VAR_ASSIGNMENT = NAME_VAR + "[\\s]+[=].*";
 //	private static final String VAR_DECLERATION = "((final )?[\\s]*(int|double|char|boolean|String)[\\s]+)";
