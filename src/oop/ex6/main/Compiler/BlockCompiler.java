@@ -72,6 +72,8 @@ public class BlockCompiler extends FileCompiler {
 	}
 
 	void addFuncVars(String[] vars) throws Exception {
+		if(vars.length == 1 && vars[0].equals(EMPTY_LINE)){return;}
+
 		for (String var : vars) {
 			if (vars.length > 1)
 				checkEmptyVar(var, "Empty func call slot");
@@ -106,7 +108,6 @@ public class BlockCompiler extends FileCompiler {
 	}
 
 	void checkBooleanCall(String line) throws Exception {
-		checkSignature();
 		String[] checkVars = splitSignature(line, "(", ")", BOOL_DELIMITER);
 		for (String var : checkVars) {
 			checkEmptyVar(var, "Empty boolean slot");
@@ -126,10 +127,7 @@ public class BlockCompiler extends FileCompiler {
 			throw new Exception("invalid boolean condition");
 
 		}
-		for (BlockCompiler subBlock:mySubBlocks
-			 ) {
-			subBlock.compile();
-		}
+
 	}
 
 	/**
@@ -150,6 +148,7 @@ public class BlockCompiler extends FileCompiler {
 	@Override
 	public void compile() throws Exception {
 		// first off we check if the last 2 lines contains the return and "}"  statement.
+		checkSignature();
 		checkReturnStatement();
 		//TODO check signature
 
@@ -171,6 +170,10 @@ public class BlockCompiler extends FileCompiler {
 			i++;
 		}
 //		System.out.println(this.scopeVariables);
+		for (BlockCompiler subBlock:mySubBlocks
+				) {
+			subBlock.compile();
+		}
 
 	}
 

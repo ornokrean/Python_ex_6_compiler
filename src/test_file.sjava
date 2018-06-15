@@ -1,3 +1,4 @@
-void _a(int a) {
-	return;
+void foo() {
+String a;
+return;
 }
