@@ -133,7 +133,6 @@ public class FileCompiler {
 
 	public void compile() throws Exception {
 		this.globalScope.compile();
-
 	}
 
 

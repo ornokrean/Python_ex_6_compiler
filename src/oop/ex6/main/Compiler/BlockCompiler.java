@@ -74,6 +74,7 @@ public class BlockCompiler extends FileCompiler {
 	void addFuncVars(String[] vars) throws Exception {
 		if(vars.length == 1 && vars[0].equals(EMPTY_LINE)){return;}
 
+
 		for (String var : vars) {
 			if (vars.length > 1)
 				checkEmptyVar(var, "Empty func call slot");
@@ -172,6 +173,7 @@ public class BlockCompiler extends FileCompiler {
 			i++;
 		}
 //		System.out.println(this.scopeVariables);
+		System.out.println(scopeVariables);
 		for (BlockCompiler subBlock:mySubBlocks
 				) {
 			subBlock.compile();
@@ -259,14 +261,13 @@ public class BlockCompiler extends FileCompiler {
 		}
 		for (String var : varsDeclared) {
 			scopeVariable existingVariableInScope = null;
-
 			checkEmptyVar(var, "bad var assignment");
 
 			Pattern p = Pattern.compile(NAME_VAR);
 			Matcher m = p.matcher(var);
 			// this is a check that the variable assigned here has not been assigned in previous scopes.
 			if (m.find()) {
-				String varName = m.group();
+				String varName = m.group().trim();
 				existingVariableInScope = getVarInScope(varName);
 
 				// checking that in the case of declaring a variable that it does not exist in the scope.
@@ -279,7 +280,7 @@ public class BlockCompiler extends FileCompiler {
 			// just declaration of a variable with no assignment.
 			if (m.matches()) {
 				if (insertVal) {
-					scopeVariables.put(m.group(1), new scopeVariable(isFinal, m.group(1), lineType,
+					scopeVariables.put(m.group(1).trim(), new scopeVariable(isFinal, m.group(1).trim(), lineType,
 							false));
 				}
 				continue;
@@ -301,7 +302,7 @@ public class BlockCompiler extends FileCompiler {
 							existingVariableInScope.getName(), m.group(5));
 				} else {
 					// group  here is the name, and group  here is the var assignment.
-					scopeVariable result = variableFactory(isFinal, lineType, m.group(3), m.group(5));
+					scopeVariable result = variableFactory(isFinal, lineType, m.group(3).trim(), m.group(5));
 					if (insertVal) {
 						scopeVariables.put(result.getName(), result);
 					}
@@ -325,9 +326,9 @@ public class BlockCompiler extends FileCompiler {
 						variableFactory(existingVariableInScope.isFinal(), existingVariableInScope.getMyType(),
 								existingVariableInScope.getName(), assignedVar.getDefaultVal());
 					} else {
-						scopeVariable result = variableFactory(isFinal, lineType, m.group(2), assignedVar.getDefaultVal());
+						scopeVariable result = variableFactory(isFinal, lineType, m.group(2).trim(), assignedVar.getDefaultVal());
 						if (insertVal) {
-							scopeVariables.put(m.group(2), result);
+							scopeVariables.put(m.group(2).trim(), result);
 						}
 						continue;
 					}
