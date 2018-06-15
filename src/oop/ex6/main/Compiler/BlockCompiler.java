@@ -72,6 +72,8 @@ public class BlockCompiler extends FileCompiler {
 	}
 
 	void addFuncVars(String[] vars) throws Exception {
+		if(vars.length == 1 && vars[0].equals(EMPTY_LINE)){return;}
+
 		for (String var : vars) {
 			if (vars.length > 1)
 				checkEmptyVar(var, "Empty func call slot");
@@ -148,6 +150,7 @@ public class BlockCompiler extends FileCompiler {
 	public void compile() throws Exception {
 		checkSignature();
 		// first off we check if the last 2 lines contains the return and "}"  statement.
+		checkSignature();
 		checkReturnStatement();
 		//TODO check signature
 
@@ -169,6 +172,10 @@ public class BlockCompiler extends FileCompiler {
 			i++;
 		}
 //		System.out.println(this.scopeVariables);
+		for (BlockCompiler subBlock:mySubBlocks
+				) {
+			subBlock.compile();
+		}
 
 		for (BlockCompiler subBlock:mySubBlocks) {
 			subBlock.compile();
