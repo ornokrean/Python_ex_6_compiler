@@ -5,7 +5,6 @@ import oop.ex6.main.Variables.scopeVariable;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,15 +23,13 @@ public class BlockCompiler extends FileCompiler {
 	public static final String SOME_PRIMITIVE = "(" + NAME_VAR + "[=][\\s]*" +
 			"(" + BOOLEAN_VALUE + "|" + CHAR_VALUE + "|" + STRING_VALUE + "))[\\s]*";
 //	String new11 = "("+NAME_VAR+"[=][\\s]*"+BOOLEAN_VALUE+"|"+CHAR_VALUE+"|"+STRING_VALUE+")";
-
-
+	static HashMap<String, String[]> functionsList = new HashMap<>();
 	protected FileCompiler myCompiler;
-
 	boolean isFunctionBlock = false;
 	int start;
 	int end;
 	HashMap<String, scopeVariable> scopeVariables = new HashMap<>();
-	HashSet<String> functionsList;
+	;
 	private BlockCompiler parentBlock = null;
 
 
@@ -63,8 +60,58 @@ public class BlockCompiler extends FileCompiler {
 			lineNum = i;
 			compileHelper.compileLine();
 		}
-
+		if (this.isFunctionBlock) {
+			String funcDeclaration = this.code.get(this.start);
+			String name = getFuncName(funcDeclaration);
+			String[] vars = splitSignature(funcDeclaration, "(", ")", FUNC_DELIMITER);
+			functionsList.put(name, vars);
+		}
 	}
+
+	void checkValidFuncCall(String line) throws Exception {
+		String name = getFuncName(line);
+		String[] callVars = splitSignature(line, "(", ")", FUNC_DELIMITER);
+		if (functionsList.containsKey(name)) {
+			String[] validVars = functionsList.get(name);
+			checkFuncCallVars(callVars, validVars);
+		}
+		throw new Exception("Invalid func call");
+	}
+
+	void checkFuncCallVars(String[] callVars, String[] validVars) throws Exception {
+		if (callVars.length != validVars.length) {
+			throw new Exception("Invalid func call - not same length as signature");
+		}
+		for (int i = 0; i < validVars.length; i++) {
+			checkEmptyVar(callVars[i], "Empty func call slot");
+			//TODO check vars is valid - same type of object or primitive
+			//(validVars[i],callVars[i]);
+
+		}
+	}
+
+	void checkBooleanCall(String line) throws Exception {
+		String[] checkVars = splitSignature(line, "(", ")", BOOL_DELIMITER);
+		for (String var : checkVars) {
+			checkEmptyVar(var, "Empty boolean slot");
+			//TODO check if "var" is good = check if is boolean / double / int type of object or primitive.
+		}
+	}
+
+	/**
+	 * this function checks if the var given equals to EMPTY_LINE, meaning its an error, and throws an
+	 * Exception with the message s iff the var is equals EMPTY_LINE
+	 *
+	 * @param var the var to check
+	 * @param s   the message to throw.
+	 * @throws Exception
+	 */
+	private void checkEmptyVar(String var, String s) throws Exception {
+		if (var.equals(EMPTY_LINE)) {
+			throw new Exception(s);
+		}
+	}
+
 
 	@Override
 	public void compile() throws Exception {
@@ -152,7 +199,7 @@ public class BlockCompiler extends FileCompiler {
 			// notice we are sending the is final true by default but in this case it makes no difference since it is
 			// not in use since the line type is null.
 
-			varDeclarationCase(line,null,true);
+			varDeclarationCase(line, null, true);
 			return lineNum;
 		}
 
@@ -166,53 +213,28 @@ public class BlockCompiler extends FileCompiler {
 
 		throw new Exception("No match for line");
 	}
-//	private void existingVarUsageCase(String line) throws Exception{
-//
-//		Pattern p = Pattern.compile(NAME_VAR);
-//		Matcher m = p.matcher(line);
-//		// this is to check that the variable we are trying to use has been initiated.
-//		if(m.find()){
-//			String varName = m.group();
-//			scopeVariable s = getVarInScope(varName);
-//			// notice the change
-//			if(s == null){ throw new Exception("usage of variable that has not been declared "); }
-//		}
-//
-//
-//		p = Pattern.compile(SOME_PRIMITIVE);
-//		m = p.matcher(line);
-//		if (m.matches()) {
-//
-////			// group  here is the name, and group  here is the var assignment.
-////			scopeVariables.put(result.getName(), result);
-////
-//		}
-//
-//
-//	}
+
 
 	private void varDeclarationCase(String line, String lineType, boolean isFinal) throws Exception {
 		String[] varsDeclared = splitSignature(line, lineType, ";", ",");
-		if(line == null && varsDeclared.length != 1){
+		if (line == null && varsDeclared.length != 1) {
 			throw new Exception("An invalid usage of a variable in one line.");
 		}
 		for (String var : varsDeclared) {
 			scopeVariable existingVariableInScope = null;
 
-			if (var.equals("")) {
-				throw new Exception("bad var assignment");
-			}
+			checkEmptyVar(var, "bad var assignment");
 
 			Pattern p = Pattern.compile(NAME_VAR);
 			Matcher m = p.matcher(var);
 			// this is a check that the variable assigned here has not been assigned in previous scopes.
-			if(m.find()){
+			if (m.find()) {
 				String varName = m.group();
 				existingVariableInScope = getVarInScope(varName);
 
 				// checking that in the case of declaring a variable that it does not exist in the scope.
 				// checking that in the case of using a variable that it does exist in the scope.
-				if((lineType == null) == (existingVariableInScope == null)){
+				if ((lineType == null) == (existingVariableInScope == null)) {
 					throw new Exception("declaring a variable that has  already been declared.");
 				}
 			}
@@ -224,7 +246,7 @@ public class BlockCompiler extends FileCompiler {
 			}
 
 			// checking that the exisiting variable is not final.
-			if(existingVariableInScope != null && existingVariableInScope.isFinal()){
+			if (existingVariableInScope != null && existingVariableInScope.isFinal()) {
 				throw new Exception("trying to assign a variable that is final");
 			}
 
@@ -233,18 +255,17 @@ public class BlockCompiler extends FileCompiler {
 			m = p.matcher(var);
 			if (m.matches()) {
 				// separating the existing var assignment and the regular one.
-				if(lineType == null){
+				if (lineType == null) {
 					// we are checking if the assigned value is of the same type of the variable.
-					variableFactory(existingVariableInScope.isFinal(),existingVariableInScope.getMyType(),
-							existingVariableInScope.getName(),m.group(5));
+					variableFactory(existingVariableInScope.isFinal(), existingVariableInScope.getMyType(),
+							existingVariableInScope.getName(), m.group(5));
+				} else {
+					// group  here is the name, and group  here is the var assignment.
+					scopeVariable result = variableFactory(isFinal, lineType, m.group(3), m.group(5));
+					scopeVariables.put(result.getName(), result);
+					continue;
 				}
-				else {
-				// group  here is the name, and group  here is the var assignment.
-				scopeVariable result = variableFactory(isFinal, lineType, m.group(3), m.group(5));
-				scopeVariables.put(result.getName(), result);
-				continue;}
 			}
-
 
 
 			// need to check that the variable has not been assigned
@@ -257,16 +278,15 @@ public class BlockCompiler extends FileCompiler {
 				if (assignedVar.isAssigned()) {
 
 					// separating the existing var assignment and the regular one.
-					if(lineType == null){
+					if (lineType == null) {
 						// we are checking if the assigned value is of the same type of the variable.
-						variableFactory(existingVariableInScope.isFinal(),existingVariableInScope.getMyType(),
-								existingVariableInScope.getName(),assignedVar.getDefaultVal());
+						variableFactory(existingVariableInScope.isFinal(), existingVariableInScope.getMyType(),
+								existingVariableInScope.getName(), assignedVar.getDefaultVal());
+					} else {
+						scopeVariable result = variableFactory(isFinal, lineType, m.group(2), assignedVar.getDefaultVal());
+						scopeVariables.put(m.group(2), result);
+						continue;
 					}
-
-					else{
-					scopeVariable result = variableFactory(isFinal, lineType, m.group(2), assignedVar.getDefaultVal());
-					scopeVariables.put(m.group(2),result);
-					continue;}
 				}
 				break;
 
@@ -278,7 +298,7 @@ public class BlockCompiler extends FileCompiler {
 
 	}
 
-	private scopeVariable getVarInScope(String varName)  {
+	private scopeVariable getVarInScope(String varName) {
 		BlockCompiler currentBlock = this;
 		while (currentBlock != null) {
 			if (currentBlock.scopeVariables.containsKey(varName)) {
