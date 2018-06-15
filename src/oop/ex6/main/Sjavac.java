@@ -1,5 +1,6 @@
 package oop.ex6.main;
 
+import oop.ex6.main.Compiler.BlockCompiler;
 import oop.ex6.main.Compiler.FileCompiler;
 import java.io.*;
 
@@ -24,6 +25,7 @@ public class  Sjavac {
             BufferedReader reader = new BufferedReader(new FileReader(args[PATH]));
             FileCompiler compiler = new FileCompiler(reader);
             compiler.compile();
+            System.out.println(BlockCompiler.SOME_PRIMITIVE);
             System.out.println(0);
 
             //TODO we need to separate into IO errors and Compilation Errors
