@@ -1,3 +1,2 @@
-void foo(int a, char b) {
-	return;
-}
+int a;
+int b = a;

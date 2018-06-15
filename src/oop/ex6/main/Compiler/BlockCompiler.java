@@ -148,7 +148,7 @@ public class BlockCompiler extends FileCompiler {
 
 	@Override
 	public void compile() throws Exception {
-		checkSignature();
+
 		// first off we check if the last 2 lines contains the return and "}"  statement.
 		checkSignature();
 		checkReturnStatement();
@@ -172,10 +172,7 @@ public class BlockCompiler extends FileCompiler {
 			i++;
 		}
 //		System.out.println(this.scopeVariables);
-		for (BlockCompiler subBlock:mySubBlocks
-				) {
-			subBlock.compile();
-		}
+
 
 		for (BlockCompiler subBlock:mySubBlocks) {
 			subBlock.compile();
@@ -331,7 +328,6 @@ public class BlockCompiler extends FileCompiler {
 						continue;
 					}
 				}
-				break;
 
 			}
 			throw new Exception("invalid assignment in line" + code.indexOf(line) + " of new variable with old one");
