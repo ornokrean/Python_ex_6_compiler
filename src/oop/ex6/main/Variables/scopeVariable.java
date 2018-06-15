@@ -69,10 +69,16 @@ public  class scopeVariable {
 		if(myType.equals(defaultVal.STRING.getType())){
 			return "\"a-string\"";
 		}
-		if (myType.equals(defaultVal.CHAR.getType())){
+		else if (myType.equals(defaultVal.CHAR.getType())){
 			return "\'a\'";
 		}
-		else {
+		else if (myType.equals(defaultVal.DOUBLE.getType())){
+			return "0.0";
+		}
+		else if (myType.equals(defaultVal.BOOLEAN.getType())){
+			return "true";
+		}
+		else{
 			return "0";
 		}
 	}

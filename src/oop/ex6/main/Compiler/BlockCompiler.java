@@ -177,17 +177,15 @@ public class BlockCompiler extends FileCompiler {
 
 			Pattern p = Pattern.compile(NAME_VAR);
 			Matcher m = p.matcher(var);
+//			if()
+
+
 			if (m.matches()) {
 
 				// need to check that the variable does'nt exist already.
-				//TODO Tell or im trying and catching here to check that the variable doesnot exist in the scope!!!
-				scopeVariable s = null;
-				try {
-					s = getVarInScope(var);
-				}catch (Exception e){
-					// it is not in the scope
-				}
-				if(s != null){throw new Exception("decralering a variable that has  already been declared.");}
+				//TODO Tell or im trying and catching here to check that the variable does not exist in the scope!!!
+				scopeVariable s = getVarInScope(var);
+				if(s != null){ throw new Exception("declaring a variable that has  already been declared."); }
 
 
 				scopeVariables.put(m.group(1), new scopeVariable(isFinal, m.group(1), lineType, false));
@@ -229,7 +227,7 @@ public class BlockCompiler extends FileCompiler {
 
 	}
 
-	private scopeVariable getVarInScope(String varName) throws Exception {
+	private scopeVariable getVarInScope(String varName)  {
 		BlockCompiler currentBlock = this;
 		while (currentBlock != null) {
 			if (currentBlock.scopeVariables.containsKey(varName)) {
@@ -237,7 +235,7 @@ public class BlockCompiler extends FileCompiler {
 			}
 			currentBlock = parentBlock;
 		}
-		throw new Exception("variable not in scope");
+		return null;
 	}
 
 
