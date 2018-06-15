@@ -31,7 +31,6 @@ public class FileCompiler {
 	int oldCurlyBracketCount;
 	int lineNum;
 	int blockStartIndex;
-	CompileHelper compileHelper;
 	BlockCompiler globalScope;
 
 
@@ -39,7 +38,6 @@ public class FileCompiler {
 	 * default constructor
 	 */
 	public FileCompiler() {
-		this.compileHelper = new CompileHelper(this);
 	}
 
 	/**
@@ -130,7 +128,7 @@ public class FileCompiler {
 	 * @throws Exception if there's a problem with the counters, too many unmatched parenthesis - (below
 	 * zero).
 	 */
-	private void changeCounter() throws Exception {
+	 void changeCounter() throws Exception {
 		Pattern notCommentPattern = Pattern.compile("([^/]{2}.*|}|\\{)");
 		Matcher m2 = notCommentPattern.matcher(this.currentCodeLine);
 		if (!m2.matches())
@@ -167,14 +165,14 @@ public class FileCompiler {
 	 * add it to the compiler's mySubBlocks ArrayList.
 	 * @throws Exception if the block compiler constructor throws exception
 	 */
-	private void newBlockHelper(BlockCompiler parent) throws Exception {
+	 void newBlockHelper(BlockCompiler parent, boolean isFunctionBlock) throws Exception {
 		if (this.oldCurlyBracketCount == 0 && this.bracketsCount[0] == 1) {
 			// a new block is in the block!
 			this.blockStartIndex = this.lineNum;
 		} else if (this.oldCurlyBracketCount == 1 && this.bracketsCount[0] == 0) {
 			//it is the end of the block:
 			this.mySubBlocks.add(new BlockCompiler(this.blockStartIndex, this.lineNum, this,
-					parent));
+					parent,isFunctionBlock));
 		}
 	}
 
@@ -189,7 +187,7 @@ public class FileCompiler {
 		this.oldCurlyBracketCount = this.bracketsCount[0];
 		changeCounter();
 		// check for the new block indexes, if needed.
-		this.newBlockHelper(parent);
+		this.newBlockHelper(parent,true);
 	}
 
 

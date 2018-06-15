@@ -1,4 +1,3 @@
-void foo() {
-char a;
-return;
+ void foo (    ) {
+	return;
 }

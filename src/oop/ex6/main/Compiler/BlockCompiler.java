@@ -49,6 +49,12 @@ public class BlockCompiler extends FileCompiler {
 		this.parentBlock = parentBlock;
 	}
 
+	public BlockCompiler(int start, int end, FileCompiler myCompiler, BlockCompiler parentBlock, boolean isFunctionBlock)
+			throws Exception {
+		this(start, end, myCompiler, isFunctionBlock);
+		this.parentBlock = parentBlock;
+	}
+
 	public void setEnd(int end) {
 		this.end = end;
 	}
@@ -384,6 +390,14 @@ public class BlockCompiler extends FileCompiler {
 			return m.group(2).trim();
 		}
 		throw new Exception("illegal func name");
+	}
+
+	@Override
+	public void compileLine(BlockCompiler parent) throws Exception {
+		this.oldCurlyBracketCount = this.bracketsCount[0];
+		changeCounter();
+		// check for the new block indexes, if needed.
+		this.newBlockHelper(this,false);
 	}
 
 }
