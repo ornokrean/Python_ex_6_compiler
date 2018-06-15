@@ -65,7 +65,9 @@ public  class scopeVariable {
 	public boolean isAssigned() {
 		return isAssigned;
 	}
+
 	public String getDefaultVal(){
+
 		if(myType.equals(defaultVal.STRING.getType())){
 			return "\"a-string\"";
 		}

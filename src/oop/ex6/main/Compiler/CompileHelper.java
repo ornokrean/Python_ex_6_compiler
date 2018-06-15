@@ -80,7 +80,7 @@ public class CompileHelper {
 		} else if (compiler.oldCurlyBracketCount == 1 && compiler.bracketsCount[0] == 0) {
 			//it is the end of the block:
 			compiler.mySubBlocks.add(new BlockCompiler(compiler.blockStartIndex, compiler.lineNum, compiler,
-					true));
+					false));
 		}
 	}
 
