@@ -1,7 +1,4 @@
 package oop.ex6.main.Compiler;
-
-import oop.ex6.main.Variables.scopeVariable;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -80,7 +77,7 @@ public class CompileHelper {
 		} else if (compiler.oldCurlyBracketCount == 1 && compiler.bracketsCount[0] == 0) {
 			//it is the end of the block:
 			compiler.mySubBlocks.add(new BlockCompiler(compiler.blockStartIndex, compiler.lineNum, compiler,
-					false));
+					(BlockCompiler) this.compiler));
 		}
 	}
 
@@ -97,24 +94,5 @@ public class CompileHelper {
 		this.newBlockHelper();
 	}
 
-
-	// (([a-zA-Z]*|[_])[\w]+)[\s]+[=].*) regex for var name.
-//(final)?[\s]*(int|double|char|boolean|String)[\s].*|
-
-
-
-	static scopeVariable checkVariableAssignment(String line){
-	// is a an assignment with a previously defined value.
-	Pattern p  = Pattern.compile("([\\s]*[a-zA-Z]*|[_])[\\w]+[\\s]*");
-	String assignmentVal = line.substring(line.indexOf('=')+1,line.indexOf(';'));
-
-	//it is a variable assignment with other variable
-	Matcher m = p.matcher(line);
-	if(m.matches()){
-		// check in scopeVariables
-	}
-//	scopeVariable var =  variableFactory(a,v,c,assignmentVal);
-	return null;
-	}
 
 }

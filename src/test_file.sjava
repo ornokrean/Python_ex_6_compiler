@@ -1,1 +1,6 @@
-int x; int y;
+void foo() {
+	int x = 3;
+	if    (   x   )    {
+	}
+	return;
+}
