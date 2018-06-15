@@ -35,7 +35,6 @@ public class BlockCompiler extends FileCompiler {
 
 
     public BlockCompiler(int start, int end, FileCompiler myCompiler, Boolean isFunctionBlock) throws Exception {
-        this.compileHelper = new CompileHelper(this);
         this.start = start;
         this.end = end;
         this.myCompiler = myCompiler;
@@ -59,7 +58,7 @@ public class BlockCompiler extends FileCompiler {
         for (int i = start + 1; i < end; i++) {
             currentCodeLine = code.get(i);
             lineNum = i;
-            compileHelper.compileLine();
+            compileLine();
         }
 
     }

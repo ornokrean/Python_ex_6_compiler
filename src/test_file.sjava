@@ -1,4 +1,1 @@
-
-void foo() {
-	return   ;
-}
+int a= 3;
