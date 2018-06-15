@@ -30,7 +30,7 @@ public class BlockCompiler extends FileCompiler {
     int start;
     int end;
     HashMap<String, scopeVariable> scopeVariables = new HashMap<>();
-    ;
+
     private BlockCompiler parentBlock = null;
 
 
@@ -62,7 +62,7 @@ public class BlockCompiler extends FileCompiler {
         for (int i = start + 1; i < end; i++) {
             currentCodeLine = code.get(i);
             lineNum = i;
-            compileLine();
+            compileLine(this);
         }
 
     }
