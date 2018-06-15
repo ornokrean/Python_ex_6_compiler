@@ -199,7 +199,7 @@ public class BlockCompiler extends FileCompiler {
 
 
 		// return line case.
-		p = Pattern.compile("(return;)[\\s]*");
+		p = Pattern.compile("(return)[\\s]*[;]");
 		m = p.matcher(line);
 		if (m.matches()) {
 			return;
