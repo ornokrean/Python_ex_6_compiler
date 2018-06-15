@@ -88,8 +88,8 @@ public  class scopeVariable {
 		}
 	}
 	public Boolean isBoolean(){
-		return (myType.equals(defaultVal.BOOLEAN.getType())||myType.equals(defaultVal.INT.getType())||
-				myType.equals(defaultVal.DOUBLE.getType()));
+		return ((myType.equals(defaultVal.BOOLEAN.getType())||myType.equals(defaultVal.INT.getType())||
+				myType.equals(defaultVal.DOUBLE.getType()))&& isAssigned);
 	}
 }
 
