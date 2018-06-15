@@ -66,6 +66,10 @@ public  class scopeVariable {
 		return isAssigned;
 	}
 
+	public void setAssigned(boolean assigned) {
+		isAssigned = assigned;
+	}
+
 	public String getDefaultVal(){
 
 		if(myType.equals(defaultVal.STRING.getType())){
@@ -83,6 +87,10 @@ public  class scopeVariable {
 		else{
 			return "0";
 		}
+	}
+	public Boolean isBoolean(){
+		return (myType.equals(defaultVal.BOOLEAN.getType())||myType.equals(defaultVal.INT.getType())||
+				myType.equals(defaultVal.DOUBLE.getType()));
 	}
 }
 
