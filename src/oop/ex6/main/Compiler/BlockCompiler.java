@@ -20,7 +20,7 @@ public class BlockCompiler extends FileCompiler {
 	private static final String CHAR_VALUE = "([\'][^\'][\'])";
 	public static final String SOME_PRIMITIVE = "(" + NAME_VAR + "[=][\\s]*" +
 			"(" + BOOLEAN_VALUE + "|" + CHAR_VALUE + "|" + STRING_VALUE + "))[\\s]*";
-//	String new11 = "("+NAME_VAR+"[=][\\s]*"+BOOLEAN_VALUE+"|"+CHAR_VALUE+"|"+STRING_VALUE+")";
+	//	String new11 = "("+NAME_VAR+"[=][\\s]*"+BOOLEAN_VALUE+"|"+CHAR_VALUE+"|"+STRING_VALUE+")";
 	static HashMap<String, String[]> functionsList = new HashMap<>();
 	protected FileCompiler myCompiler;
 	boolean isFunctionBlock = false;
@@ -66,11 +66,13 @@ public class BlockCompiler extends FileCompiler {
 			addFuncVars(vars);
 		}
 	}
-	void addFuncVars(String[] vars) throws Exception{
-		for (String var:vars) {
-			checkEmptyVar(var, "Empty func call slot");
-			String newVarName = declarationCallCase(var,true);
-			if(newVarName != null){
+
+	void addFuncVars(String[] vars) throws Exception {
+		for (String var : vars) {
+			if (vars.length > 1)
+				checkEmptyVar(var, "Empty func call slot");
+			String newVarName = declarationCallCase(var, true);
+			if (newVarName != null) {
 				scopeVariable currVar = getVarInScope(newVarName);
 				currVar.setAssigned(true);
 				continue;
@@ -95,7 +97,7 @@ public class BlockCompiler extends FileCompiler {
 		}
 		for (int i = 0; i < validVars.length; i++) {
 			checkEmptyVar(callVars[i], "Empty func call slot");
-			declarationCallCase(validVars[i]+"="+callVars[i],false);
+			declarationCallCase(validVars[i] + "=" + callVars[i], false);
 		}
 	}
 
@@ -105,14 +107,14 @@ public class BlockCompiler extends FileCompiler {
 			checkEmptyVar(var, "Empty boolean slot");
 			Pattern p = Pattern.compile(BOOLEAN_VALUE);
 			Matcher m = p.matcher(var.trim());
-			if(m.matches()){
+			if (m.matches()) {
 				continue;
 			}
 			p = Pattern.compile(NAME_VAR);
 			m = p.matcher(var.trim());
-			if(m.matches()){
+			if (m.matches()) {
 				scopeVariable currVar = getVarInScope(var.trim());
-				if(currVar != null && (currVar.isBoolean())){
+				if (currVar != null && (currVar.isBoolean())) {
 					continue;
 				}
 			}
@@ -186,7 +188,7 @@ public class BlockCompiler extends FileCompiler {
 			return;
 
 		}
-		if (declarationCallCase(line,true) != null)
+		if (declarationCallCase(line, true) != null)
 			return;
 
 
@@ -196,7 +198,7 @@ public class BlockCompiler extends FileCompiler {
 		if (m.matches()) {
 			// notice we are sending the is final true by default but in this case it makes no difference since it is
 			// not in use since the line type is null.
-			varDeclarationCase(line, null, true,true);
+			varDeclarationCase(line, null, true, true);
 			return;
 		}
 
@@ -212,10 +214,10 @@ public class BlockCompiler extends FileCompiler {
 		throw new Exception("No match for line");
 	}
 
-	private String declarationCallCase(String line,boolean insertVal) throws Exception {
+	private String declarationCallCase(String line, boolean insertVal) throws Exception {
 		Pattern p;
 		Matcher m;// var declaration call case.
-		p = Pattern.compile("[\\s]*((final )?[\\s]*(int|double|char|boolean|String)[\\s]+)"+NAME_VAR);
+		p = Pattern.compile("[\\s]*((final )?[\\s]*(int|double|char|boolean|String)[\\s]+)" + NAME_VAR);
 		m = p.matcher(line);
 		if (m.matches()) {
 			String lineType = m.group(3); // getting the type of the declaration.
@@ -223,7 +225,7 @@ public class BlockCompiler extends FileCompiler {
 			if (m.group(2) != null) {
 				isFinal = true;
 			}
-			varDeclarationCase(line, lineType, isFinal,insertVal);
+			varDeclarationCase(line, lineType, isFinal, insertVal);
 			// returns the name of the variable.
 			return m.group(5);
 		}
@@ -231,7 +233,7 @@ public class BlockCompiler extends FileCompiler {
 	}
 
 
-	private void varDeclarationCase(String line, String lineType, boolean isFinal,boolean insertVal) throws Exception {
+	private void varDeclarationCase(String line, String lineType, boolean isFinal, boolean insertVal) throws Exception {
 		String[] varsDeclared = splitSignature(line, lineType, ";", ",");
 		if (line == null && varsDeclared.length != 1) {
 			throw new Exception("An invalid usage of a variable in one line.");
@@ -257,8 +259,10 @@ public class BlockCompiler extends FileCompiler {
 
 			// just declaration of a variable with no assignment.
 			if (m.matches()) {
-				if(insertVal){scopeVariables.put(m.group(1), new scopeVariable(isFinal, m.group(1), lineType,
-						false));}
+				if (insertVal) {
+					scopeVariables.put(m.group(1), new scopeVariable(isFinal, m.group(1), lineType,
+							false));
+				}
 				continue;
 			}
 
@@ -279,7 +283,9 @@ public class BlockCompiler extends FileCompiler {
 				} else {
 					// group  here is the name, and group  here is the var assignment.
 					scopeVariable result = variableFactory(isFinal, lineType, m.group(3), m.group(5));
-					if(insertVal){scopeVariables.put(result.getName(), result);}
+					if (insertVal) {
+						scopeVariables.put(result.getName(), result);
+					}
 					continue;
 				}
 			}
@@ -301,7 +307,9 @@ public class BlockCompiler extends FileCompiler {
 								existingVariableInScope.getName(), assignedVar.getDefaultVal());
 					} else {
 						scopeVariable result = variableFactory(isFinal, lineType, m.group(2), assignedVar.getDefaultVal());
-						if(insertVal){scopeVariables.put(m.group(2), result);}
+						if (insertVal) {
+							scopeVariables.put(m.group(2), result);
+						}
 						continue;
 					}
 				}

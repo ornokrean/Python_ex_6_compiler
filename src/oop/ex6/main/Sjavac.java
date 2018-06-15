@@ -25,7 +25,6 @@ public class  Sjavac {
             BufferedReader reader = new BufferedReader(new FileReader(args[PATH]));
             FileCompiler compiler = new FileCompiler(reader);
             compiler.compile();
-            System.out.println(BlockCompiler.SOME_PRIMITIVE);
             System.out.println(0);
 
             //TODO we need to separate into IO errors and Compilation Errors
