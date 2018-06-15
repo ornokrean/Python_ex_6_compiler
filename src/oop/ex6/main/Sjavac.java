@@ -37,7 +37,7 @@ public class  Sjavac {
         }catch (Exception e){
             System.out.println(1);
 //            System.err.println(e.getMessage());
-//            throw e;
+            throw e;
 
         }
     }

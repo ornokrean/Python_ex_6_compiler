@@ -118,14 +118,12 @@ public class FileCompiler {
 	final static String BOOL_DELIMITER = "\\|\\||&&";
 	String[] splitSignature(String signature, String start, String end, String delimiter) {
 		return signature.substring(signature.indexOf(start) + start.length(), signature.indexOf(end)).split
-				(delimiter,
-				-1);
+				(delimiter, -1);
 	}
 
 	String getFuncName(String line) throws Exception {
 		Pattern p = Pattern.compile("(void)[\\s]*([a-zA-Z]+[\\w]*).*");
 		Matcher m = p.matcher(line);
-		System.out.println("here");
 		if (m.matches()) {
 			return m.group(2).trim();
 		}
@@ -135,9 +133,7 @@ public class FileCompiler {
 
 	public void compile() throws Exception {
 		this.globalScope.compile();
-		for (BlockCompiler block : mySubBlocks) {
-			block.compile();
-		}
+
 	}
 
 

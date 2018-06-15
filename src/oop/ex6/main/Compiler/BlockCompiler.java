@@ -75,9 +75,10 @@ public class BlockCompiler extends FileCompiler {
 		for (String var : vars) {
 			if (vars.length > 1)
 				checkEmptyVar(var, "Empty func call slot");
-			String newVarName = declarationCallCase(var, true);
+			String newVarName = declarationCallCase(var+";", true);
 			if (newVarName != null) {
 				scopeVariable currVar = getVarInScope(newVarName);
+				System.out.println(scopeVariables+newVarName);
 				currVar.setAssigned(true);
 				continue;
 			}
@@ -106,7 +107,6 @@ public class BlockCompiler extends FileCompiler {
 	}
 
 	void checkBooleanCall(String line) throws Exception {
-		checkSignature();
 		String[] checkVars = splitSignature(line, "(", ")", BOOL_DELIMITER);
 		for (String var : checkVars) {
 			checkEmptyVar(var, "Empty boolean slot");
@@ -126,10 +126,7 @@ public class BlockCompiler extends FileCompiler {
 			throw new Exception("invalid boolean condition");
 
 		}
-		for (BlockCompiler subBlock:mySubBlocks
-			 ) {
-			subBlock.compile();
-		}
+
 	}
 
 	/**
@@ -149,6 +146,7 @@ public class BlockCompiler extends FileCompiler {
 
 	@Override
 	public void compile() throws Exception {
+		checkSignature();
 		// first off we check if the last 2 lines contains the return and "}"  statement.
 		checkReturnStatement();
 		//TODO check signature
@@ -172,6 +170,9 @@ public class BlockCompiler extends FileCompiler {
 		}
 //		System.out.println(this.scopeVariables);
 
+		for (BlockCompiler subBlock:mySubBlocks) {
+			subBlock.compile();
+		}
 	}
 
 	private void getLineCase(int lineNum) throws Exception {
@@ -238,7 +239,7 @@ public class BlockCompiler extends FileCompiler {
 			}
 			varDeclarationCase(line, lineType, isFinal, insertVal);
 			// returns the name of the variable.
-			return m.group(5);
+			return m.group(5).trim();
 		}
 		return null;
 	}

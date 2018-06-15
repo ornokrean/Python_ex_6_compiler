@@ -73,9 +73,9 @@ public class Tester_ex6_oop {
 		LinkedList<File> listOfTests = getListOfTests(pathToTests);
 		for (File file : listOfTests) {
 			System.out.println();
-			System.out.printf(String.format("starting test %s, %%d out of %%d:%%n",
-					getTestName(Paths.get(file.getPath()))), testIndex, listOfTests.size());
-			if (doOneTest(Paths.get(file.getPath()))) // the real thing
+			String s = String.format("starting test %s, %%d out of %%d:%%n",
+					getTestName(Paths.get(file.getPath())), testIndex, listOfTests.size());
+			if (doOneTest(Paths.get(file.getPath()),s)) // the real thing
 				numOfPassed++;
 			else
 				passedAll = false;
@@ -179,7 +179,7 @@ public class Tester_ex6_oop {
 	/*
 	for given test - run school solution and user solution, compare, print and write about it.
 	 */
-	private boolean doOneTest(Path pathTOTest) {
+	private boolean doOneTest(Path pathTOTest , String s) {
 		String SchoolSolutionOutput = runTestWithSchoolSolution(pathTOTest.toString());
 		String userOutput = runTestWithOnUser(pathTOTest.toString()).trim();
 
@@ -199,9 +199,11 @@ public class Tester_ex6_oop {
 		writeResultToFile(pathTOTest, SchoolSolutionOutput, userOutput, passed);
 
 		if (passed) {
-			System.out.println("passed :)");
+//			System.out.println(s);
+//			System.out.println("passed :)");
 			return true;
 		} else {
+			System.out.println(s);
 			System.out.println("failed\t\t\t\t\t\t#######################################################");
 			return false;
 		}
