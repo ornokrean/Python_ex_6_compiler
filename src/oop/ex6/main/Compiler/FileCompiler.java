@@ -17,7 +17,7 @@ public class FileCompiler {
 
 	private static final String CODE_REGEX = "[\\s]*(?:(?:(?:(?:void|if|while).*\\{)|\\}|.*[;][\\s]*))";
 	private static final Pattern CODE_PATTERN = Pattern.compile(CODE_REGEX);
-	private static final String BAD_COMMENT_REGEX = "([\\s].*|[/*]+)";
+	private static final String BAD_COMMENT_REGEX = "([\\s].*|[/*].*)";
 	private static final Pattern BAD_COMMENT_PATTERN = Pattern.compile(BAD_COMMENT_REGEX);
 	private static final String COMMENT_REGEX = "[\\s]*([/]|[/*])+.*";
 	private static final Pattern COMMENT_PATTERN = Pattern.compile(COMMENT_REGEX);
@@ -65,11 +65,11 @@ public class FileCompiler {
 			if (badComment.matches()) {//bad comment line. bye bye.
 				throw new Exception("bad comment in line " + lineNum);
 			}
-		} else if (!codePattern.matches() && !line.equals(EMPTY_LINE)) {
+		} else if (!codePattern.matches() && !line.trim().equals(EMPTY_LINE)) {
 			//it has something inside but it isn't a code
 			throw new Exception("bad code syntax in line " + lineNum);
 		} else { // return a code
-			return codePattern.matches() && !line.equals(EMPTY_LINE);
+			return codePattern.matches() && !line.trim().equals(EMPTY_LINE);
 			//return !line.equals(EMPTY_LINE);
 		}//fix: check with tomer if there's need for double return (?)
 		return false;

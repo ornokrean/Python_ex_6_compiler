@@ -73,8 +73,8 @@ public class Tester_ex6_oop {
 		LinkedList<File> listOfTests = getListOfTests(pathToTests);
 		for (File file : listOfTests) {
 			System.out.println();
-			String s = String.format("starting test %s, %%d out of %%d:%%n",
-					getTestName(Paths.get(file.getPath())), testIndex, listOfTests.size());
+			String s ="starting test "+getTestName(Paths.get(file.getPath()))+", " +
+					""+testIndex+" out of "+listOfTests.size();
 			if (doOneTest(Paths.get(file.getPath()),s)) // the real thing
 				numOfPassed++;
 			else
