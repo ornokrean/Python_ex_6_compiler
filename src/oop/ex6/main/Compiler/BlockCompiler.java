@@ -312,7 +312,8 @@ public class BlockCompiler extends FileCompiler {
 			if (m.matches()) {
 
 				//group  here is the name of the assigned-to variable, and group  is the new variable name.
-				scopeVariable assignedVar = getVarInScope(m.group(5));
+				scopeVariable assignedVar = getVarInScope(m.group(5).trim());
+				System.out.println(assignedVar);
 				if (assignedVar.isAssigned()) {
 
 					// separating the existing var assignment and the regular one.
@@ -341,7 +342,7 @@ public class BlockCompiler extends FileCompiler {
 		BlockCompiler currentBlock = this;
 		while (currentBlock != null) {
 			if (currentBlock.scopeVariables.containsKey(varName)) {
-				return scopeVariables.get(varName);
+				return currentBlock.scopeVariables.get(varName);
 			}
 			currentBlock = currentBlock.parentBlock;
 		}

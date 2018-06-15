@@ -1,2 +1,5 @@
-int a;
-int b = a;
+int a = 3;
+void foo() {
+	int x = a;
+	return;
+}
