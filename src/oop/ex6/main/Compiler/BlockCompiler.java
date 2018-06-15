@@ -187,7 +187,7 @@ public class BlockCompiler extends FileCompiler {
 				}catch (Exception e){
 					// it is not in the scope
 				}
-				if(s != null){throw new Exception("decralring a variable that has  already been declared.");}
+				if(s != null){throw new Exception("decralering a variable that has  already been declared.");}
 
 
 				scopeVariables.put(m.group(1), new scopeVariable(isFinal, m.group(1), lineType, false));
