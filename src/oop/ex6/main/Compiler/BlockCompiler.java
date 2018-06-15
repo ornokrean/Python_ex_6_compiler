@@ -177,16 +177,16 @@ public class BlockCompiler extends FileCompiler {
 
 			Pattern p = Pattern.compile(NAME_VAR);
 			Matcher m = p.matcher(var);
-//			if()
+
+			// this is a check that the variable assigned here hass not been assigned in previous scopes.
+			if(m.find()){
+				String varName = m.group();
+				scopeVariable s = getVarInScope(varName);
+				if(s != null){ throw new Exception("declaring a variable that has  already been declared."); }
+			}
 
 
 			if (m.matches()) {
-
-				// need to check that the variable does'nt exist already.
-				//TODO Tell or im trying and catching here to check that the variable does not exist in the scope!!!
-				scopeVariable s = getVarInScope(var);
-				if(s != null){ throw new Exception("declaring a variable that has  already been declared."); }
-
 
 				scopeVariables.put(m.group(1), new scopeVariable(isFinal, m.group(1), lineType, false));
 				continue;
