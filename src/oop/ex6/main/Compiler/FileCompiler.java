@@ -141,6 +141,7 @@ public class FileCompiler {
 
 	}
 
+
 	/*
 	 * this function updates each counter according to the number of parenthesis in the currentCodeLine.
 	 */

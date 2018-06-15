@@ -29,6 +29,7 @@ public class  Sjavac {
 
             //TODO we need to separate into IO errors and Compilation Errors
         }
+
         catch (IOException e){
             System.out.println(2);
 //            System.err.println(e.getMessage());
