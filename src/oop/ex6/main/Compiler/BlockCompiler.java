@@ -151,6 +151,7 @@ public class BlockCompiler extends FileCompiler {
 		if (m.matches()) {
 			// notice we are sending the is final true by default but in this case it makes no difference since it is
 			// not in use since the line type is null.
+
 			varDeclarationCase(line,null,true);
 			return lineNum;
 		}
