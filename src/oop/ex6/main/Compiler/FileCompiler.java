@@ -127,6 +127,7 @@ public class FileCompiler {
 		Matcher m = p.matcher(line);
 		m.find();
 		// start +1 because the group finds the " " before and we don't want it
+		// TODO FIX maybe change to group() with trim the string before? check if it works
 		String name = line.substring(m.start() + 1, m.end());
 		String[] vars = splitSignature(line, "(", ")", FUNC_DELIMITER);
 	}
