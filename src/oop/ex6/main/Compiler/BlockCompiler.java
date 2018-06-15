@@ -208,7 +208,7 @@ public class BlockCompiler extends FileCompiler {
 
 
 		// return line case.
-		p = Pattern.compile("(return)[\\s]*[;]");
+		p = Pattern.compile("[\\s]*(return)[\\s]*[;]");
 		m = p.matcher(line);
 		if (m.matches()) {
 			return;
@@ -367,7 +367,7 @@ public class BlockCompiler extends FileCompiler {
 				throw new Exception("bad end of block");
 			}
 			// check if one row before last contains "return;"
-			p = Pattern.compile("(return;)[\\s]*");
+			p = Pattern.compile("[\\s]*(return)[\\s]*[;]");
 			m = p.matcher(code.get(end - 1));
 
 			if (!m.matches()) {
@@ -378,6 +378,9 @@ public class BlockCompiler extends FileCompiler {
 
 
 	String[] splitSignature(String signature, String start, String end, String delimiter) {
+		if (start == null){
+			start = EMPTY_LINE;
+		}
 		return signature.substring(signature.indexOf(start) + start.length(), signature.indexOf(end)).split
 				(delimiter, -1);
 	}
@@ -396,7 +399,7 @@ public class BlockCompiler extends FileCompiler {
 		this.oldCurlyBracketCount = this.bracketsCount[0];
 		changeCounter();
 		// check for the new block indexes, if needed.
-		this.newBlockHelper(this,false);
+		this.newBlockHelper(this, false);
 	}
 
 }

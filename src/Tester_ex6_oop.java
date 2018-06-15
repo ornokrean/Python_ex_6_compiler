@@ -2,6 +2,7 @@ import oop.ex6.main.Sjavac;
 
 // import the library - alt+enter
 import static org.junit.Assert.*;
+
 import org.junit.Test;
 
 import java.awt.*;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 public class Tester_ex6_oop {
 	private static Path pathToFiles = Paths.get("src", "tester_files");
 	private static Path pathToTests = Paths.get(pathToFiles.toString(), "tests");
-	private static Path pathToUserTests = Paths.get(pathToTests.toString(), "your_tests");
+	private static Path pathToUserTests = Paths.get(pathToTests.toString(), "specificTests");
 	private static Path pathToOutputFile = Paths.get(pathToFiles.toString(), "user_output.txt");
 	private static Path pathToSchoolSolution = Paths.get(pathToFiles.toString(), "school_solution.jar");
 //	private static Path pathToMainClass = Paths.get("oop", "ex5", "main", "Sjava.java");
@@ -26,33 +27,54 @@ public class Tester_ex6_oop {
 
 	private static PrintStream originalOutStream = System.out;
 	private static PrintStream originalErrStream = System.err;
-	private static ByteArrayOutputStream baos = new ByteArrayOutputStream();
-	private static PrintStream printsRecorder = new PrintStream(baos);
+	private static ByteArrayOutputStream baosP = new ByteArrayOutputStream();
+	private static ByteArrayOutputStream baosE = new ByteArrayOutputStream();
+	private static PrintStream printsRecorder = new PrintStream(baosP);
+	private static PrintStream ErrorsRecorder = new PrintStream(baosE);
+
+
+	private static String error = "\n" +
+			"▓█████  ██▀███   ██▀███   ▒█████   ██▀███  \n" +
+			"▓█   ▀ ▓██ ▒ ██▒▓██ ▒ ██▒▒██▒  ██▒▓██ ▒ ██▒\n" +
+			"▒███   ▓██ ░▄█ ▒▓██ ░▄█ ▒▒██░  ██▒▓██ ░▄█ ▒\n" +
+			"▒▓█  ▄ ▒██▀▀█▄  ▒██▀▀█▄  ▒██   ██░▒██▀▀█▄  \n" +
+			"░▒████▒░██▓ ▒██▒░██▓ ▒██▒░ ████▓▒░░██▓ ▒██▒\n" +
+			"░░ ▒░ ░░ ▒▓ ░▒▓░░ ▒▓ ░▒▓░░ ▒░▒░▒░ ░ ▒▓ ░▒▓░\n" +
+			" ░ ░  ░  ░▒ ░ ▒░  ░▒ ░ ▒░  ░ ▒ ▒░   ░▒ ░ ▒░\n" +
+			"   ░     ░░   ░   ░░   ░ ░ ░ ░ ▒    ░░   ░ \n" +
+			"   ░  ░   ░        ░         ░ ░     ░     \n" +
+			"                                           ";
 
 
 	@Test
 	/*
 	optionals - run specific tests.
 	To use this:
-		1. place Sjava files on Tests/your_tests
+		1. place Sjava files in 'Tests/specificTests' folder.
 		2. press the little green arrow here to the left.
 		<---
 	 */
-	public void runUserTests_optional() {
+	public void runSpecificTests_optional() {
 		int i = 1;
 		LinkedList<File> listOfTests = getListOfTests(pathToUserTests);
-		if(listOfTests.size()==0){ // not files were places.
-			System.out.println("If you want to use runUserTests, you need to add test files to " +
-					"Tests\\your_tests .");
+		if (listOfTests.size() == 0) { // not files were places.
+			System.out.println("If you want to use runSpecificTests_optional, you have to add test files to" +
+					"'Tests\\specificTests'.");
 		}
-
 		for (File file : listOfTests) {
 			Path testPath = Paths.get(file.getPath());
 			System.out.printf(String.format("\nstarting test %s, %%d out of %%d:%%n",
 					getTestName(Paths.get(file.getPath()))), i, listOfTests.size());
-			System.out.println("school solution result:\n"+ runTestWithSchoolSolution(testPath.toString()));
+			String[] userPrints = runTestWithOnUser(testPath.toString());
+			String[] schoolPrints = runTestWithSchoolSolution(testPath.toString());
+			System.out.println("school solution result:");
+			System.out.println(schoolPrints[0]); //prints
+			System.out.println(schoolPrints[1]); //errors
 			System.out.println();
-			System.out.println("user result:\n"+ runTestWithOnUser(testPath.toString()));
+			System.out.println("user result:");
+			System.out.println(userPrints[0]); //prints
+			System.out.println(userPrints[1]); //errors
+
 		}
 
 
@@ -73,9 +95,9 @@ public class Tester_ex6_oop {
 		LinkedList<File> listOfTests = getListOfTests(pathToTests);
 		for (File file : listOfTests) {
 			System.out.println();
-			String s ="starting test "+getTestName(Paths.get(file.getPath()))+", " +
-					""+testIndex+" out of "+listOfTests.size();
-			if (doOneTest(Paths.get(file.getPath()),s)) // the real thing
+			System.out.printf(String.format("starting test %s, %%d out of %%d:%%n",
+					getTestName(Paths.get(file.getPath()))), testIndex, listOfTests.size());
+			if (doOneTest(Paths.get(file.getPath()))) // the real thing
 				numOfPassed++;
 			else
 				passedAll = false;
@@ -87,7 +109,7 @@ public class Tester_ex6_oop {
 		String summary = String.format("\npassed %d out of %d tests.%n", numOfPassed, listOfTests.size());
 		System.out.println(summary);
 		writeToFile(summary);
-		assertTrue(passedAll);
+		assertTrue(error, passedAll);
 
 		try {
 			if (Desktop.isDesktopSupported()) {
@@ -102,11 +124,9 @@ public class Tester_ex6_oop {
 	/*
 	test for type 2 errors.
 	 */
-	public void runType2ErrorTests(){
+	public void runType2ErrorTests() {
 		System.out.println("\nstarting runType2ErrorTests:");
 		System.out.println("Make sure school-solution massage and user massage talk about the same thing.");
-		System.out.println("Make sure You printed '2'.");
-		System.out.println("don't worry if the '2' is not is the correct place.");
 
 		String pathToTestFile1 =
 				Paths.get(pathToTests.toString(), "SchoolTests", "test001.sjava").toString();
@@ -115,18 +135,21 @@ public class Tester_ex6_oop {
 
 		String[][] args = new String[2][];
 		//args[0] = new String[]{"", "No args"}; // school solution throw
-		args[0] = new String[]{pathToTestFile1+" "+pathToTestFile2, "2 args"};
+		args[0] = new String[]{pathToTestFile1 + " " + pathToTestFile2, "2 args"};
 		args[1] = new String[]{pathToTests.toString(), "not a file"};
 
-		for (String[] arr: args){
+		for (String[] arr : args) {
 			System.out.println();
-			System.out.println("type 2 tested: "+arr[1]);
-			try{
-				System.out.println("school_solution massage:");
-				System.out.println(runTestWithSchoolSolution(arr[0]));
+			System.out.println("type 2 tested: " + arr[1]);
+			try {
+				String[] userPrints = runTestWithOnUser(arr[0]);
+				String[] SchoolPrints = runTestWithSchoolSolution(arr[0]);
+				assertTrue(SchoolPrints[0].equals(userPrints[0])); // both should be 2.
+				System.out.println("school_solution error massage:");
+				System.out.println(userPrints[1]);
 				System.out.println("user massage:");
-				System.out.println(runTestWithOnUser(arr[0]));
-			}catch (Exception e){
+				System.out.println(SchoolPrints[1]);
+			} catch (Exception e) {
 				System.err.println("your program throw an exception (and that's not OK).");
 				e.printStackTrace();
 				fail();
@@ -179,31 +202,29 @@ public class Tester_ex6_oop {
 	/*
 	for given test - run school solution and user solution, compare, print and write about it.
 	 */
-	private boolean doOneTest(Path pathTOTest , String s) {
-		String SchoolSolutionOutput = runTestWithSchoolSolution(pathTOTest.toString());
-		String userOutput = runTestWithOnUser(pathTOTest.toString()).trim();
+	private boolean doOneTest(Path pathToTest) {
+		String[] SchoolSolutionOutput = runTestWithSchoolSolution(pathToTest.toString());
+		String[] userOutput = runTestWithOnUser(pathToTest.toString());
 
 
 		// printed to match
-		if (userOutput.length() > 1) {
-			String toPrint = "while testing " + getTestName(pathTOTest) +
-					", Your program printed something that is not '1' or '0'.\n" +
-					"The prints (or errors) were:\n+" + userOutput;
+		if (userOutput[0].length() != 1) {
+			String toPrint = "while testing " + getTestName(pathToTest) +
+					", Your program printed something that is not '1' or '0' or '2'.\n" +
+					"The prints were:\n" + userOutput[0] + "\n" + userOutput[1];
 			System.err.println(toPrint);
 			writeToFile("\n" + toPrint + "\n");
 			return false;
 
 		}
 
-		boolean passed = SchoolSolutionOutput.equals(userOutput); // compare
-		writeResultToFile(pathTOTest, SchoolSolutionOutput, userOutput, passed);
+		boolean passed = SchoolSolutionOutput[0].equals(userOutput[0]); // compare
+		writeResultToFile(pathToTest, SchoolSolutionOutput[0], userOutput[0], passed);
 
 		if (passed) {
-//			System.out.println(s);
-//			System.out.println("passed :)");
+			System.out.println("passed :)");
 			return true;
 		} else {
-			System.out.println(s);
 			System.out.println("failed\t\t\t\t\t\t#######################################################");
 			return false;
 		}
@@ -275,11 +296,12 @@ public class Tester_ex6_oop {
 	/*
 	return the output of the user's program on the given test.
 	 */
-	private String runTestWithOnUser(String pathTOTest) {
+	private String[] runTestWithOnUser(String pathTOTest) {
 		recordPrints();
 		try {
 			Sjavac.main(new String[]{pathTOTest});
 		} catch (Exception e) {
+			// your program threw something...
 			e.printStackTrace();
 		}
 		return getPrintsAndBackToNormal();
@@ -288,10 +310,8 @@ public class Tester_ex6_oop {
 	/*
 	return the output of the school solution on the given test.
 	 */
-	private String runTestWithSchoolSolution(String pathTOTest) {
-		BufferedReader b =
-				excCommand("java", "-jar", pathToSchoolSolution.toString(), pathTOTest);
-		return b.lines().collect(Collectors.joining());
+	private String[] runTestWithSchoolSolution(String pathTOTest) {
+		return excCommand("java", "-jar", pathToSchoolSolution.toString(), pathTOTest);
 	}
 
 
@@ -300,16 +320,21 @@ public class Tester_ex6_oop {
 	/*
 	run the command given is cmd and return output
 	 */
-	private BufferedReader excCommand(String... args) {
+	private String[] excCommand(String... args) {
+		String[] records = new String[2];
 		ProcessBuilder builder = new ProcessBuilder(args);
-		builder.redirectErrorStream(true);
 		try {
 			Process p = builder.start();
-			return new BufferedReader(new InputStreamReader(p.getInputStream()));
+			BufferedReader out = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			BufferedReader err = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+			records[0] = out.lines().collect(Collectors.joining());
+			records[1] = err.lines().collect(Collectors.joining());
 		} catch (IOException e) {
+			// download tester again.
 			e.printStackTrace();
 			return null;
 		}
+		return records;
 	}
 
 
@@ -318,16 +343,31 @@ public class Tester_ex6_oop {
 	 */
 	private static void recordPrints() {
 		System.setOut(printsRecorder);
-		System.setErr(printsRecorder);
+		System.setErr(ErrorsRecorder);
 	}
 
 	/*
 	return recorded prints
 	 */
-	private static String getPrintsAndBackToNormal() {
-		String string = baos.toString();
-		baos.reset();
+	private static String[] getPrintsAndBackToNormal() {
+		String[] records = new String[2];
+		records[0] = baosP.toString().trim();
+		baosP.reset();
 		System.setOut(originalOutStream);
+
+		records[1] = baosE.toString().trim();
+		baosE.reset();
+		System.setErr(originalErrStream);
+
+		return records;
+	}
+
+	/*
+	return recorded prints
+	 */
+	private static String getErrorsAndBackToNormal() {
+		String string = baosE.toString();
+		baosE.reset();
 		System.setErr(originalErrStream);
 
 		return string;

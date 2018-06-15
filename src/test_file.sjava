@@ -1,6 +1,3 @@
-void foo() {
-	int x;
-	while    (   x   )    {
-	}
-	return;
-}
+int a;
+a = 3;
+int b = a;
