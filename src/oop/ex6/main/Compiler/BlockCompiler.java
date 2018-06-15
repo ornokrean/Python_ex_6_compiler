@@ -50,6 +50,10 @@ public class BlockCompiler extends FileCompiler {
         this.parentBlock = parentBlock;
     }
 
+    public void setEnd(int end) {
+        this.end = end;
+    }
+
     void setParentBlock(BlockCompiler parentBlock) {
         this.parentBlock = parentBlock;
         this.isFunctionBlock = true;
