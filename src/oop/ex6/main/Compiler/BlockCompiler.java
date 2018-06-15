@@ -42,10 +42,10 @@ public class BlockCompiler extends FileCompiler {
 		// compile first line
 	}
 
-	public BlockCompiler(int start, int end, FileCompiler myCompiler, BlockCompiler parentBlock) throws Exception {
-		this(start, end, myCompiler, false);
-		this.parentBlock = parentBlock;
-	}
+//	public BlockCompiler(int start, int end, FileCompiler myCompiler, BlockCompiler parentBlock) throws Exception {
+//		this(start, end, myCompiler, false);
+//		this.parentBlock = parentBlock;
+//	}
 
 	void setParentBlock(BlockCompiler parentBlock) {
 		this.parentBlock = parentBlock;
@@ -331,7 +331,7 @@ public class BlockCompiler extends FileCompiler {
 			if (currentBlock.scopeVariables.containsKey(varName)) {
 				return scopeVariables.get(varName);
 			}
-			currentBlock = parentBlock;
+			currentBlock = currentBlock.parentBlock;
 		}
 		return null;
 	}
