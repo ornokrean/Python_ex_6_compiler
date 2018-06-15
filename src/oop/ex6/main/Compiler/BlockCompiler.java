@@ -313,7 +313,6 @@ public class BlockCompiler extends FileCompiler {
 
 				//group  here is the name of the assigned-to variable, and group  is the new variable name.
 				scopeVariable assignedVar = getVarInScope(m.group(5).trim());
-				System.out.println(assignedVar);
 				if (assignedVar.isAssigned()) {
 
 					// separating the existing var assignment and the regular one.
