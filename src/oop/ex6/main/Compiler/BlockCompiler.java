@@ -150,7 +150,6 @@ public class BlockCompiler extends FileCompiler {
 	public void compile() throws Exception {
 		checkSignature();
 		// first off we check if the last 2 lines contains the return and "}"  statement.
-		checkSignature();
 		checkReturnStatement();
 		//TODO check signature
 
@@ -160,21 +159,14 @@ public class BlockCompiler extends FileCompiler {
 		}
 		for (BlockCompiler b : mySubBlocks) {
 			while (i < b.start) {
-//				System.out.println("checking: " + code.get(i));
 				getLineCase(i);
 				i++;
 			}
 			i = b.end + 1;
 		}
 		while (i <= this.end) {
-//			System.out.println("checking: " + code.get(i));
 			getLineCase(i);
 			i++;
-		}
-//		System.out.println(this.scopeVariables);
-		for (BlockCompiler subBlock:mySubBlocks
-				) {
-			subBlock.compile();
 		}
 
 		for (BlockCompiler subBlock:mySubBlocks) {

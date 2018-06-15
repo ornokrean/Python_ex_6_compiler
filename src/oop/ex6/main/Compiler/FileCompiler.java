@@ -17,7 +17,7 @@ public class FileCompiler {
 
 	private static final String CODE_REGEX = "[\\s]*(?:(?:(?:(?:void|if|while).*\\{)|\\}|.*[;][\\s]*))";
 	private static final Pattern CODE_PATTERN = Pattern.compile(CODE_REGEX);
-	private static final String BAD_COMMENT_REGEX = "([\\s].*|[/*]+)";
+	private static final String BAD_COMMENT_REGEX = "([\\s].*|[/*].*)";
 	private static final Pattern BAD_COMMENT_PATTERN = Pattern.compile(BAD_COMMENT_REGEX);
 	private static final String COMMENT_REGEX = "[\\s]*([/]|[/*])+.*";
 	private static final Pattern COMMENT_PATTERN = Pattern.compile(COMMENT_REGEX);
