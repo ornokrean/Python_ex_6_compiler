@@ -145,6 +145,9 @@ public class BlockCompiler extends FileCompiler {
 		//TODO check signature
 
 		int i = this.start;
+		if(isFunctionBlock){
+			i++;
+		}
 		for (BlockCompiler b : mySubBlocks) {
 			while (i < b.start) {
 //				System.out.println("checking: " + code.get(i));

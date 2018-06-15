@@ -1,1 +1,3 @@
-int a = 5;
+void foo(int a) {
+	return;
+}
