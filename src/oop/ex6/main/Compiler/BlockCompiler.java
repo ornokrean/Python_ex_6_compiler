@@ -84,12 +84,11 @@ public class BlockCompiler extends FileCompiler {
 	}
 
 	void addFuncVars(String[] vars) throws Exception {
-		if (vars.length == 1 && vars[0].equals(EMPTY_LINE)) {
+		if (vars.length == 1 && vars[0].trim().equals(EMPTY_LINE)) {
 			return;
 		}
-
-
 		for (String var : vars) {
+			var = var.trim();
 			if (vars.length > 1)
 				checkEmptyVar(var, "Empty func call slot");
 			String newVarName = declarationCallCase(var + ";", true);
@@ -384,7 +383,7 @@ public class BlockCompiler extends FileCompiler {
 	}
 
 	String getFuncName(String line) throws Exception {
-		Pattern p = Pattern.compile("(void)[\\s]*([a-zA-Z]+[\\w]*).*");
+		Pattern p = Pattern.compile("[\\s]*(void)[\\s]*([a-zA-Z]+[\\w]*).*");
 		Matcher m = p.matcher(line);
 		if (m.matches()) {
 			return m.group(2).trim();
