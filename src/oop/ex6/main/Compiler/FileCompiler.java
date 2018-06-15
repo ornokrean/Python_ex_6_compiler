@@ -65,11 +65,11 @@ public class FileCompiler {
 			if (badComment.matches()) {//bad comment line. bye bye.
 				throw new Exception("bad comment in line " + lineNum);
 			}
-		} else if (!codePattern.matches() && !line.equals(EMPTY_LINE)) {
+		} else if (!codePattern.matches() && !line.trim().equals(EMPTY_LINE)) {
 			//it has something inside but it isn't a code
 			throw new Exception("bad code syntax in line " + lineNum);
 		} else { // return a code
-			return codePattern.matches() && !line.equals(EMPTY_LINE);
+			return codePattern.matches() && !line.trim().equals(EMPTY_LINE);
 			//return !line.equals(EMPTY_LINE);
 		}//fix: check with tomer if there's need for double return (?)
 		return false;
