@@ -65,6 +65,7 @@ public class BlockCompiler extends FileCompiler {
 			String name = getFuncName(funcDeclaration);
 			String[] vars = splitSignature(funcDeclaration, "(", ")", FUNC_DELIMITER);
 			functionsList.put(name, vars);
+
 		}
 	}
 
