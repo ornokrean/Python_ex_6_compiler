@@ -81,7 +81,6 @@ public class BlockCompiler extends FileCompiler {
 			String newVarName = declarationCallCase(var+";", true);
 			if (newVarName != null) {
 				scopeVariable currVar = getVarInScope(newVarName);
-				System.out.println(scopeVariables+newVarName);
 				currVar.setAssigned(true);
 				continue;
 			}
@@ -173,7 +172,6 @@ public class BlockCompiler extends FileCompiler {
 			i++;
 		}
 //		System.out.println(this.scopeVariables);
-		System.out.println(scopeVariables);
 		for (BlockCompiler subBlock:mySubBlocks
 				) {
 			subBlock.compile();
