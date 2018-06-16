@@ -1,5 +1,5 @@
 void foo() {
-foo2(5,7);
+		foo2                (            5          , 7   );
 return;
 }
 

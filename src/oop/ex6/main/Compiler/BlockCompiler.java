@@ -138,6 +138,7 @@ public class BlockCompiler extends FileCompiler {
 		Matcher m;
 
 		for (int i = 0; i < validVars.length; i++) {
+			callVars[i] = callVars[i].trim();
 			m = p.matcher(callVars[i]);
 			scopeVariable currVar = getVarInScope(callVars[i]);
 			checkEmptyVar(callVars[i], "Empty func call slot");
