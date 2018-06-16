@@ -28,10 +28,11 @@ public class BlockCompiler extends FileCompiler {
 	public static final String CHAR_VALUE = "([\'][^\'][\'])";
 	public static final String SOME_PRIMITIVE = "(" + NAME_VAR + "[=][\\s]*" +
 			"(" + BOOLEAN_VALUE + "|" + CHAR_VALUE + "|" + STRING_VALUE + "))[\\s]*";
-	static final String VAR_DECLARATION_REGEX = "[\\s]*((final )?[\\s]*(int|double|char|boolean|String)[\\s]+)";
+	static final String VAR_DECLARATION_REGEX = "[\\s]*((final\\s)?[\\s]*(int|double|char|boolean|String)" +
+			"[\\s]+)";
 
 	static final String END_BLOCK_REGEX = "^[\\s]*}[\\s]*$";
-	static final String ASSIGNMENT_REGEX = "[=].*[;]";
+	static final String ASSIGNMENT_REGEX = "[\\s]*[=].*[;]";
 	static final String EVERYTHING_REGEX = ".*";
 	static final String EQUALS_REGEX = "[=]";
 	static final String BRACKET_CLOSE_REGEX = "}[\\s]*$";
