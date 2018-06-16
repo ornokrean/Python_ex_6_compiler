@@ -85,17 +85,17 @@ public class BlockCompiler extends FileCompiler {
 			String[] vars = splitSignature(funcDeclaration, "(", ")", FUNC_DELIMITER);
 			addFuncVars(vars);
 
-
-			for (int i = 0; i < vars.length; i++) {
-				Pattern p = Pattern.compile(VAR_DECLARATION_REGEX + NAME_VAR + "[\\s]*");
-				Matcher m = p.matcher(vars[i]);
-				if (m.matches()) {
-					vars[i] = m.group(3).trim();
-					continue;
+			if(!(vars.length == 1 && vars[0].equals(EMPTY_LINE))){
+				for (int i = 0; i < vars.length; i++) {
+					Pattern p = Pattern.compile(VAR_DECLARATION_REGEX + NAME_VAR + "[\\s]*");
+					Matcher m = p.matcher(vars[i]);
+					if (m.matches()) {
+						vars[i] = m.group(3).trim();
+						continue;
+					}
+					throw new Exception("bad function signature");
 				}
-				throw new Exception("bad function signature");
 			}
-
 			functionsList.put(name, vars);
 		}
 	}
