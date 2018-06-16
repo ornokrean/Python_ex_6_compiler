@@ -23,6 +23,9 @@ public class FileCompiler {
 	private static final String COMMENT_REGEX = "[\\s]*([/]|[/*])+.*";
 	private static final Pattern COMMENT_PATTERN = Pattern.compile(COMMENT_REGEX);
 	static final String NOT_COMMENT_REGEX = "([^/]{2}.*|}|\\{)";
+	static final String IF_WHILE_REGEX = "^[\\s]*(if|while)[\\s]*[(].+[)][\\s]*[{]";
+	static final String FUNC_CALL = "([\\s]*)([a-zA-Z][\\w]*)[\\s]*[(].*[)][\\s]*(;)";
+
 	static BlockCompiler globalScope;
 	ArrayList<BlockCompiler> mySubBlocks = new ArrayList<>();
 	int[] bracketsCount = {0, 0};
@@ -92,7 +95,7 @@ public class FileCompiler {
 
 	private void checkInvalidGlobalCode(String line) throws Exception {
 		if (bracketsCount[0] == 0) {
-			Pattern p = Pattern.compile(RETURN_REGEX);
+			Pattern p = Pattern.compile("("+RETURN_REGEX+")|("+IF_WHILE_REGEX+")|("+FUNC_CALL+")");
 			Matcher m = p.matcher(line);
 			if (m.matches())
 				throw new Exception("return statement at bad place (global scope)");
@@ -132,8 +135,6 @@ public class FileCompiler {
 	public void compile() throws Exception {
 		for (BlockCompiler block : mySubBlocks) {
 			block.checkSignature();
-
-
 		}
 		this.globalScope.compile();
 	}
