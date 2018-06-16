@@ -302,11 +302,11 @@ public class BlockCompiler extends FileCompiler {
 					throw new Exception("declaring a var that is already in scope.");
 				}
 
-				existingVariableInScope = getVarInScope(varName);
+
 
 				// checking that in the case of declaring a variable that it does not exist in the scope.
 				// checking that in the case of using a variable that it does exist in the scope.
-				if ((lineType == null) == (existingVariableInScope == null)) {
+				else if ((lineType == null) == (existingVariableInScope == null)) {
 					throw new Exception("declaring a variable that has  already been declared.");
 				}
 			}
