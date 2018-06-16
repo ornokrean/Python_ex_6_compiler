@@ -17,16 +17,14 @@ public class BlockCompiler extends FileCompiler {
 	private static final int NOT_ASSIGNED = -1;
 
 	static final String NAME_VAR = "([\\s]*(([a-zA-Z]|[_][\\w])[\\w]*)[\\s]*)";
-	//	private static final String VAR_ASSIGNMENT = NAME_VAR + "[\\s]+[=].*";
-//	private static final String VAR_DECLERATION = "((final )?[\\s]*(int|double|char|boolean|String)[\\s]+)";
-
 
 	public static final String BOOLEAN_VALUE = "(true|false|[-]?[0-9]+[.]?[0-9]*|[-]?[.][0-9]+)";
 	public static final String STRING_VALUE = "([\"][^\"]*[\"])";
 	public static final String CHAR_VALUE = "([\'][^\'][\'])";
 	public static final String SOME_PRIMITIVE = "(" + NAME_VAR + "[=][\\s]*" +
 			"(" + BOOLEAN_VALUE + "|" + CHAR_VALUE + "|" + STRING_VALUE + "))[\\s]*";
-	//	String new11 = "("+NAME_VAR+"[=][\\s]*"+BOOLEAN_VALUE+"|"+CHAR_VALUE+"|"+STRING_VALUE+")";
+
+
 	static HashMap<String, String[]> functionsList = new HashMap<>();
 	protected FileCompiler myCompiler;
 	boolean isFunctionBlock = false;
@@ -72,7 +70,6 @@ public class BlockCompiler extends FileCompiler {
 			lineNum = i;
 			compileLine(this);
 		}
-
 	}
 
 	private void checkSignature() throws Exception {
@@ -291,7 +288,7 @@ public class BlockCompiler extends FileCompiler {
 			if (m.matches()) {
 				if (insertVal) {
 					scopeVariables.put(m.group(1).trim(), new scopeVariable(isFinal, m.group(1).trim(), lineType,
-							lineNum));
+							NOT_ASSIGNED));
 				}
 				continue;
 			}
