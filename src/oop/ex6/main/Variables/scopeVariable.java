@@ -20,7 +20,7 @@ public  class scopeVariable {
 	boolean isFinal;
 	String name;
 	String myType;
-	boolean isAssigned = true;
+	private int isAssigned = -1;
 
 	enum defaultVal{
 
@@ -40,13 +40,17 @@ public  class scopeVariable {
 		this.myType =type;
 	}
 
-	public scopeVariable(boolean isFinal, String name, String type,boolean isAssigned) throws Exception{
+	public scopeVariable(boolean isFinal, String name, String type,int isAssigned) throws Exception{
 		this(isFinal,name,type);
-		if (isFinal && !isAssigned) {
+		if (isFinal && ) {
 			throw new Exception("final with no value");
 		}
 		this.isAssigned = isAssigned;
 
+	}
+
+	public boolean isAssigned(){
+		return (isAssigned != -1);
 	}
 
 	public boolean isFinal() {
@@ -61,12 +65,12 @@ public  class scopeVariable {
 		return myType;
 	}
 
-	public boolean isAssigned() {
-		return isAssigned;
-	}
 
-	public void setAssigned(boolean assigned) {
+	public void setAssigned(int assigned) {
 		isAssigned = assigned;
+	}
+	public int getVarLineNum(){
+		return isAssigned;
 	}
 
 	public String getDefaultVal(){
@@ -89,7 +93,7 @@ public  class scopeVariable {
 	}
 	public Boolean isBoolean(){
 		return ((myType.equals(defaultVal.BOOLEAN.getType())||myType.equals(defaultVal.INT.getType())||
-				myType.equals(defaultVal.DOUBLE.getType()))&& isAssigned);
+				myType.equals(defaultVal.DOUBLE.getType()))&& isAssigned());
 	}
 }
 
