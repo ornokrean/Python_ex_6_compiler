@@ -21,7 +21,6 @@ public class BlockCompiler extends FileCompiler {
 	static final String FUNC_DECLARATION = "[\\s]*(void)[\\s]*([a-zA-Z]+[\\w]*)[\\s]*[(].*[)][\\s]*[{]";
 	private static final Pattern FUNC_DECLARATION_PATTERN = Pattern.compile(FUNC_DECLARATION);
 
-	static final String FUNC_CALL = "([\\s]*)([a-zA-Z][\\w]*)[\\s]*[(].*[)][\\s]*(;)";
 	private static final Pattern FUNC_CALL_PATTERN = Pattern.compile(FUNC_CALL);
 
 	public static final String BOOLEAN_VALUE = "(true|false|[-]?[0-9]+[.]?[0-9]*|[-]?[.][0-9]+)";
@@ -30,7 +29,7 @@ public class BlockCompiler extends FileCompiler {
 	public static final String SOME_PRIMITIVE = "(" + NAME_VAR + "[=][\\s]*" +
 			"(" + BOOLEAN_VALUE + "|" + CHAR_VALUE + "|" + STRING_VALUE + "))[\\s]*";
 	static final String VAR_DECLARATION_REGEX = "[\\s]*((final )?[\\s]*(int|double|char|boolean|String)[\\s]+)";
-	static final String IF_WHILE_REGEX = "^[\\s]*(if|while)[\\s]*[(].+[)][\\s]*[{]";
+
 	static final String END_BLOCK_REGEX = "^[\\s]*}[\\s]*$";
 	static final String ASSIGNMENT_REGEX = "[=].*[;]";
 	static final String EVERYTHING_REGEX = ".*";
