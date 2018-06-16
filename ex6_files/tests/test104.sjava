@@ -1,3 +1,7 @@
-char foo() {
-	return 'a';
+void foo() {
+	if(true){
+	    int a;
+	    int a = x;
+	}
+	int x =5;
 }

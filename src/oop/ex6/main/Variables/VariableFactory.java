@@ -9,30 +9,30 @@ import java.util.regex.Pattern;
 public class VariableFactory {
 	private static final String BAD_VARIABLE_DECLERATION = "ERROR: Wrong type variable in line : ";
 
-	public static scopeVariable variableFactory(boolean finalFlag, String type, String varName, String varValue) throws Exception {
+	public static scopeVariable variableFactory(boolean finalFlag, String type, String varName, String varValue,int lineNum) throws Exception {
 
 		if (type.equals(typeCases.BOOLEAN.myType)) {
 			booleanHelper(varValue);
-			return new scopeVariable(finalFlag, varName, type);
+			return new scopeVariable(finalFlag, varName, type,lineNum);
 
 
 		} else if (type.equals(typeCases.INT.myType)) {
 			intHelper(varValue);
-			return new scopeVariable(finalFlag, varName, type);
+			return new scopeVariable(finalFlag, varName, type,lineNum);
 
 
 		} else if (type.equals(typeCases.DOUBLE.myType)) {
 			doubleHelper(varValue);
-			return new scopeVariable(finalFlag, varName, type);
+			return new scopeVariable(finalFlag, varName, type,lineNum);
 
 
 		} else if (type.equals(typeCases.STRING.myType)) {
 			stringHelper(varValue);
-			return new scopeVariable(finalFlag, varName, type);
+			return new scopeVariable(finalFlag, varName, type,lineNum);
 
 		} else if (type.equals(typeCases.CHAR.myType)) {
 			charHelper(varValue);
-			return new scopeVariable(finalFlag, varName, type);
+			return new scopeVariable(finalFlag, varName, type,lineNum);
 		} else {
 			throw new Exception(BAD_VARIABLE_DECLERATION);
 		}
