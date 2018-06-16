@@ -91,7 +91,9 @@ public class BlockCompiler extends FileCompiler {
 				Matcher m = p.matcher(vars[i]);
 				if (m.matches()) {
 					vars[i] = m.group(3).trim();
+					continue;
 				}
+				throw new Exception("bad function signature");
 			}
 
 			functionsList.put(name, vars);
