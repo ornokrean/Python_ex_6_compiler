@@ -5,6 +5,7 @@ import oop.ex6.main.Variables.scopeVariable;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,8 +38,8 @@ public class BlockCompiler extends FileCompiler {
 	int start;
 	int end;
 	HashMap<String, scopeVariable> scopeVariables = new HashMap<>();
+	HashSet<Integer> myLines;
 	private BlockCompiler parentBlock = null;
-
 
 	public BlockCompiler(int start, int end, FileCompiler myCompiler, Boolean isFunctionBlock) throws Exception {
 		this.start = start;
@@ -47,6 +48,7 @@ public class BlockCompiler extends FileCompiler {
 		this.code = myCompiler.code;
 		this.isFunctionBlock = isFunctionBlock;
 		initiateBlock();
+		myLines = new HashSet<>();
 		// compile first line
 	}
 
@@ -85,7 +87,7 @@ public class BlockCompiler extends FileCompiler {
 			String[] vars = splitSignature(funcDeclaration, "(", ")", FUNC_DELIMITER);
 			addFuncVars(vars);
 
-			if(!(vars.length == 1 && vars[0].trim().equals(EMPTY_LINE))){
+			if (!(vars.length == 1 && vars[0].trim().equals(EMPTY_LINE))) {
 				for (int i = 0; i < vars.length; i++) {
 					Pattern p = Pattern.compile(VAR_DECLARATION_REGEX + NAME_VAR + "[\\s]*");
 					Matcher m = p.matcher(vars[i]);
@@ -136,7 +138,7 @@ public class BlockCompiler extends FileCompiler {
 		if (callVars.length == 1 && validVars[0].equals(EMPTY_LINE)) {
 			return;
 		}
-		Pattern p = Pattern.compile(STRING_VALUE+"|"+BOOLEAN_VALUE+"|"+CHAR_VALUE);
+		Pattern p = Pattern.compile(STRING_VALUE + "|" + BOOLEAN_VALUE + "|" + CHAR_VALUE);
 		Matcher m;
 
 		for (int i = 0; i < validVars.length; i++) {
@@ -144,13 +146,12 @@ public class BlockCompiler extends FileCompiler {
 			m = p.matcher(callVars[i]);
 			scopeVariable currVar = getVarInScope(callVars[i]);
 			checkEmptyVar(callVars[i], "Empty func call slot");
-			if(m.matches()){
-				variableFactory(true,validVars[i],"no_matter",callVars[i],0);
-			}
-			else if(currVar == null||!(currVar.isAssigned())){
+			if (m.matches()) {
+				variableFactory(true, validVars[i], "no_matter", callVars[i], 0);
+			} else if (currVar == null || !(currVar.isAssigned())) {
 				throw new Exception("invalid variable assignment.");
-			}else{
-				variableFactory(true,validVars[i],"no_matter",currVar.getDefaultVal(),0);
+			} else {
+				variableFactory(true, validVars[i], "no_matter", currVar.getDefaultVal(), 0);
 			}
 
 		}
@@ -224,7 +225,7 @@ public class BlockCompiler extends FileCompiler {
 
 	private void checkLine(int lineNum) throws Exception {
 		String line = code.get(lineNum);
-
+		myLines.add(lineNum);
 		// if or while case.
 		Pattern p = Pattern.compile(IF_WHILE_REGEX);
 		Matcher m = p.matcher(line);
@@ -368,16 +369,18 @@ public class BlockCompiler extends FileCompiler {
 
 				//group  here is the name of the assigned-to variable, and group  is the new variable name.
 				scopeVariable assignedVar = getVarInScope(m.group(5).trim());
+
 				if (assignedVar.isAssigned()) {
-
-					if (!globalScope.scopeVariables.containsKey(assignedVar.getName()) && (assignedVar
-							.getVarLineNum() < start || assignedVar.getVarLineNum() > end) && (assignedVar.getVarLineNum() > lineNum)) {
+					if (!globalScope.scopeVariables.containsValue(assignedVar) && (assignedVar
+							.getVarLineNum() < start || assignedVar.getVarLineNum() > end) &&
+							(assignedVar.getVarLineNum() > lineNum)) {
 						throw new Exception("trying to assign a value with a value that has not been declared yet.");
+
+					} else if (globalScope.scopeVariables.containsValue(assignedVar) && !globalScope
+							.myLines.contains(assignedVar.getVarLineNum())) {
+						throw new Exception("trying to assign a value with a value that has not been declared yet.");
+
 					}
-
-
-
-
 					// separating the existing var assignment and the regular one.
 					if (lineType == null) {
 						// we are checking if the assigned value is of the same type of the variable.

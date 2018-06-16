@@ -25,20 +25,20 @@ public class  Sjavac {
             BufferedReader reader = new BufferedReader(new FileReader(args[PATH]));
             FileCompiler compiler = new FileCompiler(reader);
             compiler.compile();
-            System.out.println(0);
+            System.out.print(0);
 
             //TODO we need to separate into IO errors and Compilation Errors
         }
 
         catch (IOException e){
-            System.out.println(2);
+            System.out.print(2);
 //            System.err.println(e.getMessage());
 //            throw e;
 
         }catch (Exception e){
-            System.out.println(1);
+            System.out.print(1);
 //            System.err.println(e.getMessage());
-            throw e;
+//            throw e;
         }
     }
 

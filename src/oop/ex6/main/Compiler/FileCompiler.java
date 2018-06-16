@@ -16,17 +16,18 @@ public class FileCompiler {
 	static final String ROUND_CLOSE = ")";
 	//todo this is for the if inside, returns an array of the conditions.
 	static final String RETURN_REGEX = "[\\s]*(return)[\\s]*[;]";
-	private static final String CODE_REGEX = "[\\s]*(?:(?:(?:(?:void|if|while)[^{]*\\{)|\\}|[^;]*[;][\\s]*))";
+	static final String NOT_COMMENT_REGEX = "([^/]{2}.*|}|\\{)";
+	static final String IF_WHILE_REGEX = "^[\\s]*(if|while)[\\s]*[(].+[)][\\s]*[{]";
+	static final String FUNC_CALL = "([\\s]*)([a-zA-Z][\\w]*)[\\s]*[(].*[)][\\s]*(;)";
+	private static final String CODE_REGEX = "[\\s]*(?:(?:(?:(?:void|if|while)[^{]*\\{)|\\}|[^;" +
+			"]*[;][\\s]*))[\\s]*";
 	private static final Pattern CODE_PATTERN = Pattern.compile(CODE_REGEX);
 	private static final String BAD_COMMENT_REGEX = "([\\s].*|[/][*].*)";
 	private static final Pattern BAD_COMMENT_PATTERN = Pattern.compile(BAD_COMMENT_REGEX);
 	private static final String COMMENT_REGEX = "[\\s]*([/]|[/*])+.*";
 	private static final Pattern COMMENT_PATTERN = Pattern.compile(COMMENT_REGEX);
-	static final String NOT_COMMENT_REGEX = "([^/]{2}.*|}|\\{)";
-	static final String IF_WHILE_REGEX = "^[\\s]*(if|while)[\\s]*[(].+[)][\\s]*[{]";
-	static final String FUNC_CALL = "([\\s]*)([a-zA-Z][\\w]*)[\\s]*[(].*[)][\\s]*(;)";
-
 	static BlockCompiler globalScope;
+
 	ArrayList<BlockCompiler> mySubBlocks = new ArrayList<>();
 	int[] bracketsCount = {0, 0};
 	ArrayList<String> code = new ArrayList<>();
@@ -95,7 +96,7 @@ public class FileCompiler {
 
 	private void checkInvalidGlobalCode(String line) throws Exception {
 		if (bracketsCount[0] == 0) {
-			Pattern p = Pattern.compile("("+RETURN_REGEX+")|("+IF_WHILE_REGEX+")|("+FUNC_CALL+")");
+			Pattern p = Pattern.compile("(" + RETURN_REGEX + ")|(" + IF_WHILE_REGEX + ")|(" + FUNC_CALL + ")");
 			Matcher m = p.matcher(line);
 			if (m.matches())
 				throw new Exception("return statement at bad place (global scope)");
@@ -128,11 +129,13 @@ public class FileCompiler {
 		// check counter at the end
 		checkCounter(bracketsCount[0] != 0, bracketsCount[1] != 0);
 
+
 		// close the BufferedReader
 		codeReader.close();
 	}
 
 	public void compile() throws Exception {
+
 		for (BlockCompiler block : mySubBlocks) {
 			block.checkSignature();
 		}

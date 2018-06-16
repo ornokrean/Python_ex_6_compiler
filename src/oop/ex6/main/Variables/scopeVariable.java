@@ -16,7 +16,7 @@
 
 package oop.ex6.main.Variables;
 
-public  class scopeVariable {
+public class scopeVariable {
 	boolean isFinal;
 	String name;
 	String myType;

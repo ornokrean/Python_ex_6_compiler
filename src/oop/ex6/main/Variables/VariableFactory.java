@@ -13,29 +13,18 @@ public class VariableFactory {
 
 		if (type.equals(typeCases.BOOLEAN.myType)) {
 			booleanHelper(varValue);
-			return new scopeVariable(finalFlag, varName, type, lineNum);
-
-
 		} else if (type.equals(typeCases.INT.myType)) {
 			intHelper(varValue);
-			return new scopeVariable(finalFlag, varName, type, lineNum);
-
-
 		} else if (type.equals(typeCases.DOUBLE.myType)) {
 			doubleHelper(varValue);
-			return new scopeVariable(finalFlag, varName, type, lineNum);
-
-
 		} else if (type.equals(typeCases.STRING.myType)) {
 			stringHelper(varValue);
-			return new scopeVariable(finalFlag, varName, type, lineNum);
-
 		} else if (type.equals(typeCases.CHAR.myType)) {
 			charHelper(varValue);
-			return new scopeVariable(finalFlag, varName, type, lineNum);
 		} else {
 			throw new Exception(BAD_VARIABLE_DECLERATION);
 		}
+		return new scopeVariable(finalFlag, varName, type, lineNum);
 	}
 
 	private static int intHelper(String varValue) throws Exception {

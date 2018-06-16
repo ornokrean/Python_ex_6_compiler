@@ -1,5 +1,9 @@
-void foo() {
-				 while 	        		   (        		  true        )  {
+int a;
+void foo(){
+a = 7;
+return;
 }
+void boo(){
+int b = a;
 return;
 }
