@@ -18,6 +18,12 @@ public class BlockCompiler extends FileCompiler {
 
 	static final String NAME_VAR = "([\\s]*(([a-zA-Z]|[_][\\w])[\\w]*)[\\s]*)";
 
+	static final String FUNC_DECLARATION = "[\\s]*(void)[\\s]*([a-zA-Z]+[\\w]*).*";
+	private static final Pattern FUNC_DECLARATION_PATTERN = Pattern.compile(FUNC_DECLARATION);
+
+	static final String FUNC_CALL = "([\\s]*)([a-zA-Z]+[\\w]*).*";
+	private static final Pattern FUNC_CALL_PATTERN = Pattern.compile(FUNC_CALL);
+
 	public static final String BOOLEAN_VALUE = "(true|false|[-]?[0-9]+[.]?[0-9]*|[-]?[.][0-9]+)";
 	public static final String STRING_VALUE = "([\"][^\"]*[\"])";
 	public static final String CHAR_VALUE = "([\'][^\'][\'])";
@@ -75,7 +81,7 @@ public class BlockCompiler extends FileCompiler {
 	private void checkSignature() throws Exception {
 		if (this.isFunctionBlock) {
 			String funcDeclaration = this.code.get(this.start);
-			String name = getFuncName(funcDeclaration);
+			String name = getFuncName(funcDeclaration,FUNC_DECLARATION_PATTERN);
 			String[] vars = splitSignature(funcDeclaration, "(", ")", FUNC_DELIMITER);
 			functionsList.put(name, vars);
 			addFuncVars(vars);
@@ -101,7 +107,7 @@ public class BlockCompiler extends FileCompiler {
 	}
 
 	void checkValidFuncCall(String line) throws Exception {
-		String name = getFuncName(line);
+		String name = getFuncName(line,FUNC_CALL_PATTERN);
 		String[] callVars = splitSignature(line, "(", ")", FUNC_DELIMITER);
 		if (functionsList.containsKey(name)) {
 			String[] validVars = functionsList.get(name);
@@ -403,8 +409,7 @@ public class BlockCompiler extends FileCompiler {
 				(delimiter, -1);
 	}
 
-	String getFuncName(String line) throws Exception {
-		Pattern p = Pattern.compile("[\\s]*(void)?[\\s]*([a-zA-Z]+[\\w]*).*");
+	String getFuncName(String line, Pattern p) throws Exception {
 		Matcher m = p.matcher(line);
 		if (m.matches()) {
 			return m.group(2).trim();

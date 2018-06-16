@@ -83,9 +83,15 @@ public class FileCompiler {
 			//it has something inside but it isn't a code
 			throw new Exception("bad code syntax in line " + lineNum);
 		} else { // return a code
+			Pattern p = Pattern.compile("[\\s]*(return)[\\s]*[;]");
+			Matcher m = p.matcher(line);
+			if (m.matches() && bracketsCount[0] == 0) {
+				throw new Exception("return statement at bad place (global scope)");
+			}
 			return codePattern.matches() && !line.trim().equals(EMPTY_LINE);
-			//return !line.equals(EMPTY_LINE);
-		}//fix: check with tomer if there's need for double return (?)
+		}
+		//return !line.equals(EMPTY_LINE);
+		//fix: check with tomer if there's need for double return (?)
 		return false;
 	}
 

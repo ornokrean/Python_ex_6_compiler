@@ -1,4 +1,4 @@
-void bar() {
-	bar();
+void bar(int x) {
+	bar(5);
 	return;
 }
