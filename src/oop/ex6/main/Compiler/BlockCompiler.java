@@ -302,7 +302,7 @@ public class BlockCompiler extends FileCompiler {
 				// checking that in the case of using a variable that it does exist in the scope.
 				if (lineType == null) {
 					if (existingVariableInScope == null)
-					throw new Exception("declaring a variable that has  already been declared.");
+						throw new Exception("declaring a variable that has  already been declared.");
 				}
 			}
 
@@ -352,11 +352,9 @@ public class BlockCompiler extends FileCompiler {
 				//group  here is the name of the assigned-to variable, and group  is the new variable name.
 				scopeVariable assignedVar = getVarInScope(m.group(5).trim());
 				if (assignedVar.isAssigned()) {
-					if (!globalScope.scopeVariables.containsKey(assignedVar.getName())) {
-						// checking the the variable declaration was done in the correct scope.
-						throw new Exception("trying to assign a value with a value that is not in global scope.");
-					}
-					else if((assignedVar.getVarLineNum() < start || assignedVar.getVarLineNum()>end)&&(assignedVar.getVarLineNum() > lineNum)){
+
+					if (!globalScope.scopeVariables.containsKey(assignedVar.getName()) && (assignedVar
+							.getVarLineNum() < start || assignedVar.getVarLineNum() > end) && (assignedVar.getVarLineNum() > lineNum)) {
 						throw new Exception("trying to assign a value with a value that has not been declared yet.");
 					}
 
