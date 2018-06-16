@@ -84,6 +84,8 @@ public class BlockCompiler extends FileCompiler {
 			String name = getFuncName(funcDeclaration, FUNC_DECLARATION_PATTERN);
 			String[] vars = splitSignature(funcDeclaration, "(", ")", FUNC_DELIMITER);
 			addFuncVars(vars);
+
+
 			for (int i = 0; i < vars.length; i++) {
 				Pattern p = Pattern.compile(VAR_DECLARATION_REGEX + NAME_VAR + ".*");
 				Matcher m = p.matcher(vars[i]);
@@ -357,6 +359,8 @@ public class BlockCompiler extends FileCompiler {
 							.getVarLineNum() < start || assignedVar.getVarLineNum() > end) && (assignedVar.getVarLineNum() > lineNum)) {
 						throw new Exception("trying to assign a value with a value that has not been declared yet.");
 					}
+
+
 
 
 					// separating the existing var assignment and the regular one.
