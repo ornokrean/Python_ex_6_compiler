@@ -87,7 +87,7 @@ public class BlockCompiler extends FileCompiler {
 
 
 			for (int i = 0; i < vars.length; i++) {
-				Pattern p = Pattern.compile(VAR_DECLARATION_REGEX + NAME_VAR + ".*");
+				Pattern p = Pattern.compile(VAR_DECLARATION_REGEX + NAME_VAR + "[\\s]*");
 				Matcher m = p.matcher(vars[i]);
 				if (m.matches()) {
 					vars[i] = m.group(3).trim();
@@ -145,7 +145,7 @@ public class BlockCompiler extends FileCompiler {
 			if(m.matches()){
 				variableFactory(true,validVars[i],"no_matter",callVars[i],0);
 			}
-			else if(currVar == null){
+			else if(currVar == null||!(currVar.isAssigned())){
 				throw new Exception("invalid variable assignment.");
 			}else{
 				variableFactory(true,validVars[i],"no_matter",currVar.getDefaultVal(),0);
