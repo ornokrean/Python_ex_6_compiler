@@ -12,32 +12,25 @@ import static oop.ex6.main.Variables.VariableFactory.variableFactory;
 
 public class BlockCompiler extends FileCompiler {
 
-	final static String FUNC_DELIMITER = ",";
-	final static String BOOL_DELIMITER = "\\|\\||&&";
-	private static final int NOT_ASSIGNED = -1;
-
-	static final String NAME_VAR = "([\\s]*(([a-zA-Z]|[_][\\w])[\\w]*)[\\s]*)";
-
-	static final String FUNC_DECLARATION = "[\\s]*(void)[\\s]*([a-zA-Z]+[\\w]*)[\\s]*[(].*[)][\\s]*[{]";
-	private static final Pattern FUNC_DECLARATION_PATTERN = Pattern.compile(FUNC_DECLARATION);
-
-	static final String FUNC_CALL = "([\\s]*)([a-zA-Z][\\w]*)[\\s]*[(].*[)][\\s]*(;)";
-	private static final Pattern FUNC_CALL_PATTERN = Pattern.compile(FUNC_CALL);
-
 	public static final String BOOLEAN_VALUE = "(true|false|[-]?[0-9]+[.]?[0-9]*|[-]?[.][0-9]+)";
 	public static final String STRING_VALUE = "([\"][^\"]*[\"])";
 	public static final String CHAR_VALUE = "([\'][^\'][\'])";
+	final static String FUNC_DELIMITER = ",";
+	final static String BOOL_DELIMITER = "\\|\\||&&";
+	static final String NAME_VAR = "([\\s]*(([a-zA-Z]|[_][\\w])[\\w]*)[\\s]*)";
 	public static final String SOME_PRIMITIVE = "(" + NAME_VAR + "[=][\\s]*" +
 			"(" + BOOLEAN_VALUE + "|" + CHAR_VALUE + "|" + STRING_VALUE + "))[\\s]*";
-	static final String VAR_DECLARATION_REGEX = "[\\s]*((final )?[\\s]*(int|double|char|boolean|String)[\\s]+)";
-	static final String IF_WHILE_REGEX = "^[\\s]*(if|while)[\\s]*[(].+[)][\\s]*[{]";
+	static final String FUNC_DECLARATION = "[\\s]*(void)[\\s]*([a-zA-Z]+[\\w]*)[\\s]*[(].*[)][\\s]*[{]";
+	static final String VAR_DECLARATION_REGEX = "[\\s]*((final\\s)?[\\s]*(int|double|char|boolean|String)" +
+			"[\\s]+)";
 	static final String END_BLOCK_REGEX = "^[\\s]*}[\\s]*$";
-	static final String ASSIGNMENT_REGEX = "[=].*[;]";
+	static final String ASSIGNMENT_REGEX = "[\\s]*[=].*[;]";
 	static final String EVERYTHING_REGEX = ".*";
 	static final String EQUALS_REGEX = "[=]";
 	static final String BRACKET_CLOSE_REGEX = "}[\\s]*$";
-
-
+	private static final int NOT_ASSIGNED = -1;
+	private static final Pattern FUNC_DECLARATION_PATTERN = Pattern.compile(FUNC_DECLARATION);
+	private static final Pattern FUNC_CALL_PATTERN = Pattern.compile(FUNC_CALL);
 	static HashMap<String, String[]> functionsList = new HashMap<>();
 	protected FileCompiler myCompiler;
 	boolean isFunctionBlock = false;
@@ -88,13 +81,13 @@ public class BlockCompiler extends FileCompiler {
 	void checkSignature() throws Exception {
 		if (this.isFunctionBlock) {
 			String funcDeclaration = this.code.get(this.start);
-			String name = getFuncName(funcDeclaration,FUNC_DECLARATION_PATTERN);
+			String name = getFuncName(funcDeclaration, FUNC_DECLARATION_PATTERN);
 			String[] vars = splitSignature(funcDeclaration, "(", ")", FUNC_DELIMITER);
 			addFuncVars(vars);
 			for (int i = 0; i < vars.length; i++) {
 				Pattern p = Pattern.compile(VAR_DECLARATION_REGEX + NAME_VAR + ".*");
 				Matcher m = p.matcher(vars[i]);
-				if(m.matches()){
+				if (m.matches()) {
 					vars[i] = m.group(5).trim();
 				}
 			}
@@ -111,7 +104,7 @@ public class BlockCompiler extends FileCompiler {
 			var = var.trim();
 			if (vars.length > 1)
 				checkEmptyVar(var, "Empty func call slot");
-			String newVarName = declarationCallCase(var + ";", true,start);
+			String newVarName = declarationCallCase(var + ";", true, start);
 			if (newVarName != null) {
 				scopeVariable currVar = getVarInScope(newVarName);
 				currVar.setAssigned(start);
@@ -122,7 +115,7 @@ public class BlockCompiler extends FileCompiler {
 	}
 
 	void checkValidFuncCall(String line) throws Exception {
-		String name = getFuncName(line,FUNC_CALL_PATTERN);
+		String name = getFuncName(line, FUNC_CALL_PATTERN);
 		String[] callVars = splitSignature(line, "(", ")", FUNC_DELIMITER);
 		if (functionsList.containsKey(name)) {
 			String[] validVars = functionsList.get(name);
@@ -142,11 +135,11 @@ public class BlockCompiler extends FileCompiler {
 
 		for (int i = 0; i < validVars.length; i++) {
 			checkEmptyVar(callVars[i], "Empty func call slot");
-			declarationCallCase(validVars[i] + "=" + callVars[i]+";", false, NOT_ASSIGNED);
+			declarationCallCase(validVars[i] + "=" + callVars[i] + ";", false, NOT_ASSIGNED);
 		}
 	}
 
-	void checkBooleanCall(String line,int lineNum) throws Exception {
+	void checkBooleanCall(String line, int lineNum) throws Exception {
 		String[] checkVars = splitSignature(line, "(", ")", BOOL_DELIMITER);
 		for (String var : checkVars) {
 			checkEmptyVar(var, "Empty boolean slot");
@@ -219,7 +212,7 @@ public class BlockCompiler extends FileCompiler {
 		Pattern p = Pattern.compile(IF_WHILE_REGEX);
 		Matcher m = p.matcher(line);
 		if (m.matches()) {
-			checkBooleanCall(line,lineNum);
+			checkBooleanCall(line, lineNum);
 			return;
 		}
 
@@ -239,7 +232,7 @@ public class BlockCompiler extends FileCompiler {
 			return;
 
 		}
-		if (declarationCallCase(line, true,lineNum) != null)
+		if (declarationCallCase(line, true, lineNum) != null)
 			return;
 
 
@@ -249,7 +242,7 @@ public class BlockCompiler extends FileCompiler {
 		if (m.matches()) {
 			// notice we are sending the is final true by default but in this case it makes no difference since it is
 			// not in use since the line type is null.
-			varDeclarationCase(line, null, true, true,lineNum);
+			varDeclarationCase(line, null, true, true, lineNum);
 			return;
 		}
 		// function call case
@@ -262,7 +255,8 @@ public class BlockCompiler extends FileCompiler {
 
 		throw new Exception("No match for line");
 	}
-	private String declarationCallCase(String line, boolean insertVal,int lineNum) throws Exception {
+
+	private String declarationCallCase(String line, boolean insertVal, int lineNum) throws Exception {
 		// var declaration call case.
 		Pattern p = Pattern.compile(VAR_DECLARATION_REGEX + NAME_VAR + EVERYTHING_REGEX);
 		Matcher m = p.matcher(line);
@@ -272,7 +266,7 @@ public class BlockCompiler extends FileCompiler {
 			if (m.group(2) != null) {
 				isFinal = true;
 			}
-			varDeclarationCase(line, lineType, isFinal, insertVal,lineNum);
+			varDeclarationCase(line, lineType, isFinal, insertVal, lineNum);
 			// returns the name of the variable.
 			return m.group(5).trim();
 		}
@@ -280,7 +274,7 @@ public class BlockCompiler extends FileCompiler {
 	}
 
 
-	private void varDeclarationCase(String line, String lineType, boolean isFinal, boolean insertVal,int lineNum) throws Exception {
+	private void varDeclarationCase(String line, String lineType, boolean isFinal, boolean insertVal, int lineNum) throws Exception {
 		String[] varsDeclared = splitSignature(line, lineType, ";", ",");
 		if (line == null && varsDeclared.length != 1) {
 			throw new Exception("An invalid usage of a variable in one line.");
@@ -299,7 +293,7 @@ public class BlockCompiler extends FileCompiler {
 			if (m.find()) {
 				String varName = m.group().trim();
 				existingVariableInScope = getVarInScope(varName);
-				if(lineType == null && scopeVariables.containsKey(varName)){
+				if (lineType == null && scopeVariables.containsKey(varName)) {
 					throw new Exception("declaring a var that is already in scope.");
 				}
 
@@ -320,7 +314,6 @@ public class BlockCompiler extends FileCompiler {
 			}
 
 
-
 			// checking that the existing variable is not final.
 			if (existingVariableInScope != null && existingVariableInScope.isFinal()) {
 				throw new Exception("trying to assign a variable that is final");
@@ -334,14 +327,14 @@ public class BlockCompiler extends FileCompiler {
 				if (lineType == null) {
 					// we are checking if the assigned value is of the same type of the variable.
 					variableFactory(existingVariableInScope.isFinal(), existingVariableInScope.getMyType(),
-							existingVariableInScope.getName(), m.group(5),lineNum);
+							existingVariableInScope.getName(), m.group(5), lineNum);
 					existingVariableInScope.setAssigned(lineNum);
 					// assigned!!!!!
 
 					continue;
 				} else {
 					// group  here is the name, and group  here is the var assignment.
-					scopeVariable result = variableFactory(isFinal, lineType, m.group(3).trim(), m.group(5),lineNum);
+					scopeVariable result = variableFactory(isFinal, lineType, m.group(3).trim(), m.group(5), lineNum);
 					if (insertVal) {
 						scopeVariables.put(result.getName(), result);
 					}
@@ -358,8 +351,8 @@ public class BlockCompiler extends FileCompiler {
 				//group  here is the name of the assigned-to variable, and group  is the new variable name.
 				scopeVariable assignedVar = getVarInScope(m.group(5).trim());
 				if (assignedVar.isAssigned()) {
-					if(!(myCompiler.globalScope.scopeVariables.containsKey(assignedVar.getName())|| assignedVar
-							.getVarLineNum()< lineNum)){
+					if (!(myCompiler.globalScope.scopeVariables.containsKey(assignedVar.getName()) || assignedVar
+							.getVarLineNum() < lineNum)) {
 						// checking the the variable declaration was done in the correct scope.
 						throw new Exception("trying to assign a value with a value that has not been declared yet.");
 					}
@@ -369,12 +362,12 @@ public class BlockCompiler extends FileCompiler {
 					if (lineType == null) {
 						// we are checking if the assigned value is of the same type of the variable.
 						variableFactory(existingVariableInScope.isFinal(), existingVariableInScope.getMyType(),
-								existingVariableInScope.getName(), assignedVar.getDefaultVal(),lineNum);
+								existingVariableInScope.getName(), assignedVar.getDefaultVal(), lineNum);
 						existingVariableInScope.setAssigned(lineNum);
-							// assigned!!!!!
+						// assigned!!!!!
 					} else {
 						scopeVariable result = variableFactory(isFinal, lineType, m.group(2).trim(),
-								assignedVar.getDefaultVal(),lineNum);
+								assignedVar.getDefaultVal(), lineNum);
 						if (insertVal) {
 							scopeVariables.put(m.group(2).trim(), result);
 						}
@@ -423,7 +416,7 @@ public class BlockCompiler extends FileCompiler {
 
 
 	String[] splitSignature(String signature, String start, String end, String delimiter) {
-		if (start == null){
+		if (start == null) {
 			start = EMPTY_LINE;
 		}
 		return signature.substring(signature.indexOf(start) + start.length(), signature.indexOf(end)).split
