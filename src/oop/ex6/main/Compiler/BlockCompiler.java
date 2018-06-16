@@ -356,7 +356,7 @@ public class BlockCompiler extends FileCompiler {
 						// checking the the variable declaration was done in the correct scope.
 						throw new Exception("trying to assign a value with a value that is not in global scope.");
 					}
-					else if((assignedVar.getVarLineNum() >start && assignedVar.getVarLineNum()<end)||(assignedVar.getVarLineNum()<lineNum)){
+					else if((assignedVar.getVarLineNum() < start || assignedVar.getVarLineNum()>end)&&(assignedVar.getVarLineNum() > lineNum)){
 						throw new Exception("trying to assign a value with a value that has not been declared yet.");
 					}
 
