@@ -1,8 +1,8 @@
-void foo(int a) {
-	return;
+void foo() {
+foo2(5,7);
+return;
 }
 
-void bar() {
-	foo('3');
-	return;
+void foo2(int b, int c) {
+return;
 }

@@ -90,8 +90,7 @@ public class BlockCompiler extends FileCompiler {
 				Pattern p = Pattern.compile(VAR_DECLARATION_REGEX + NAME_VAR + ".*");
 				Matcher m = p.matcher(vars[i]);
 				if (m.matches()) {
-					vars[i] = m.group(5).trim();
-
+					vars[i] = m.group(3).trim();
 				}
 			}
 
@@ -135,7 +134,7 @@ public class BlockCompiler extends FileCompiler {
 		if (callVars.length == 1 && validVars[0].equals(EMPTY_LINE)) {
 			return;
 		}
-		Pattern p = Pattern.compile(SOME_PRIMITIVE);
+		Pattern p = Pattern.compile(STRING_VALUE+"|"+BOOLEAN_VALUE+"|"+CHAR_VALUE);
 		Matcher m;
 
 		for (int i = 0; i < validVars.length; i++) {
