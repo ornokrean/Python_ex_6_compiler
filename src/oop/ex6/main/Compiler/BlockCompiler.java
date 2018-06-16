@@ -352,8 +352,8 @@ public class BlockCompiler extends FileCompiler {
 				//group  here is the name of the assigned-to variable, and group  is the new variable name.
 				scopeVariable assignedVar = getVarInScope(m.group(5).trim());
 				if (assignedVar.isAssigned()) {
-					if (!(myCompiler.globalScope.scopeVariables.containsKey(assignedVar.getName()) || assignedVar
-							.getVarLineNum() < lineNum)) {
+					if ((!(myCompiler.globalScope.scopeVariables.containsKey(assignedVar.getName()) || assignedVar
+							.getVarLineNum() < lineNum) && (assignedVar.getVarLineNum() <= end&&assignedVar.getVarLineNum()>=start))) {
 						// checking the the variable declaration was done in the correct scope.
 						throw new Exception("trying to assign a value with a value that has not been declared yet.");
 					}
