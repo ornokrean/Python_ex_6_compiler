@@ -14,16 +14,16 @@ public class FileCompiler {
 	static final String CURLY_CLOSE = "}";
 	static final String ROUND_OPEN = "(";
 	static final String ROUND_CLOSE = ")";
-	static final String TAB_CHAR = "\t";
 	//todo this is for the if inside, returns an array of the conditions.
-
+	static final String RETURN_REGEX = "[\\s]*(return)[\\s]*[;]";
 	private static final String CODE_REGEX = "[\\s]*(?:(?:(?:(?:void|if|while)[^{]*\\{)|\\}|[^;]*[;][\\s]*))";
 	private static final Pattern CODE_PATTERN = Pattern.compile(CODE_REGEX);
 	private static final String BAD_COMMENT_REGEX = "([\\s].*|[/][*].*)";
 	private static final Pattern BAD_COMMENT_PATTERN = Pattern.compile(BAD_COMMENT_REGEX);
 	private static final String COMMENT_REGEX = "[\\s]*([/]|[/*])+.*";
 	private static final Pattern COMMENT_PATTERN = Pattern.compile(COMMENT_REGEX);
-
+	static final String NOT_COMMENT_REGEX = "([^/]{2}.*|}|\\{)";
+	static BlockCompiler globalScope;
 	ArrayList<BlockCompiler> mySubBlocks = new ArrayList<>();
 	int[] bracketsCount = {0, 0};
 	ArrayList<String> code = new ArrayList<>();
@@ -31,7 +31,6 @@ public class FileCompiler {
 	int oldCurlyBracketCount;
 	int lineNum;
 	int blockStartIndex;
-	static BlockCompiler globalScope;
 
 
 	/**
@@ -83,17 +82,23 @@ public class FileCompiler {
 			//it has something inside but it isn't a code
 			throw new Exception("bad code syntax in line " + lineNum);
 		} else { // return a code
-			Pattern p = Pattern.compile("[\\s]*(return)[\\s]*[;]");
-			Matcher m = p.matcher(line);
-			if (m.matches() && bracketsCount[0] == 0) {
-				throw new Exception("return statement at bad place (global scope)");
-			}
+			checkInvalidGlobalCode(line);
 			return codePattern.matches() && !line.trim().equals(EMPTY_LINE);
 		}
 		//return !line.equals(EMPTY_LINE);
 		//fix: check with tomer if there's need for double return (?)
 		return false;
 	}
+
+	private void checkInvalidGlobalCode(String line) throws Exception {
+		if (bracketsCount[0] == 0) {
+			Pattern p = Pattern.compile(RETURN_REGEX);
+			Matcher m = p.matcher(line);
+			if (m.matches())
+				throw new Exception("return statement at bad place (global scope)");
+		}
+	}
+
 
 	/**
 	 * this function initiates the Compiler. it reads the given code via the code reader, checks for syntax
@@ -109,7 +114,7 @@ public class FileCompiler {
 		while ((currentCodeLine = codeReader.readLine()) != null) {
 			if (validateLine(currentCodeLine)) {
 				//this is a valid line, add it to the code:
-				code.add(currentCodeLine.replace(TAB_CHAR, ""));
+				code.add(currentCodeLine.trim());
 				// compile this line and it's sub-blocks:
 				compileLine(this.globalScope);
 				lineNum++;
@@ -125,6 +130,11 @@ public class FileCompiler {
 	}
 
 	public void compile() throws Exception {
+		for (BlockCompiler block : mySubBlocks) {
+			block.checkSignature();
+
+
+		}
 		this.globalScope.compile();
 	}
 
@@ -134,8 +144,8 @@ public class FileCompiler {
 	 * @throws Exception if there's a problem with the counters, too many unmatched parenthesis - (below
 	 * zero).
 	 */
-	 void changeCounter() throws Exception {
-		Pattern notCommentPattern = Pattern.compile("([^/]{2}.*|}|\\{)");
+	void changeCounter() throws Exception {
+		Pattern notCommentPattern = Pattern.compile(NOT_COMMENT_REGEX);
 		Matcher m2 = notCommentPattern.matcher(this.currentCodeLine);
 		if (!m2.matches())
 			return;
@@ -171,14 +181,14 @@ public class FileCompiler {
 	 * add it to the compiler's mySubBlocks ArrayList.
 	 * @throws Exception if the block compiler constructor throws exception
 	 */
-	 void newBlockHelper(BlockCompiler parent, boolean isFunctionBlock) throws Exception {
+	void newBlockHelper(BlockCompiler parent, boolean isFunctionBlock) throws Exception {
 		if (this.oldCurlyBracketCount == 0 && this.bracketsCount[0] == 1) {
 			// a new block is in the block!
 			this.blockStartIndex = this.lineNum;
 		} else if (this.oldCurlyBracketCount == 1 && this.bracketsCount[0] == 0) {
 			//it is the end of the block:
 			this.mySubBlocks.add(new BlockCompiler(this.blockStartIndex, this.lineNum, this,
-					parent,isFunctionBlock));
+					parent, isFunctionBlock));
 		}
 	}
 
@@ -193,7 +203,7 @@ public class FileCompiler {
 		this.oldCurlyBracketCount = this.bracketsCount[0];
 		changeCounter();
 		// check for the new block indexes, if needed.
-		this.newBlockHelper(parent,true);
+		this.newBlockHelper(parent, true);
 	}
 
 

@@ -1,4 +1,5 @@
-void bar(int x) {
-	bar(5);
-	return;
+int a;
+void foo() {
+String a;
+return;
 }
