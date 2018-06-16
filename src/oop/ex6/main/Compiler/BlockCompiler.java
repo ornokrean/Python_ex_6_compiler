@@ -291,6 +291,20 @@ public class BlockCompiler extends FileCompiler {
 
 			Pattern p = Pattern.compile(NAME_VAR);
 			Matcher m = p.matcher(var);
+
+			// just declaration of a variable with no assignment.
+			if (m.matches()) {
+				if(scopeVariables.containsKey(m.group(1))){
+					throw new Exception("declaring a var that is already in scope.");
+				}
+				if (insertVal) {
+					scopeVariables.put(m.group(1).trim(), new scopeVariable(isFinal, m.group(1).trim(), lineType,
+							NOT_ASSIGNED));
+				}
+				continue;
+			}
+
+
 			// this is a check that the variable assigned here has not been assigned in previous scopes.
 			if (m.find()) {
 				String varName = m.group().trim();
@@ -303,14 +317,7 @@ public class BlockCompiler extends FileCompiler {
 				}
 			}
 
-			// just declaration of a variable with no assignment.
-			if (m.matches()) {
-				if (insertVal) {
-					scopeVariables.put(m.group(1).trim(), new scopeVariable(isFinal, m.group(1).trim(), lineType,
-							NOT_ASSIGNED));
-				}
-				continue;
-			}
+
 
 			// checking that the existing variable is not final.
 			if (existingVariableInScope != null && existingVariableInScope.isFinal()) {
