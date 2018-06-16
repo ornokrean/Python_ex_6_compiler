@@ -124,7 +124,7 @@ public class BlockCompiler extends FileCompiler {
 		}
 	}
 
-	void checkBooleanCall(String line) throws Exception {
+	void checkBooleanCall(String line,int lineNum) throws Exception {
 		String[] checkVars = splitSignature(line, "(", ")", BOOL_DELIMITER);
 		for (String var : checkVars) {
 			checkEmptyVar(var, "Empty boolean slot");
@@ -137,7 +137,8 @@ public class BlockCompiler extends FileCompiler {
 			m = p.matcher(var.trim());
 			if (m.matches()) {
 				scopeVariable currVar = getVarInScope(var.trim());
-				if (currVar != null && (currVar.isBoolean())) {
+				if (currVar != null && (currVar.isBoolean()) && (currVar.getVarLineNum() < lineNum ||
+						globalScope.scopeVariables.containsValue(currVar))) {
 					continue;
 				}
 			}
@@ -197,7 +198,7 @@ public class BlockCompiler extends FileCompiler {
 		Pattern p = Pattern.compile("^[\\s]*(if|while)[\\s]*[(].+[)][\\s]*[{]");
 		Matcher m = p.matcher(line);
 		if (m.matches()) {
-			checkBooleanCall(line);
+			checkBooleanCall(line,lineNum);
 			return;
 		}
 
