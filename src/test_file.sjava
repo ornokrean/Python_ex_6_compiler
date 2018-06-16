@@ -1,3 +1,4 @@
-int a;
-a = 3;
-int b = a;
+void bar() {
+	bar();
+	return;
+}

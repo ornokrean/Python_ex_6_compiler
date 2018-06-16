@@ -33,7 +33,6 @@ public class BlockCompiler extends FileCompiler {
 	int start;
 	int end;
 	HashMap<String, scopeVariable> scopeVariables = new HashMap<>();
-
 	private BlockCompiler parentBlock = null;
 
 
@@ -110,11 +109,15 @@ public class BlockCompiler extends FileCompiler {
 		if (functionsList.containsKey(name)) {
 			String[] validVars = functionsList.get(name);
 			checkFuncCallVars(callVars, validVars);
+			return;
 		}
 		throw new Exception("Invalid function call");
 	}
 
 	void checkFuncCallVars(String[] callVars, String[] validVars) throws Exception {
+		if (callVars.length == 1 && callVars[0].trim().equals(EMPTY_LINE)) {
+			return;
+		}
 		if (callVars.length != validVars.length) {
 			throw new Exception("Invalid func call - not same length as signature");
 		}
@@ -403,7 +406,7 @@ public class BlockCompiler extends FileCompiler {
 	}
 
 	String getFuncName(String line) throws Exception {
-		Pattern p = Pattern.compile("[\\s]*(void)[\\s]*([a-zA-Z]+[\\w]*).*");
+		Pattern p = Pattern.compile("[\\s]*(void)?[\\s]*([a-zA-Z]+[\\w]*).*");
 		Matcher m = p.matcher(line);
 		if (m.matches()) {
 			return m.group(2).trim();

@@ -81,8 +81,6 @@ public class Tester_ex6_oop {
 	}
 
 
-
-
 	@Test
 	/*
 	main test - run all tests.
