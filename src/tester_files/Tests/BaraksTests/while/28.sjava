@@ -1,6 +1,0 @@
-void foo() {
-	char x = 'u';
-	while(x) {
-	}
-	return;
-}

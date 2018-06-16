@@ -1,5 +1,7 @@
 package oop.ex6.main.Variables;
 
+import oop.ex6.main.Compiler.BlockCompiler;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,7 +37,6 @@ public class VariableFactory {
 			throw new Exception(BAD_VARIABLE_DECLERATION);
 		}
 	}
-//    private static final String[] availableTypes = {"boolean","int","double","String","Char"};
 
 	private static int intHelper(String varValue)throws Exception  {
 		try {
@@ -54,7 +55,7 @@ public class VariableFactory {
 	}
 
 	private static Boolean booleanHelper(String varValue) throws Exception {
-		Pattern p = Pattern.compile("(true|false|[-]?[0-9]+[.]?[0-9]*)");
+		Pattern p = Pattern.compile(BlockCompiler.BOOLEAN_VALUE);
 		Matcher m = p.matcher(varValue);
 		if (!(m.matches())) {
 			throw new Exception("bad boolean");
@@ -68,7 +69,7 @@ public class VariableFactory {
 	}
 
 	private static String stringHelper(String varValue)throws Exception  {
-		Pattern p = Pattern.compile("[\"][^\"]*[\"]");
+		Pattern p = Pattern.compile(BlockCompiler.STRING_VALUE);
 		Matcher m = p.matcher(varValue);
 		if (!(m.matches())) {
 			throw new Exception("bad string");
@@ -80,7 +81,7 @@ public class VariableFactory {
 	}
 
 	private static char charHelper(String varValue)throws Exception  {
-		Pattern p = Pattern.compile("[\'][^\'][\']");
+		Pattern p = Pattern.compile(BlockCompiler.CHAR_VALUE);
 		Matcher m = p.matcher(varValue);
 		if (!(m.matches())) {
 			throw new Exception("bad char");
@@ -93,8 +94,7 @@ public class VariableFactory {
 
 	enum typeCases {
 
-		BOOLEAN("boolean"), INT("int"), DOUBLE("double"), STRING("String"), CHAR("char"), ISFINAL("final"),
-		DECLARATION("declaration");
+		BOOLEAN("boolean"), INT("int"), DOUBLE("double"), STRING("String"), CHAR("char"), ISFINAL("final");
 
 		private final String myType;
 
@@ -102,8 +102,5 @@ public class VariableFactory {
 			myType = string;
 		}
 
-		public String getMyType() {
-			return myType;
-		}
 	}
 }

@@ -1,9 +1,0 @@
-void foo() {
-	if (true) {
-		int a = 3;
-		while (true) {
-			int x = a;
-		}
-	}
-	return;
-}

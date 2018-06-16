@@ -18,9 +18,11 @@ public class BlockCompiler extends FileCompiler {
 	static final String NAME_VAR = "([\\s]*(([a-zA-Z]|[_][\\w])[\\w]*)[\\s]*)";
 	//	private static final String VAR_ASSIGNMENT = NAME_VAR + "[\\s]+[=].*";
 //	private static final String VAR_DECLERATION = "((final )?[\\s]*(int|double|char|boolean|String)[\\s]+)";
-	private static final String BOOLEAN_VALUE = "(true|false|[-]?[0-9]+[.]?[0-9]*|[-]?[.][0-9]+)";
-	private static final String STRING_VALUE = "([\"][^\"]*[\"])";
-	private static final String CHAR_VALUE = "([\'][^\'][\'])";
+
+
+	public static final String BOOLEAN_VALUE = "(true|false|[-]?[0-9]+[.]?[0-9]*|[-]?[.][0-9]+)";
+	public static final String STRING_VALUE = "([\"][^\"]*[\"])";
+	public static final String CHAR_VALUE = "([\'][^\'][\'])";
 	public static final String SOME_PRIMITIVE = "(" + NAME_VAR + "[=][\\s]*" +
 			"(" + BOOLEAN_VALUE + "|" + CHAR_VALUE + "|" + STRING_VALUE + "))[\\s]*";
 	//	String new11 = "("+NAME_VAR+"[=][\\s]*"+BOOLEAN_VALUE+"|"+CHAR_VALUE+"|"+STRING_VALUE+")";
@@ -172,13 +174,13 @@ public class BlockCompiler extends FileCompiler {
 		}
 		for (BlockCompiler b : mySubBlocks) {
 			while (i < b.start) {
-				getLineCase(i);
+				checkLine(i);
 				i++;
 			}
 			i = b.end + 1;
 		}
 		while (i <= this.end) {
-			getLineCase(i);
+			checkLine(i);
 			i++;
 		}
 		for (BlockCompiler subBlock : mySubBlocks) {
@@ -187,7 +189,7 @@ public class BlockCompiler extends FileCompiler {
 
 	}
 
-	private void getLineCase(int lineNum) throws Exception {
+	private void checkLine(int lineNum) throws Exception {
 		String line = code.get(lineNum);
 
 		// if or while case.
@@ -304,6 +306,10 @@ public class BlockCompiler extends FileCompiler {
 					// we are checking if the assigned value is of the same type of the variable.
 					variableFactory(existingVariableInScope.isFinal(), existingVariableInScope.getMyType(),
 							existingVariableInScope.getName(), m.group(5));
+					existingVariableInScope.setAssigned(true);
+					// assigned!!!!!
+
+					continue;
 				} else {
 					// group  here is the name, and group  here is the var assignment.
 					scopeVariable result = variableFactory(isFinal, lineType, m.group(3).trim(), m.group(5));
@@ -329,6 +335,7 @@ public class BlockCompiler extends FileCompiler {
 						// we are checking if the assigned value is of the same type of the variable.
 						variableFactory(existingVariableInScope.isFinal(), existingVariableInScope.getMyType(),
 								existingVariableInScope.getName(), assignedVar.getDefaultVal());
+						existingVariableInScope.setAssigned(true);	// assigned!!!!!
 					} else {
 						scopeVariable result = variableFactory(isFinal, lineType, m.group(2).trim(), assignedVar.getDefaultVal());
 						if (insertVal) {

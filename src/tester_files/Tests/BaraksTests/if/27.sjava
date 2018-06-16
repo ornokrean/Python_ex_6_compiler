@@ -1,6 +1,0 @@
-void foo() {
-	String x = "barak";
-	if(x) {
-	}
-	return;
-}

@@ -1,5 +1,0 @@
-void foo() {
-	while    (   -99 || 3   )    {
-	}
-	return;
-}
