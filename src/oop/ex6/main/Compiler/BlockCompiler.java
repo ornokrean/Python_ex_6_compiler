@@ -91,6 +91,7 @@ public class BlockCompiler extends FileCompiler {
 				Matcher m = p.matcher(vars[i]);
 				if (m.matches()) {
 					vars[i] = m.group(5).trim();
+
 				}
 			}
 
@@ -134,10 +135,22 @@ public class BlockCompiler extends FileCompiler {
 		if (callVars.length == 1 && validVars[0].equals(EMPTY_LINE)) {
 			return;
 		}
+		Pattern p = Pattern.compile(SOME_PRIMITIVE);
+		Matcher m;
 
 		for (int i = 0; i < validVars.length; i++) {
+			m = p.matcher(callVars[i]);
+			scopeVariable currVar = getVarInScope(callVars[i]);
 			checkEmptyVar(callVars[i], "Empty func call slot");
-			declarationCallCase(validVars[i] + "=" + callVars[i] + ";", false, NOT_ASSIGNED);
+			if(m.matches()){
+				variableFactory(true,validVars[i],"no_matter",callVars[i],0);
+			}
+			else if(currVar == null){
+				throw new Exception("invalid variable assignment.");
+			}else{
+				variableFactory(true,validVars[i],"no_matter",currVar.getDefaultVal(),0);
+			}
+
 		}
 	}
 
