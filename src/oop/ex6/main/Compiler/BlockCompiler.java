@@ -298,6 +298,10 @@ public class BlockCompiler extends FileCompiler {
 			// this is a check that the variable assigned here has not been assigned in previous scopes.
 			if (m.find()) {
 				String varName = m.group().trim();
+				if(lineType != null && scopeVariables.containsKey(varName)){
+					throw new Exception("declaring a var that is already in scope.");
+				}
+
 				existingVariableInScope = getVarInScope(varName);
 
 				// checking that in the case of declaring a variable that it does not exist in the scope.
@@ -306,10 +310,8 @@ public class BlockCompiler extends FileCompiler {
 					throw new Exception("declaring a variable that has  already been declared.");
 				}
 			}
+
 			if (m.matches()) {
-				if(scopeVariables.containsKey(m.group(1))){
-					throw new Exception("declaring a var that is already in scope.");
-				}
 				if (insertVal) {
 					scopeVariables.put(m.group(1).trim(), new scopeVariable(isFinal, m.group(1).trim(), lineType,
 							NOT_ASSIGNED));
