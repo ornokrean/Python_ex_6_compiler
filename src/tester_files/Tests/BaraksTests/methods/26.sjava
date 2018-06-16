@@ -1,8 +1,0 @@
-void foo(int a, String x) {
-	return;
-}
-
-void bar() {
-	foo(2, 2);
-	return;
-}
