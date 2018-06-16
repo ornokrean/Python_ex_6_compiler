@@ -1,5 +1,6 @@
-int a;
+int a = 5;
+
 void foo() {
-String a;
+a = 4;
 return;
 }
