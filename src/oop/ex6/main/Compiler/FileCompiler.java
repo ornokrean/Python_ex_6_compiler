@@ -31,7 +31,7 @@ public class FileCompiler {
 	int oldCurlyBracketCount;
 	int lineNum;
 	int blockStartIndex;
-	BlockCompiler globalScope;
+	static BlockCompiler globalScope;
 
 
 	/**
