@@ -9,36 +9,36 @@ import java.util.regex.Pattern;
 public class VariableFactory {
 	private static final String BAD_VARIABLE_DECLERATION = "ERROR: Wrong type variable in line : ";
 
-	public static scopeVariable variableFactory(boolean finalFlag, String type, String varName, String varValue,int lineNum) throws Exception {
+	public static scopeVariable variableFactory(boolean finalFlag, String type, String varName, String varValue, int lineNum) throws Exception {
 
 		if (type.equals(typeCases.BOOLEAN.myType)) {
 			booleanHelper(varValue);
-			return new scopeVariable(finalFlag, varName, type,lineNum);
+			return new scopeVariable(finalFlag, varName, type, lineNum);
 
 
 		} else if (type.equals(typeCases.INT.myType)) {
 			intHelper(varValue);
-			return new scopeVariable(finalFlag, varName, type,lineNum);
+			return new scopeVariable(finalFlag, varName, type, lineNum);
 
 
 		} else if (type.equals(typeCases.DOUBLE.myType)) {
 			doubleHelper(varValue);
-			return new scopeVariable(finalFlag, varName, type,lineNum);
+			return new scopeVariable(finalFlag, varName, type, lineNum);
 
 
 		} else if (type.equals(typeCases.STRING.myType)) {
 			stringHelper(varValue);
-			return new scopeVariable(finalFlag, varName, type,lineNum);
+			return new scopeVariable(finalFlag, varName, type, lineNum);
 
 		} else if (type.equals(typeCases.CHAR.myType)) {
 			charHelper(varValue);
-			return new scopeVariable(finalFlag, varName, type,lineNum);
+			return new scopeVariable(finalFlag, varName, type, lineNum);
 		} else {
 			throw new Exception(BAD_VARIABLE_DECLERATION);
 		}
 	}
 
-	private static int intHelper(String varValue)throws Exception  {
+	private static int intHelper(String varValue) throws Exception {
 		try {
 			return Integer.parseInt(varValue);
 		} catch (NumberFormatException e) {
@@ -46,7 +46,7 @@ public class VariableFactory {
 		}
 	}
 
-	private static double doubleHelper(String varValue)throws Exception  {
+	private static double doubleHelper(String varValue) throws Exception {
 		try {
 			return Double.parseDouble(varValue);
 		} catch (NumberFormatException e) {
@@ -68,7 +68,7 @@ public class VariableFactory {
 		}
 	}
 
-	private static String stringHelper(String varValue)throws Exception  {
+	private static String stringHelper(String varValue) throws Exception {
 		Pattern p = Pattern.compile(BlockCompiler.STRING_VALUE);
 		Matcher m = p.matcher(varValue);
 		if (!(m.matches())) {
@@ -80,7 +80,7 @@ public class VariableFactory {
 
 	}
 
-	private static char charHelper(String varValue)throws Exception  {
+	private static char charHelper(String varValue) throws Exception {
 		Pattern p = Pattern.compile(BlockCompiler.CHAR_VALUE);
 		Matcher m = p.matcher(varValue);
 		if (!(m.matches())) {

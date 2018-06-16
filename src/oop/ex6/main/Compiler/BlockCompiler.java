@@ -123,7 +123,7 @@ public class BlockCompiler extends FileCompiler {
 		}
 		for (int i = 0; i < validVars.length; i++) {
 			checkEmptyVar(callVars[i], "Empty func call slot");
-			declarationCallCase(validVars[i] + "=" + callVars[i], false,NOT_ASSIGNED);
+			declarationCallCase(validVars[i] + "=" + callVars[i], false, NOT_ASSIGNED);
 		}
 	}
 
