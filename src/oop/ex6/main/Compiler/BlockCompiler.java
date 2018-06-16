@@ -85,7 +85,7 @@ public class BlockCompiler extends FileCompiler {
 			String[] vars = splitSignature(funcDeclaration, "(", ")", FUNC_DELIMITER);
 			addFuncVars(vars);
 
-			if(!(vars.length == 1 && vars[0].equals(EMPTY_LINE))){
+			if(!(vars.length == 1 && vars[0].trim().equals(EMPTY_LINE))){
 				for (int i = 0; i < vars.length; i++) {
 					Pattern p = Pattern.compile(VAR_DECLARATION_REGEX + NAME_VAR + "[\\s]*");
 					Matcher m = p.matcher(vars[i]);
