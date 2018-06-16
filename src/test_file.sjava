@@ -1,1 +1,5 @@
-	final	 	int 	x	 =	 3;
+int a;
+void foo() {
+String a;
+return;
+}

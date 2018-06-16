@@ -287,30 +287,29 @@ public class BlockCompiler extends FileCompiler {
 			Matcher m = p.matcher(var);
 
 			// just declaration of a variable with no assignment.
-
-
-			// this is a check that the variable assigned here has not been assigned in previous scopes.
-			if (m.find()) {
-				String varName = m.group().trim();
-				existingVariableInScope = getVarInScope(varName);
-				if (lineType == null && scopeVariables.containsKey(varName)) {
+			if (m.matches()) {
+				if (lineType != null && scopeVariables.containsKey(m.group(1).trim())) {
 					throw new Exception("declaring a var that is already in scope.");
 				}
-
-
-				// checking that in the case of declaring a variable that it does not exist in the scope.
-				// checking that in the case of using a variable that it does exist in the scope.
-				else if ((lineType == null) == (existingVariableInScope == null)) {
-					throw new Exception("declaring a variable that has  already been declared.");
-				}
-			}
-
-			if (m.matches()) {
 				if (insertVal) {
 					scopeVariables.put(m.group(1).trim(), new scopeVariable(isFinal, m.group(1).trim(), lineType,
 							NOT_ASSIGNED));
 				}
 				continue;
+			}
+
+			// this is a check that the variable assigned here has not been assigned in previous scopes.
+			if (m.find()) {
+				String varName = m.group().trim();
+				existingVariableInScope = getVarInScope(varName);
+
+
+
+				// checking that in the case of declaring a variable that it does not exist in the scope.
+				// checking that in the case of using a variable that it does exist in the scope.
+				 if ((lineType == null) == (existingVariableInScope == null)) {
+					throw new Exception("declaring a variable that has  already been declared.");
+				}
 			}
 
 
