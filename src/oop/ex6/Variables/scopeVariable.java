@@ -61,7 +61,7 @@ public class scopeVariable {
 	 */
 	public scopeVariable(boolean isFinal, String name, String type, int isAssigned) throws InvalidVariableUsageException{
 		this(isFinal,name,type);
-		if (isFinal && isAssigned == -1) {
+		if (isFinal && isAssigned == NOT_ASSIGNED) {
 			throw new InvalidVariableUsageException("final with no value");
 		}
 		this.isAssigned = isAssigned;
