@@ -124,7 +124,9 @@ public class BlockCompiler extends FileCompiler {
 			compileLine();
 		}
 	}
-
+	/*
+	* a method that checks the signature of the function block.
+	 */
 	void checkSignature() throws InvalidLineException {
 		if (this.isFunctionBlock) {
 			String funcDeclaration = this.code.get(this.start);
@@ -146,7 +148,9 @@ public class BlockCompiler extends FileCompiler {
 			functionsList.put(name, vars);
 		}
 	}
-
+	/*
+	* A function that adds the variables declared in the function's signature.
+	 */
 	void addFuncVars(String[] vars) throws InvalidLineException {
 		if (vars.length == 1 && vars[0].trim().equals(EMPTY_LINE)) {
 			return;
@@ -161,7 +165,9 @@ public class BlockCompiler extends FileCompiler {
 			}
 		}
 	}
-
+	/*
+	* A function that checks if a function call is valid, on its parameters and name.
+	 */
 	private void checkValidFuncCall(String line) throws InvalidLineException {
 		String name = getFuncName(line, CompilerPatterns.FUNC_CALL_PATTERN);
 		String[] callVars = splitSignature(line, CompilerPatterns.ROUND_OPEN, CompilerPatterns.ROUND_CLOSE, CompilerPatterns.FUNC_DELIMITER);
@@ -173,6 +179,9 @@ public class BlockCompiler extends FileCompiler {
 		throw new InvalidLineException(INVALID_FUNCTION_CALL);
 	}
 
+	/*
+	* A function that checks if the function call variables given are valid.
+	 */
 	private void checkFuncCallVars(String[] callVars, String[] validVars) throws InvalidLineException {
 		if (callVars.length != validVars.length) {
 			throw new InvalidNameException(INVALID_FUNCTION_CALL);
@@ -197,7 +206,9 @@ public class BlockCompiler extends FileCompiler {
 
 		}
 	}
-
+	/*
+	* A function that checks if a given Boolean call is a Valid boolean call on its syntax and conditions.
+	 */
 	private void checkBooleanCall(String line, int lineNum) throws InvalidLineException {
 		String[] checkVars = splitSignature(line, CompilerPatterns.ROUND_OPEN, CompilerPatterns.ROUND_CLOSE, CompilerPatterns.BOOL_DELIMITER);
 		for (String var : checkVars) {
@@ -259,7 +270,10 @@ public class BlockCompiler extends FileCompiler {
 		}
 
 	}
-
+	/*
+	* A function that receives a line number and goes to the code array by that index, and matches the line to a
+	* cerating case to handle it properly.
+	 */
 	private void checkLine(int lineNum) throws InvalidLineException {
 		String line = code.get(lineNum);
 		Matcher matcher;
@@ -434,12 +448,16 @@ public class BlockCompiler extends FileCompiler {
 		}
 
 	}
-
+	/*
+	* A function that returns a boolean value of true if the given line number in the code is a Function signature line.
+	 */
 	private boolean IsSignatureLine(int lineNum) {
 		return lineNum == start && isFunctionBlock;
 	}
 
-
+	/*
+	* A function that returns the variable by a given name if it exists in  the  scope and null otherwise.
+	 */
 	private scopeVariable getVarInScope(String varName) {
 		BlockCompiler currentBlock = this;
 		while (currentBlock != null) {
@@ -451,7 +469,9 @@ public class BlockCompiler extends FileCompiler {
 		return null;
 	}
 
-
+	/*
+	*  A function that checks the end of the function lines to see that they are in the correct format.
+	 */
 	private void checkReturnStatement() throws InvalidLineException {
 		if (isFunctionBlock) {
 			// check if lat row is "}"
@@ -468,7 +488,9 @@ public class BlockCompiler extends FileCompiler {
 		}
 	}
 
-
+	/*
+	* A helper function the splits the signature of the function.
+	 */
 	private String[] splitSignature(String signature, String start, String end, String delimiter) {
 		if (start == null) {
 			start = EMPTY_LINE;
