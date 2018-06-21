@@ -312,7 +312,9 @@ public class BlockCompiler extends FileCompiler {
 			return;
 		throw new InvalidLineException(NO_MATCH_FOR_LINE);
 	}
-
+	/*
+	* A helper method to deal with a variable declaration call case.
+	 */
 	private String declarationCallCase(String line, int lineNum) throws InvalidLineException {
 		// var declaration call case.
 		Matcher m = CompilerPatterns.getMatcher(CompilerPatterns.VAR_DECLARATION_START_PATTERN, line);
@@ -328,7 +330,9 @@ public class BlockCompiler extends FileCompiler {
 		}
 		return null;
 	}
-
+	/*
+	* A function that deals with all variable assignments of all type by calling other functions.
+	 */
 	private void varDeclarationCase(String line, String lineType, boolean isFinal, int lineNum)
 			throws InvalidLineException {
 		// get all declarations in the line:
@@ -364,7 +368,9 @@ public class BlockCompiler extends FileCompiler {
 			throw new InvalidVariableUsageException(INVALID_ASSIGNMENT_OF_NEW_VARIABLE_WITH_OLD_ONE);
 		}
 	}
-
+	/*
+	* A function that initiates a variable with another variable.
+	 */
 	private boolean assignVarWithVar(String lineType, boolean isFinal, int lineNum,
 	                                 String var, ScopeVariable varInScope) throws InvalidLineException {
 		Matcher matcher = CompilerPatterns.getMatcher(CompilerPatterns.ASSIGN_VAR_PATTERN, var);
@@ -378,16 +384,18 @@ public class BlockCompiler extends FileCompiler {
 					throw new InvalidVariableUsageException(VAR_IS_NOT_DECLARED_USAGE_MSG);
 				}
 				// separating the existing var assignment and the regular one.
-				if (assignToExistingVar(lineType, isFinal, lineNum, varInScope, matcher, assignedVar))
+				if (assignExistingVarToExistingVar(lineType, isFinal, lineNum, varInScope, matcher, assignedVar))
 					return true;
 			}
 		}
 		return false;
 	}
-
-	private boolean assignToExistingVar(String lineType, boolean isFinal, int lineNum,
-	                                    ScopeVariable varInScope, Matcher matcher,
-	                                    ScopeVariable assignedVar) throws InvalidLineException {
+	/*
+	*  A method that checks a variable assignment with an existing variable.
+	*/
+	private boolean assignExistingVarToExistingVar(String lineType, boolean isFinal, int lineNum,
+												   ScopeVariable varInScope, Matcher matcher,
+												   ScopeVariable assignedVar) throws InvalidLineException {
 		if (lineType == null) {
 			// we are checking if the assigned value is of the same type of the variable.
 			variableFactory(varInScope.isFinal(), varInScope.getMyType(),
@@ -402,7 +410,9 @@ public class BlockCompiler extends FileCompiler {
 		}
 		return false;
 	}
-
+	/*
+	* A function that checks if an Assigned variable of the same name in the scope.
+	 */
 	private void checkAssingedInScope(int lineNum, ScopeVariable assignedVar)
 			throws InvalidVariableUsageException {
 		if ((assignedVar.getVarLineNum() < start || assignedVar.getVarLineNum() > end) &&
@@ -410,7 +420,9 @@ public class BlockCompiler extends FileCompiler {
 			throw new InvalidVariableUsageException(VAR_IS_NOT_DECLARED_USAGE_MSG);
 		}
 	}
-
+	/*
+	* A function that assigns a declared variable with a value, or adding a new variable .
+	 */
 	private void addNewVar(String lineType, boolean isFinal, int lineNum,
 	                       ScopeVariable varInScope, Matcher matcher) throws InvalidLineException {
 		if (lineType == null) {
@@ -425,7 +437,9 @@ public class BlockCompiler extends FileCompiler {
 			scopeVariables.put(result.getName(), result);
 		}
 	}
-
+	/*
+	* A function the declares a new variable.
+	 */
 	private void declareNewVar(String lineType, boolean isFinal, int lineNum, String name) throws
 			InvalidVariableUsageException {
 		int isAssigned = NOT_ASSIGNED;
@@ -434,7 +448,9 @@ public class BlockCompiler extends FileCompiler {
 		scopeVariables.put(name, new ScopeVariable(isFinal, name,
 				lineType, isAssigned));
 	}
-
+	/*
+	* A function that validates the new variable's name. meaning checking that is does not exist in the scope and such.
+	 */
 	private ScopeVariable validateNewVarName(String lineType, String varName) throws
 			InvalidVariableUsageException {
 		ScopeVariable varInScope = getVarInScope(varName);
@@ -502,7 +518,9 @@ public class BlockCompiler extends FileCompiler {
 		return signature.substring(signature.indexOf(start) + start.length(), signature.indexOf(end)).split
 				(delimiter, -1);
 	}
-
+	/*
+	* A function that returns the function name according the a line given.
+	*/
 	private String getFuncName(String line, Pattern p) throws InvalidLineException {
 		Matcher m = CompilerPatterns.getMatcher(p, line);
 		if (m.matches()) {
