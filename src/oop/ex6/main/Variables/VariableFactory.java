@@ -10,7 +10,6 @@ public class VariableFactory {
 	private static final String BAD_VARIABLE_DECLERATION = "ERROR: Wrong type variable in line : ";
 
 	public static scopeVariable variableFactory(boolean finalFlag, String type, String varName, String varValue, int lineNum) throws Exception {
-
 		if (type.equals(typeCases.BOOLEAN.myType)) {
 			booleanHelper(varValue);
 		} else if (type.equals(typeCases.INT.myType)) {

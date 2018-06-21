@@ -51,8 +51,8 @@ to separate the code into scopes first and the for each scope to create a mechan
 
 How did you handle the s-java errors ?:
 --------------------------------------
-
-
+every error we caught we have decided to throw as an error of the program and only catch it in the Sjavac Main method
+that operates the other programs, As it seems to be reasonable since one error is enough to make the code not valid.
 
 
 
