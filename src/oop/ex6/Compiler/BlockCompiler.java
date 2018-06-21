@@ -138,7 +138,8 @@ public class BlockCompiler extends FileCompiler {
 
 			if (!(vars.length == 1 && vars[0].trim().equals(EMPTY_LINE))) {
 				for (int i = 0; i < vars.length; i++) {
-					Matcher m = CompilerPatterns.getMatcher(CompilerPatterns.VAR_DECLARATION_PATTERN,vars[i]);
+					Matcher m = CompilerPatterns.getMatcher(CompilerPatterns.VAR_DECLARATION_START_PATTERN,
+							vars[i]);
 					if (m.matches()) {
 						vars[i] = m.group(3).trim();
 						continue;
