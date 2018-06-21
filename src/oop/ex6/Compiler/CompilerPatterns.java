@@ -4,6 +4,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CompilerPatterns {
+	/**
+	 * A class Containing Patterns and regex's and operates as a helper class
+	 */
 	public static final String ROUND_CLOSE = ")";
 	public static final String OR_REGEX = "|";
 	public static final String SPACES_REGEX = "[\\s]*";
@@ -21,8 +24,6 @@ public class CompilerPatterns {
 	public static final String VAR_DECLARATION_TYPE_REGEX = "[\\s]*((final\\s)?[\\s]*" +
 			"(int|double|char|boolean|String)" +
 			"[\\s]+)";
-
-
 
 	public static final String END_BLOCK_REGEX = "^[\\s]*}[\\s]*$";
 	public static final String ASSIGNMENT_REGEX = "[\\s]*[=].*[;]";
@@ -77,6 +78,7 @@ public class CompilerPatterns {
 	public static final Pattern BAD_COMMENT_PATTERN = Pattern.compile(BAD_COMMENT_REGEX);
 	public static final Pattern COMMENT_PATTERN = Pattern.compile(COMMENT_REGEX);
 	public static final Pattern GLOBAL_SCOPE_CODE_PATTERN = Pattern.compile(GLOBAL_CODE_REGEX);
+	public static final Pattern STRING_VALUE_PATTERN = Pattern.compile(STRING_VALUE_REGEX);
 
 
 	public static final Pattern BRACKET_CLOSE_PATTERN= Pattern.compile(BRACKET_CLOSE_REGEX);
