@@ -41,11 +41,11 @@ public class CompilerPatterns {
 
 
 
-
+	public static final Pattern FUNC_DECLARATION_PATTERN = Pattern.compile(FUNC_DECLARATION);
+	public static final Pattern FUNC_CALL_PATTERN = Pattern.compile(FUNC_CALL);
 
 
 	public static final Pattern NOT_COMMENT_PATTERN = Pattern.compile(NOT_COMMENT_REGEX);
-
 	public static final Pattern CODE_PATTERN = Pattern.compile(CODE_REGEX);
 	public static final Pattern BAD_COMMENT_PATTERN = Pattern.compile(BAD_COMMENT_REGEX);
 	public static final Pattern COMMENT_PATTERN = Pattern.compile(COMMENT_REGEX);

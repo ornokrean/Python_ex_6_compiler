@@ -14,16 +14,17 @@ public class BlockCompiler extends FileCompiler {
 	static final String SEMICOLON = ";";
 	static final String DEFAULT_VAR_NAME = "varName";
 	private static final int NOT_ASSIGNED = -1;
-	private static final Pattern FUNC_DECLARATION_PATTERN = Pattern.compile(CompilerPatterns.FUNC_DECLARATION);
-	private static final Pattern FUNC_CALL_PATTERN = Pattern.compile(CompilerPatterns.FUNC_CALL);
 	static HashMap<String, String[]> functionsList = new HashMap<>();
-	protected FileCompiler myCompiler;
-	boolean isFunctionBlock = false;
-	int start;
-	int end;
-	HashMap<String, scopeVariable> scopeVariables = new HashMap<>();
-	HashSet<Integer> myLines;
+	 FileCompiler myCompiler;
+	private boolean isFunctionBlock = false;
+	private int start;
+	private int end;
+	private HashMap<String, scopeVariable> scopeVariables = new HashMap<>();
+	private HashSet<Integer> myLines;
 	private BlockCompiler parentBlock = null;
+
+
+
 
 	public BlockCompiler(int start, int end, FileCompiler myCompiler, Boolean isFunctionBlock) throws Exception {
 		this.start = start;
@@ -51,10 +52,6 @@ public class BlockCompiler extends FileCompiler {
 		this.end = end;
 	}
 
-	void setParentBlock(BlockCompiler parentBlock) {
-		this.parentBlock = parentBlock;
-		this.isFunctionBlock = true;
-	}
 
 	void initiateBlock() throws IOException, Exception {
 		for (int i = start + 1; i < end; i++) {
@@ -67,7 +64,7 @@ public class BlockCompiler extends FileCompiler {
 	void checkSignature() throws Exception {
 		if (this.isFunctionBlock) {
 			String funcDeclaration = this.code.get(this.start);
-			String name = getFuncName(funcDeclaration, FUNC_DECLARATION_PATTERN);
+			String name = getFuncName(funcDeclaration, CompilerPatterns.FUNC_DECLARATION_PATTERN);
 			String[] vars = splitSignature(funcDeclaration, CompilerPatterns.ROUND_OPEN, CompilerPatterns.ROUND_CLOSE, CompilerPatterns.FUNC_DELIMITER);
 			addFuncVars(vars);
 
@@ -102,7 +99,7 @@ public class BlockCompiler extends FileCompiler {
 	}
 
 	void checkValidFuncCall(String line) throws Exception {
-		String name = getFuncName(line, FUNC_CALL_PATTERN);
+		String name = getFuncName(line, CompilerPatterns.FUNC_CALL_PATTERN);
 		String[] callVars = splitSignature(line, CompilerPatterns.ROUND_OPEN, CompilerPatterns.ROUND_CLOSE, CompilerPatterns.FUNC_DELIMITER);
 		if (functionsList.containsKey(name)) {
 			String[] validVars = functionsList.get(name);
