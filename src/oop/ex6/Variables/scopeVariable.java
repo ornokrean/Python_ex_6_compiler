@@ -19,10 +19,28 @@ package oop.ex6.Variables;
 import oop.ex6.main.compilerExceptions.InvalidVariableUsageException;
 
 public class scopeVariable {
+	/**
+	 * A class representing a variable in a scope of a block.
+	 */
+	/*
+	 * A constant representing a value of an declared but not assigned variable.
+	 */
 	private static final int NOT_ASSIGNED = -1;
-	boolean isFinal;
-	String name;
-	String myType;
+	/**
+	 * a flag representing is the variable final.
+	 */
+	private boolean isFinal;
+	/**
+	 * a string representing the name of the variable
+	 */
+	private String name;
+	/**
+	 * a string representing the type of the variable.
+	 */
+	private String myType;
+	/**
+	 * A data member holding the line in which the variable was assigned , NOT_ASSIGNED otherwise.
+	 */
 	private int isAssigned = NOT_ASSIGNED;
 
 	/*

@@ -2,13 +2,27 @@ package oop.ex6.main;
 
 import oop.ex6.Compiler.FileCompiler;
 import oop.ex6.main.compilerExceptions.InvalidLineException;
-
 import java.io.*;
 
 public class  Sjavac {
+    /**
+     * A class that compiles a Java-scrips of type s-java .
+     */
+
+    /*
+    * A variable indicating the Correct input size.
+     */
     private static final int  INPUT_SIZE = 1;
+    /*
+     *  A variable indicating the path location in the args, given.
+     */
     private final static int PATH = 0;
+
     private final static String BAD_INPUT_ERROR = "ERROR: Wrong usage. Should receive 1 arguments";
+    private static final int IO_ERROR = 2;
+    private static final int COMPILATION_ERROR = 1;
+    private static final int VALID_CODE = 0;
+
     /*
      * Check if the input is valid. In case that the input is not valid print error message to the
      * screen and exit.
@@ -18,27 +32,23 @@ public class  Sjavac {
         if (input.length != INPUT_SIZE) {
             throw new IOException(BAD_INPUT_ERROR);
         }
-        // TODO to check is it a valid path!!!
     }
+    
     public static void main(String[] args)throws Exception{
-        try {
+
+        try(BufferedReader reader = new BufferedReader(new FileReader(args[PATH]))) {
             checkInput(args);
-            BufferedReader reader = new BufferedReader(new FileReader(args[PATH]));
             FileCompiler compiler = new FileCompiler(reader);
             compiler.compile();
-            System.out.print(0);
-
+            System.out.print(VALID_CODE);
         }
-
         catch (IOException e){
-            System.out.print(2);
-//            System.err.println(e.getMessage());
-//            throw e;
+            System.out.print(IO_ERROR);
+            System.err.println(e.getMessage());
 
         }catch (InvalidLineException e){
-            System.out.print(1);
-//            System.err.println(e.getMessage());
-//            throw e;
+            System.out.print(COMPILATION_ERROR);
+            System.err.println(e.getMessage());
         }
     }
 
