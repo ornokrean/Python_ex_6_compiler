@@ -88,6 +88,8 @@ public class CompilerPatterns {
 	public static final Pattern PRIMITIVE_DECLARATION_PATTERN = Pattern.compile(PRIMITIVE_DECLARATION_REGEX);
 
 
+
+
 	/**
 	 * A function that  receives a pattern and a String and returns a matcher for them.
 	 * @param pattern A given Pattern.

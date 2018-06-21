@@ -49,6 +49,7 @@ public class  Sjavac {
         }catch (InvalidLineException e){
             System.out.print(COMPILATION_ERROR);
             System.err.println(e.getMessage());
+//            throw e;
         }
     }
 

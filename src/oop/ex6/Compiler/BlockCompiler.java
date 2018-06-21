@@ -86,8 +86,7 @@ public class BlockCompiler extends FileCompiler {
 	 * @throws InvalidLineException
 	 */
 	public BlockCompiler(int start, int end, FileCompiler myCompiler, BlockCompiler parentBlock) throws InvalidLineException {
-		this(start, end, myCompiler, false);
-		this.parentBlock = parentBlock;
+		this(start, end, myCompiler,parentBlock, false);
 	}
 
 	/**
@@ -104,6 +103,8 @@ public class BlockCompiler extends FileCompiler {
 			throws InvalidLineException {
 		this(start, end, myCompiler, isFunctionBlock);
 		this.parentBlock = parentBlock;
+		this.myCompiler = myCompiler;
+
 	}
 
 	/*

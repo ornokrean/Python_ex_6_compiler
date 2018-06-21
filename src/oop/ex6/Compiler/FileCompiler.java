@@ -59,8 +59,8 @@ public class FileCompiler {
 	/**
 	 * A  Hash set containing the line numbers of the block.
 	 */
-	private HashSet<Integer> myLines = new HashSet<>();
-	;
+	 HashSet<Integer> myLines = new HashSet<>();
+
 	/**
 	 * default constructor
 	 */
@@ -222,7 +222,7 @@ public class FileCompiler {
 			this.blockStartIndex = this.lineNum;
 		} else if (this.oldCurlyBracketCount == 1 && this.bracketsCount[0] == 0) {
 			//it is the end of the block:
-			this.mySubBlocks.add(new BlockCompiler(this.blockStartIndex, this.lineNum, this,
+			this.mySubBlocks.add(new BlockCompiler(this.blockStartIndex, this.lineNum, globalScope.myCompiler,
 					parent, isFunctionBlock));
 		}
 	}
@@ -241,6 +241,5 @@ public class FileCompiler {
 		changeCounter();
 		// check for the new block indexes, if needed.
 		this.newBlockHelper(globalScope, true);
-		//                globalScope
 	}
 }

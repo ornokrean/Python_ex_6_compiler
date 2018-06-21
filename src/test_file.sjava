@@ -1,3 +1,9 @@
-void foo (final int a, final int b ){
-return;
+void foo() {
+	if (true) {
+		while (true) {
+			int x = a;
+		}
+	}
+	return;
 }
+int a = 3;
