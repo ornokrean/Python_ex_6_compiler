@@ -184,14 +184,11 @@ public class BlockCompiler extends FileCompiler {
 		if (callVars.length == 1 && validVars[0].equals(EMPTY_LINE)) {
 			return;
 		}
-		Pattern p = Pattern.compile(CompilerPatterns.STRING_VALUE_REGEX + CompilerPatterns.OR_REGEX +
-				CompilerPatterns.BOOLEAN_VALUE_REGEX + CompilerPatterns.OR_REGEX + CompilerPatterns
-				.CHAR_VALUE_REGEX);
-		Matcher m;
+
 
 		for (int i = 0; i < validVars.length; i++) {
 			callVars[i] = callVars[i].trim();
-			m = p.matcher(callVars[i]);
+			Matcher m = CompilerPatterns.getMatcher(CompilerPatterns.r_PATTERN,callVars[i]);
 			scopeVariable currVar = getVarInScope(callVars[i]);
 			checkEmptyVar(callVars[i], EMPTY_FUNC_CALL_SLOT);
 			if (m.matches()) {
@@ -322,7 +319,8 @@ public class BlockCompiler extends FileCompiler {
 
 	private String declarationCallCase(String line, int lineNum) throws InvalidLineException {
 		// var declaration call case.
-		Pattern p = Pattern.compile(CompilerPatterns.VAR_DECLARATION_REGEX + CompilerPatterns.NAME_VAR + CompilerPatterns.EVERYTHING_REGEX);
+		Pattern p = Pattern.compile(CompilerPatterns.VAR_DECLARATION_TYPE_REGEX + CompilerPatterns.NAME_VAR + CompilerPatterns
+				.EVERYTHING_REGEX);
 		Matcher m = p.matcher(line);
 		if (m.matches()) {
 			String lineType = m.group(3); // getting the type of the declaration.
