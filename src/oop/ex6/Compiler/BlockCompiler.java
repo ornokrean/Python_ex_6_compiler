@@ -31,17 +31,44 @@ public class BlockCompiler extends FileCompiler {
 	static final String EMPTY_BOOLEAN_SLOT = "Empty boolean slot";
 	static final String INVALID_BOOLEAN_CONDITION = "invalid boolean condition";
 	static HashMap<String, String[]> functionsList = new HashMap<>();
+	/**
+	 * A reference to the super FileCompiler
+	 */
 	FileCompiler myCompiler;
+	/**
+	 * A boolean declaring if the block is a function block.
+	 */
 	private boolean isFunctionBlock = false;
+	/**
+	 * a int indicating the start of a block in the code array.
+	 */
 	private int start;
+	/**
+	 * a int indicating the end of a block in the code array.
+	 */
 	private int end;
+	/**
+	 * A Hash map containing the scope's variables.
+	 */
 	private HashMap<String, scopeVariable> scopeVariables = new HashMap<>();
+	/**
+	 * A  Hash set containing the line numbers of the block.
+	 */
 	private HashSet<Integer> myLines;
+	/**
+	 * a reference to the parent block.
+	 */
 	private BlockCompiler parentBlock = null;
 
 
-
-
+	/**
+	 * A constructor for BlockCompiler.
+	 * @param start a int indicating the start of a block in the code array.
+	 * @param end a int indicating the end of a block in the code array.
+	 * @param myCompiler A reference to the super FileCompiler
+	 * @param isFunctionBlock A boolean declaring if the block is a function block.
+	 * @throws InvalidLineException
+	 */
 	public BlockCompiler(int start, int end, FileCompiler myCompiler, Boolean isFunctionBlock) throws InvalidLineException {
 		this.start = start;
 		this.end = end;
@@ -53,22 +80,45 @@ public class BlockCompiler extends FileCompiler {
 		// compile first line
 	}
 
+	/**
+	 * A constructor allowing to set the parent block of the block.
+	 * @param start a int indicating the start of a block in the code array.
+	 * @param end a int indicating the end of a block in the code array.
+	 * @param myCompiler A reference to the super FileCompiler
+	 * @param parentBlock a reference to the parent block.
+	 * @throws InvalidLineException
+	 */
 	public BlockCompiler(int start, int end, FileCompiler myCompiler, BlockCompiler parentBlock) throws InvalidLineException {
 		this(start, end, myCompiler, false);
 		this.parentBlock = parentBlock;
 	}
 
+	/**
+	 * A constructor allowing to create a function block and set a parent.
+	 * @param start a int indicating the start of a block in the code array.
+	 * @param end a int indicating the end of a block in the code array.
+	 * @param myCompiler A reference to the super FileCompiler
+	 * @param parentBlock a reference to the parent block.
+	 * @param isFunctionBlock A boolean declaring if the block is a function block.
+	 * @throws InvalidLineException
+	 */
 	public BlockCompiler(int start, int end, FileCompiler myCompiler, BlockCompiler parentBlock, boolean isFunctionBlock)
 			throws InvalidLineException {
 		this(start, end, myCompiler, isFunctionBlock);
 		this.parentBlock = parentBlock;
 	}
 
-	public void setEnd(int end) {
+	/*
+	* A method that allows setting the end of a Block.
+	 */
+	void setEnd(int end) {
 		this.end = end;
 	}
 
-
+	/*
+	 * An initiator function that
+	 * @throws InvalidLineException
+	 */
 	void initiateBlock() throws  InvalidLineException {
 		for (int i = start + 1; i < end; i++) {
 			currentCodeLine = code.get(i);
