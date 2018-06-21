@@ -9,18 +9,50 @@ import java.util.regex.Matcher;
 
 
 public class FileCompiler {
+	/**
+	 * A class that its purpose is to check if a given code in a given path compiles, and throw an error if it does not.
+	 */
+
 	static final String EMPTY_LINE = "";
 	static final String BAD_COMMENT_MSG = "bad comment in line ";
 	static final String BAD_CODE_SYNTAX_MSG = "bad code syntax in line ";
 	static final String ILLEGAL_RETURN_MSG = "return statement at illegal location (global scope)";
-	static BlockCompiler globalScope;
-	ArrayList<BlockCompiler> mySubBlocks = new ArrayList<>();
-	int[] bracketsCount = {0, 0};
-	ArrayList<String> code = new ArrayList<>();
-	String currentCodeLine;
-	int oldCurlyBracketCount;
-	int lineNum;
 
+	/**
+	 * A data member of BlockCompiler type which represents the global scope of the code.
+	 */
+	static BlockCompiler globalScope;
+	/**
+	 * An array of BlockCompilers Containing all the Function Blocks.
+	 */
+	ArrayList<BlockCompiler> mySubBlocks = new ArrayList<>();
+
+	/**
+	 * A Array of size 2, of usage to count the number of brackets and by that create the subBlocks.
+	 */
+	int[] bracketsCount = {0, 0};
+
+	/**
+	 * An array list containing the code that was read and filtered from the path.
+	 */
+	ArrayList<String> code = new ArrayList<>();
+
+	/**
+	 * the previous curly brackets count also held in order to create the subBlocks.
+	 */
+	int oldCurlyBracketCount;
+	/**
+	 * the current line num we are at in the code read.
+	 */
+	int lineNum;
+	/**
+	 * the current code line we are using.
+	 */
+	String currentCodeLine;
+
+	/**
+	 * An int indicating the index of the blockStart.
+	 */
 	private int blockStartIndex;
 
 
@@ -79,6 +111,11 @@ public class FileCompiler {
 		return false;
 	}
 
+	/**
+	 * A function checking that the lines written in the global scope are in the right format.
+	 * @param line the current line.
+	 * @throws InvalidLineException throws an invalid line exception in case of identifying an invalid line.
+	 */
 	private void checkInvalidGlobalCode(String line) throws InvalidLineException {
 		if (bracketsCount[0] == 0) {
 			Matcher globalScopeCode = CompilerPatterns.GLOBAL_SCOPE_CODE_PATTERN.matcher(line);
@@ -117,6 +154,10 @@ public class FileCompiler {
 		codeReader.close();
 	}
 
+    /**
+     * The functions the actually compiles all the code after preparations.
+     * @throws InvalidLineException
+     */
 	public void compile() throws InvalidLineException {
 
 		for (BlockCompiler block : mySubBlocks) {
@@ -180,7 +221,6 @@ public class FileCompiler {
 	 * this function is like the "main" function of the class, it operates all the work that needs to be
 	 * done and makes it into one function line. it will save the oldCurlyBracketCount, and run the change
 	 * counter and will add a new block when needed.
-	 *
 	 * @throws InvalidLineException if one of the counters is below zero, an exception will be thrown.
 	 */
 	public void compileLine(BlockCompiler parent) throws InvalidLineException {
