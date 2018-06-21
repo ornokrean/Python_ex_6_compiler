@@ -188,7 +188,7 @@ public class BlockCompiler extends FileCompiler {
 
 		for (int i = 0; i < validVars.length; i++) {
 			callVars[i] = callVars[i].trim();
-			Matcher m = CompilerPatterns.getMatcher(CompilerPatterns.r_PATTERN,callVars[i]);
+			Matcher m = CompilerPatterns.getMatcher(CompilerPatterns.r_PATTERN, callVars[i]);
 			scopeVariable currVar = getVarInScope(callVars[i]);
 			checkEmptyVar(callVars[i], EMPTY_FUNC_CALL_SLOT);
 			if (m.matches()) {
@@ -206,13 +206,11 @@ public class BlockCompiler extends FileCompiler {
 		String[] checkVars = splitSignature(line, CompilerPatterns.ROUND_OPEN, CompilerPatterns.ROUND_CLOSE, CompilerPatterns.BOOL_DELIMITER);
 		for (String var : checkVars) {
 			checkEmptyVar(var, EMPTY_BOOLEAN_SLOT);
-			Pattern p = Pattern.compile(CompilerPatterns.BOOLEAN_VALUE_REGEX);
-			Matcher m = p.matcher(var.trim());
+			Matcher m = CompilerPatterns.getMatcher(CompilerPatterns.BOOLEAN_VALUE_PATTERN, var.trim());
 			if (m.matches()) {
 				continue;
 			}
-			p = Pattern.compile(CompilerPatterns.NAME_VAR);
-			m = p.matcher(var.trim());
+			m = CompilerPatterns.getMatcher(CompilerPatterns.NAME_VAR_PATTERN, var.trim());
 			if (m.matches()) {
 				scopeVariable currVar = getVarInScope(var.trim());
 				if (currVar != null && (currVar.isBoolean()) && (currVar.getVarLineNum() < lineNum ||
@@ -269,27 +267,25 @@ public class BlockCompiler extends FileCompiler {
 	private void checkLine(int lineNum) throws InvalidLineException {
 		String line = code.get(lineNum);
 		myLines.add(lineNum);
+		Matcher matcher;
 		// if or while case.
-		Pattern p = Pattern.compile(CompilerPatterns.IF_WHILE_REGEX);
-		Matcher m = p.matcher(line);
-		if (m.matches()) {
+		matcher = CompilerPatterns.getMatcher(CompilerPatterns.IF_WHILE_PATTERN, line);
+		if (matcher.matches()) {
 			checkBooleanCall(line, lineNum);
 			return;
 		}
 
 
 		// end of block case
-		p = Pattern.compile(CompilerPatterns.END_BLOCK_REGEX);
-		m = p.matcher(line);
-		if (m.matches()) {
+		matcher = CompilerPatterns.getMatcher(CompilerPatterns.END_BLOCK_PATTERN, line);
+		if (matcher.matches()) {
 			return;
 		}
 
 
 		// return line case.
-		p = Pattern.compile(CompilerPatterns.RETURN_REGEX);
-		m = p.matcher(line);
-		if (m.matches()) {
+		matcher = CompilerPatterns.getMatcher(CompilerPatterns.RETURN_PATTERN, line);
+		if (matcher.matches()) {
 			return;
 
 		}
@@ -298,18 +294,16 @@ public class BlockCompiler extends FileCompiler {
 
 
 		// existing var usage call case.
-		p = Pattern.compile(CompilerPatterns.NAME_VAR + CompilerPatterns.ASSIGNMENT_REGEX);
-		m = p.matcher(line);
-		if (m.matches()) {
+		matcher = CompilerPatterns.getMatcher(CompilerPatterns.NAME_AND_ASSIGNMENT_PATTERN, line);
+		if (matcher.matches()) {
 			// notice we are sending the is final true by default but in this case it makes no difference since it is
 			// not in use since the line type is null.
 			varDeclarationCase(line, null, true, lineNum);
 			return;
 		}
 		// function call case
-		p = Pattern.compile(CompilerPatterns.FUNC_CALL);
-		m = p.matcher(line);
-		if (m.matches()) {
+		matcher = CompilerPatterns.getMatcher(CompilerPatterns.FUNC_CALL_PATTERN,line);
+		if (matcher.matches()) {
 			checkValidFuncCall(line);
 			return;
 		}
@@ -319,7 +313,7 @@ public class BlockCompiler extends FileCompiler {
 
 	private String declarationCallCase(String line, int lineNum) throws InvalidLineException {
 		// var declaration call case.
-		Pattern p = Pattern.compile(CompilerPatterns.VAR_DECLARATION_TYPE_REGEX + CompilerPatterns.NAME_VAR + CompilerPatterns
+		Pattern p = Pattern.compile(CompilerPatterns.VAR_DECLARATION_TYPE_REGEX + CompilerPatterns.NAME_VAR_REGEX + CompilerPatterns
 				.EVERYTHING_REGEX);
 		Matcher m = p.matcher(line);
 		if (m.matches()) {
@@ -344,7 +338,7 @@ public class BlockCompiler extends FileCompiler {
 			scopeVariable existingVariableInScope = null;
 			checkEmptyVar(var, INVALID_VARIABLE_ASSIGNMENT);
 
-			Pattern p = Pattern.compile(CompilerPatterns.NAME_VAR);
+			Pattern p = Pattern.compile(CompilerPatterns.NAME_VAR_REGEX);
 			Matcher m = p.matcher(var);
 
 			// just declaration of a variable with no assignment.
@@ -368,13 +362,13 @@ public class BlockCompiler extends FileCompiler {
 			}
 
 			if (m.matches()) {
-					if (IsSignatureLine(lineNum)) {
-						scopeVariables.put(m.group(1).trim(), new scopeVariable(isFinal, m.group(1).trim(),
-								lineType, start));
-					} else {
-						scopeVariables.put(m.group(1).trim(), new scopeVariable(isFinal, m.group(1).trim(), lineType,
-								NOT_ASSIGNED));
-					}
+				if (IsSignatureLine(lineNum)) {
+					scopeVariables.put(m.group(1).trim(), new scopeVariable(isFinal, m.group(1).trim(),
+							lineType, start));
+				} else {
+					scopeVariables.put(m.group(1).trim(), new scopeVariable(isFinal, m.group(1).trim(), lineType,
+							NOT_ASSIGNED));
+				}
 
 				continue;
 			}
@@ -401,7 +395,7 @@ public class BlockCompiler extends FileCompiler {
 				} else {
 					// group  here is the name, and group  here is the var assignment.
 					scopeVariable result = variableFactory(isFinal, lineType, m.group(3).trim(), m.group(5), lineNum);
-						scopeVariables.put(result.getName(), result);
+					scopeVariables.put(result.getName(), result);
 
 					continue;
 				}
@@ -409,7 +403,7 @@ public class BlockCompiler extends FileCompiler {
 
 
 			// need to check that the variable has not been assigned
-			p = Pattern.compile(CompilerPatterns.NAME_VAR + CompilerPatterns.EQUALS_REGEX + CompilerPatterns.NAME_VAR);
+			p = Pattern.compile(CompilerPatterns.NAME_VAR_REGEX + CompilerPatterns.EQUALS_REGEX + CompilerPatterns.NAME_VAR_REGEX);
 			m = p.matcher(var);
 			if (m.matches()) {
 
@@ -437,7 +431,7 @@ public class BlockCompiler extends FileCompiler {
 					} else {
 						scopeVariable result = variableFactory(isFinal, lineType, m.group(2).trim(),
 								assignedVar.getDefaultVal(), lineNum);
-							scopeVariables.put(m.group(2).trim(), result);
+						scopeVariables.put(m.group(2).trim(), result);
 						continue;
 					}
 				}
@@ -495,7 +489,7 @@ public class BlockCompiler extends FileCompiler {
 	}
 
 	private String getFuncName(String line, Pattern p) throws InvalidLineException {
-		Matcher m = p.matcher(line);
+		Matcher m = CompilerPatterns.getMatcher(p,line);
 		if (m.matches()) {
 			return m.group(2).trim();
 		}
