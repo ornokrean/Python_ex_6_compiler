@@ -121,7 +121,7 @@ public class BlockCompiler extends FileCompiler {
 	 * An initiator function that
 	 * @throws InvalidLineException
 	 */
-	void initiateBlock() throws InvalidLineException {
+	private void initiateBlock() throws InvalidLineException {
 		for (int i = start + 1; i < end; i++) {
 			currentCodeLine = code.get(i);
 			lineNum = i;
@@ -159,14 +159,14 @@ public class BlockCompiler extends FileCompiler {
 			var = var.trim();
 			if (vars.length > 1)
 				checkEmptyVar(var, EMPTY_FUNC_CALL_SLOT);
-			String newVarName = declarationCallCase(var + SEMICOLON, true, start);
+			String newVarName = declarationCallCase(var + SEMICOLON, start);
 			if (newVarName == null) {
 				throw new InvalidNameException(INVALID_FUNCTION_SIGNATURE);
 			}
 		}
 	}
 
-	void checkValidFuncCall(String line) throws InvalidLineException {
+	private void checkValidFuncCall(String line) throws InvalidLineException {
 		String name = getFuncName(line, CompilerPatterns.FUNC_CALL_PATTERN);
 		String[] callVars = splitSignature(line, CompilerPatterns.ROUND_OPEN, CompilerPatterns.ROUND_CLOSE, CompilerPatterns.FUNC_DELIMITER);
 		if (functionsList.containsKey(name)) {
@@ -177,7 +177,7 @@ public class BlockCompiler extends FileCompiler {
 		throw new InvalidLineException(INVALID_FUNCTION_CALL);
 	}
 
-	void checkFuncCallVars(String[] callVars, String[] validVars) throws InvalidLineException {
+	private void checkFuncCallVars(String[] callVars, String[] validVars) throws InvalidLineException {
 		if (callVars.length != validVars.length) {
 			throw new InvalidNameException(INVALID_FUNCTION_CALL);
 		}
@@ -185,7 +185,8 @@ public class BlockCompiler extends FileCompiler {
 			return;
 		}
 		Pattern p = Pattern.compile(CompilerPatterns.STRING_VALUE_REGEX + CompilerPatterns.OR_REGEX +
-				CompilerPatterns.BOOLEAN_VALUE + CompilerPatterns.OR_REGEX + CompilerPatterns.CHAR_VALUE_REGEX);
+				CompilerPatterns.BOOLEAN_VALUE_REGEX + CompilerPatterns.OR_REGEX + CompilerPatterns
+				.CHAR_VALUE_REGEX);
 		Matcher m;
 
 		for (int i = 0; i < validVars.length; i++) {
@@ -204,11 +205,11 @@ public class BlockCompiler extends FileCompiler {
 		}
 	}
 
-	void checkBooleanCall(String line, int lineNum) throws InvalidLineException {
+	private void checkBooleanCall(String line, int lineNum) throws InvalidLineException {
 		String[] checkVars = splitSignature(line, CompilerPatterns.ROUND_OPEN, CompilerPatterns.ROUND_CLOSE, CompilerPatterns.BOOL_DELIMITER);
 		for (String var : checkVars) {
 			checkEmptyVar(var, EMPTY_BOOLEAN_SLOT);
-			Pattern p = Pattern.compile(CompilerPatterns.BOOLEAN_VALUE);
+			Pattern p = Pattern.compile(CompilerPatterns.BOOLEAN_VALUE_REGEX);
 			Matcher m = p.matcher(var.trim());
 			if (m.matches()) {
 				continue;
@@ -295,7 +296,7 @@ public class BlockCompiler extends FileCompiler {
 			return;
 
 		}
-		if (declarationCallCase(line, true, lineNum) != null)
+		if (declarationCallCase(line, lineNum) != null)
 			return;
 
 
@@ -305,7 +306,7 @@ public class BlockCompiler extends FileCompiler {
 		if (m.matches()) {
 			// notice we are sending the is final true by default but in this case it makes no difference since it is
 			// not in use since the line type is null.
-			varDeclarationCase(line, null, true, true, lineNum);
+			varDeclarationCase(line, null, true, lineNum);
 			return;
 		}
 		// function call case
@@ -319,7 +320,7 @@ public class BlockCompiler extends FileCompiler {
 		throw new InvalidLineException(NO_MATCH_FOR_LINE);
 	}
 
-	private String declarationCallCase(String line, boolean insertVal, int lineNum) throws InvalidLineException {
+	private String declarationCallCase(String line, int lineNum) throws InvalidLineException {
 		// var declaration call case.
 		Pattern p = Pattern.compile(CompilerPatterns.VAR_DECLARATION_REGEX + CompilerPatterns.NAME_VAR + CompilerPatterns.EVERYTHING_REGEX);
 		Matcher m = p.matcher(line);
@@ -329,15 +330,14 @@ public class BlockCompiler extends FileCompiler {
 			if (m.group(2) != null) {
 				isFinal = true;
 			}
-			varDeclarationCase(line, lineType, isFinal, insertVal, lineNum);
+			varDeclarationCase(line, lineType, isFinal, lineNum);
 			// returns the name of the variable.
 			return m.group(5).trim();
 		}
 		return null;
 	}
 
-
-	private void varDeclarationCase(String line, String lineType, boolean isFinal, boolean insertVal, int lineNum) throws InvalidLineException {
+	private void varDeclarationCase(String line, String lineType, boolean isFinal, int lineNum) throws InvalidLineException {
 		String[] varsDeclared = splitSignature(line, lineType, ";", ",");
 		if (line == null && varsDeclared.length != 1) {
 			throw new InvalidVariableUsageException(INVALID_VARIABLE_ASSIGNMENT);
@@ -370,7 +370,6 @@ public class BlockCompiler extends FileCompiler {
 			}
 
 			if (m.matches()) {
-				if (insertVal) {
 					if (IsSignatureLine(lineNum)) {
 						scopeVariables.put(m.group(1).trim(), new scopeVariable(isFinal, m.group(1).trim(),
 								lineType, start));
@@ -378,7 +377,7 @@ public class BlockCompiler extends FileCompiler {
 						scopeVariables.put(m.group(1).trim(), new scopeVariable(isFinal, m.group(1).trim(), lineType,
 								NOT_ASSIGNED));
 					}
-				}
+
 				continue;
 			}
 
@@ -404,9 +403,8 @@ public class BlockCompiler extends FileCompiler {
 				} else {
 					// group  here is the name, and group  here is the var assignment.
 					scopeVariable result = variableFactory(isFinal, lineType, m.group(3).trim(), m.group(5), lineNum);
-					if (insertVal) {
 						scopeVariables.put(result.getName(), result);
-					}
+
 					continue;
 				}
 			}
@@ -441,9 +439,7 @@ public class BlockCompiler extends FileCompiler {
 					} else {
 						scopeVariable result = variableFactory(isFinal, lineType, m.group(2).trim(),
 								assignedVar.getDefaultVal(), lineNum);
-						if (insertVal) {
 							scopeVariables.put(m.group(2).trim(), result);
-						}
 						continue;
 					}
 				}
@@ -492,7 +488,7 @@ public class BlockCompiler extends FileCompiler {
 	}
 
 
-	String[] splitSignature(String signature, String start, String end, String delimiter) {
+	private String[] splitSignature(String signature, String start, String end, String delimiter) {
 		if (start == null) {
 			start = EMPTY_LINE;
 		}
@@ -500,7 +496,7 @@ public class BlockCompiler extends FileCompiler {
 				(delimiter, -1);
 	}
 
-	String getFuncName(String line, Pattern p) throws InvalidLineException {
+	private String getFuncName(String line, Pattern p) throws InvalidLineException {
 		Matcher m = p.matcher(line);
 		if (m.matches()) {
 			return m.group(2).trim();
