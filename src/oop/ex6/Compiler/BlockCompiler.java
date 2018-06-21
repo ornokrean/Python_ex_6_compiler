@@ -1,6 +1,9 @@
 package oop.ex6.Compiler;
 
 import oop.ex6.Variables.scopeVariable;
+import oop.ex6.main.compilerExceptions.InvalidLineException;
+import oop.ex6.main.compilerExceptions.InvalidNameException;
+import oop.ex6.main.compilerExceptions.InvalidVariableUsageException;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -14,8 +17,21 @@ public class BlockCompiler extends FileCompiler {
 	static final String SEMICOLON = ";";
 	static final String DEFAULT_VAR_NAME = "varName";
 	private static final int NOT_ASSIGNED = -1;
+	static final String NO_MATCH_FOR_LINE = "No match for line";
+	static final String VAR_IN_SCOPE_ERROR = "declaring a var that is already in scope.";
+	static final String FINAL_VAR_ASSIGNMENT_MSG = "trying to assign a variable that is final";
+	static final String VAR_IS_NOT_DECLARED_USAGE_MSG = "trying to assign a value with a value that has not been declared yet.";
+	static final String INVALID_ASSIGNMENT_OF_NEW_VARIABLE_WITH_OLD_ONE = "invalid assignment of new variable with old one";
+	static final String INVALID_END_OF_BLOCK = "Invalid end of block";
+	static final String ILLEGAL_FUNC_NAME = "illegal func name";
+	static final String INVALID_VARIABLE_ASSIGNMENT = "invalid variable assignment.";
+	static final String INVALID_FUNCTION_SIGNATURE = "Invalid function signature";
+	static final String EMPTY_FUNC_CALL_SLOT = "Empty func call slot";
+	static final String INVALID_FUNCTION_CALL = "Invalid function call";
+	static final String EMPTY_BOOLEAN_SLOT = "Empty boolean slot";
+	static final String INVALID_BOOLEAN_CONDITION = "invalid boolean condition";
 	static HashMap<String, String[]> functionsList = new HashMap<>();
-	 FileCompiler myCompiler;
+	FileCompiler myCompiler;
 	private boolean isFunctionBlock = false;
 	private int start;
 	private int end;
@@ -26,7 +42,7 @@ public class BlockCompiler extends FileCompiler {
 
 
 
-	public BlockCompiler(int start, int end, FileCompiler myCompiler, Boolean isFunctionBlock) throws Exception {
+	public BlockCompiler(int start, int end, FileCompiler myCompiler, Boolean isFunctionBlock) throws InvalidLineException {
 		this.start = start;
 		this.end = end;
 		this.myCompiler = myCompiler;
@@ -37,13 +53,13 @@ public class BlockCompiler extends FileCompiler {
 		// compile first line
 	}
 
-	public BlockCompiler(int start, int end, FileCompiler myCompiler, BlockCompiler parentBlock) throws Exception {
+	public BlockCompiler(int start, int end, FileCompiler myCompiler, BlockCompiler parentBlock) throws InvalidLineException {
 		this(start, end, myCompiler, false);
 		this.parentBlock = parentBlock;
 	}
 
 	public BlockCompiler(int start, int end, FileCompiler myCompiler, BlockCompiler parentBlock, boolean isFunctionBlock)
-			throws Exception {
+			throws InvalidLineException {
 		this(start, end, myCompiler, isFunctionBlock);
 		this.parentBlock = parentBlock;
 	}
@@ -53,7 +69,7 @@ public class BlockCompiler extends FileCompiler {
 	}
 
 
-	void initiateBlock() throws IOException, Exception {
+	void initiateBlock() throws  InvalidLineException {
 		for (int i = start + 1; i < end; i++) {
 			currentCodeLine = code.get(i);
 			lineNum = i;
@@ -61,7 +77,7 @@ public class BlockCompiler extends FileCompiler {
 		}
 	}
 
-	void checkSignature() throws Exception {
+	void checkSignature() throws InvalidLineException {
 		if (this.isFunctionBlock) {
 			String funcDeclaration = this.code.get(this.start);
 			String name = getFuncName(funcDeclaration, CompilerPatterns.FUNC_DECLARATION_PATTERN);
@@ -76,29 +92,29 @@ public class BlockCompiler extends FileCompiler {
 						vars[i] = m.group(3).trim();
 						continue;
 					}
-					throw new Exception("bad function signature");
+					throw new InvalidNameException(INVALID_FUNCTION_SIGNATURE);
 				}
 			}
 			functionsList.put(name, vars);
 		}
 	}
 
-	void addFuncVars(String[] vars) throws Exception {
+	void addFuncVars(String[] vars) throws InvalidLineException {
 		if (vars.length == 1 && vars[0].trim().equals(EMPTY_LINE)) {
 			return;
 		}
 		for (String var : vars) {
 			var = var.trim();
 			if (vars.length > 1)
-				checkEmptyVar(var, "Empty func call slot");
+				checkEmptyVar(var, EMPTY_FUNC_CALL_SLOT);
 			String newVarName = declarationCallCase(var + SEMICOLON, true, start);
 			if (newVarName == null) {
-				throw new Exception("invalid parameter in function call");
+				throw new InvalidNameException(INVALID_FUNCTION_SIGNATURE);
 			}
 		}
 	}
 
-	void checkValidFuncCall(String line) throws Exception {
+	void checkValidFuncCall(String line) throws InvalidLineException {
 		String name = getFuncName(line, CompilerPatterns.FUNC_CALL_PATTERN);
 		String[] callVars = splitSignature(line, CompilerPatterns.ROUND_OPEN, CompilerPatterns.ROUND_CLOSE, CompilerPatterns.FUNC_DELIMITER);
 		if (functionsList.containsKey(name)) {
@@ -106,12 +122,12 @@ public class BlockCompiler extends FileCompiler {
 			checkFuncCallVars(callVars, validVars);
 			return;
 		}
-		throw new Exception("Invalid function call");
+		throw new InvalidLineException(INVALID_FUNCTION_CALL);
 	}
 
-	void checkFuncCallVars(String[] callVars, String[] validVars) throws Exception {
+	void checkFuncCallVars(String[] callVars, String[] validVars) throws InvalidLineException {
 		if (callVars.length != validVars.length) {
-			throw new Exception("Invalid func call - not same length as signature");
+			throw new InvalidNameException(INVALID_FUNCTION_CALL);
 		}
 		if (callVars.length == 1 && validVars[0].equals(EMPTY_LINE)) {
 			return;
@@ -123,11 +139,11 @@ public class BlockCompiler extends FileCompiler {
 			callVars[i] = callVars[i].trim();
 			m = p.matcher(callVars[i]);
 			scopeVariable currVar = getVarInScope(callVars[i]);
-			checkEmptyVar(callVars[i], "Empty func call slot");
+			checkEmptyVar(callVars[i], EMPTY_FUNC_CALL_SLOT);
 			if (m.matches()) {
 				variableFactory(true, validVars[i], DEFAULT_VAR_NAME, callVars[i], 0);
 			} else if (currVar == null || !(currVar.isAssigned())) {
-				throw new Exception("invalid variable assignment.");
+				throw new InvalidVariableUsageException(INVALID_VARIABLE_ASSIGNMENT);
 			} else {
 				variableFactory(true, validVars[i], DEFAULT_VAR_NAME, currVar.getDefaultVal(), 0);
 			}
@@ -135,10 +151,10 @@ public class BlockCompiler extends FileCompiler {
 		}
 	}
 
-	void checkBooleanCall(String line, int lineNum) throws Exception {
+	void checkBooleanCall(String line, int lineNum) throws InvalidLineException {
 		String[] checkVars = splitSignature(line, CompilerPatterns.ROUND_OPEN, CompilerPatterns.ROUND_CLOSE, CompilerPatterns.BOOL_DELIMITER);
 		for (String var : checkVars) {
-			checkEmptyVar(var, "Empty boolean slot");
+			checkEmptyVar(var, EMPTY_BOOLEAN_SLOT);
 			Pattern p = Pattern.compile(CompilerPatterns.BOOLEAN_VALUE);
 			Matcher m = p.matcher(var.trim());
 			if (m.matches()) {
@@ -153,7 +169,7 @@ public class BlockCompiler extends FileCompiler {
 					continue;
 				}
 			}
-			throw new Exception("invalid boolean condition");
+			throw new InvalidLineException(INVALID_BOOLEAN_CONDITION);
 
 		}
 
@@ -165,17 +181,17 @@ public class BlockCompiler extends FileCompiler {
 	 *
 	 * @param var the var to check
 	 * @param s   the message to throw.
-	 * @throws Exception
+	 * @throws InvalidLineException
 	 */
-	private void checkEmptyVar(String var, String s) throws Exception {
+	private void checkEmptyVar(String var, String s) throws InvalidLineException {
 		if (var.equals(EMPTY_LINE)) {
-			throw new Exception(s);
+			throw new InvalidLineException(s);
 		}
 	}
 
 
 	@Override
-	public void compile() throws Exception {
+	public void compile() throws InvalidLineException {
 		// first off we check if the last 2 lines contains the return and "}"  statement.
 		checkReturnStatement();
 		int i = this.start;
@@ -199,7 +215,7 @@ public class BlockCompiler extends FileCompiler {
 
 	}
 
-	private void checkLine(int lineNum) throws Exception {
+	private void checkLine(int lineNum) throws InvalidLineException {
 		String line = code.get(lineNum);
 		myLines.add(lineNum);
 		// if or while case.
@@ -247,10 +263,10 @@ public class BlockCompiler extends FileCompiler {
 			return;
 		}
 
-		throw new Exception("No match for line");
+		throw new InvalidLineException(NO_MATCH_FOR_LINE);
 	}
 
-	private String declarationCallCase(String line, boolean insertVal, int lineNum) throws Exception {
+	private String declarationCallCase(String line, boolean insertVal, int lineNum) throws InvalidLineException {
 		// var declaration call case.
 		Pattern p = Pattern.compile(CompilerPatterns.VAR_DECLARATION_REGEX + CompilerPatterns.NAME_VAR + CompilerPatterns.EVERYTHING_REGEX);
 		Matcher m = p.matcher(line);
@@ -268,14 +284,14 @@ public class BlockCompiler extends FileCompiler {
 	}
 
 
-	private void varDeclarationCase(String line, String lineType, boolean isFinal, boolean insertVal, int lineNum) throws Exception {
+	private void varDeclarationCase(String line, String lineType, boolean isFinal, boolean insertVal, int lineNum) throws InvalidLineException {
 		String[] varsDeclared = splitSignature(line, lineType, ";", ",");
 		if (line == null && varsDeclared.length != 1) {
-			throw new Exception("An invalid usage of a variable in one line.");
+			throw new InvalidVariableUsageException(INVALID_VARIABLE_ASSIGNMENT);
 		}
 		for (String var : varsDeclared) {
 			scopeVariable existingVariableInScope = null;
-			checkEmptyVar(var, "bad var assignment");
+			checkEmptyVar(var, INVALID_VARIABLE_ASSIGNMENT);
 
 			Pattern p = Pattern.compile(CompilerPatterns.NAME_VAR);
 			Matcher m = p.matcher(var);
@@ -288,7 +304,7 @@ public class BlockCompiler extends FileCompiler {
 				String varName = m.group().trim();
 				existingVariableInScope = getVarInScope(varName);
 				if (lineType != null && scopeVariables.containsKey(varName)) {
-					throw new Exception("declaring a var that is already in scope.");
+					throw new InvalidVariableUsageException(VAR_IN_SCOPE_ERROR);
 				}
 
 
@@ -296,7 +312,7 @@ public class BlockCompiler extends FileCompiler {
 				// checking that in the case of using a variable that it does exist in the scope.
 				if (lineType == null) {
 					if (existingVariableInScope == null)
-						throw new Exception("declaring a variable that has  already been declared.");
+						throw new InvalidVariableUsageException(VAR_IN_SCOPE_ERROR);
 				}
 			}
 
@@ -316,7 +332,7 @@ public class BlockCompiler extends FileCompiler {
 
 			// checking that the existing variable is not final.
 			if (existingVariableInScope != null && existingVariableInScope.isFinal()) {
-				throw new Exception("trying to assign a variable that is final");
+				throw new InvalidVariableUsageException(FINAL_VAR_ASSIGNMENT_MSG);
 			}
 
 			// an assignment of a variable with a primitive.
@@ -355,11 +371,11 @@ public class BlockCompiler extends FileCompiler {
 					if (!globalScope.scopeVariables.containsValue(assignedVar) && (assignedVar
 							.getVarLineNum() < start || assignedVar.getVarLineNum() > end) &&
 							(assignedVar.getVarLineNum() > lineNum)) {
-						throw new Exception("trying to assign a value with a value that has not been declared yet.");
+						throw new InvalidVariableUsageException(VAR_IS_NOT_DECLARED_USAGE_MSG);
 
 					} else if (globalScope.scopeVariables.containsValue(assignedVar) && !globalScope
 							.myLines.contains(assignedVar.getVarLineNum())) {
-						throw new Exception("trying to assign a value with a value that has not been declared yet.");
+						throw new InvalidVariableUsageException(VAR_IS_NOT_DECLARED_USAGE_MSG);
 
 					}
 					// separating the existing var assignment and the regular one.
@@ -380,7 +396,7 @@ public class BlockCompiler extends FileCompiler {
 				}
 
 			}
-			throw new Exception("invalid assignment in line" + code.indexOf(line) + " of new variable with old one");
+			throw new InvalidVariableUsageException(INVALID_ASSIGNMENT_OF_NEW_VARIABLE_WITH_OLD_ONE);
 
 
 		}
@@ -404,20 +420,20 @@ public class BlockCompiler extends FileCompiler {
 	}
 
 
-	private void checkReturnStatement() throws Exception {
+	private void checkReturnStatement() throws InvalidLineException {
 		if (isFunctionBlock) {
 			// check if lat row is "}"
 			Pattern p = Pattern.compile(CompilerPatterns.BRACKET_CLOSE_REGEX);
 			Matcher m = p.matcher(code.get(end));
 			if (!m.matches()) {
-				throw new Exception("bad end of block");
+				throw new InvalidLineException(INVALID_END_OF_BLOCK);
 			}
 			// check if one row before last contains "return;"
 			p = Pattern.compile(CompilerPatterns.RETURN_REGEX);
 			m = p.matcher(code.get(end - 1));
 
 			if (!m.matches()) {
-				throw new Exception("bad end of block");
+				throw new InvalidLineException(INVALID_END_OF_BLOCK);
 			}
 		}
 	}
@@ -431,16 +447,16 @@ public class BlockCompiler extends FileCompiler {
 				(delimiter, -1);
 	}
 
-	String getFuncName(String line, Pattern p) throws Exception {
+	String getFuncName(String line, Pattern p) throws InvalidLineException {
 		Matcher m = p.matcher(line);
 		if (m.matches()) {
 			return m.group(2).trim();
 		}
-		throw new Exception("illegal func name");
+		throw new InvalidNameException(ILLEGAL_FUNC_NAME);
 	}
 
 	@Override
-	public void compileLine(BlockCompiler parent) throws Exception {
+	public void compileLine(BlockCompiler parent) throws InvalidLineException {
 		this.oldCurlyBracketCount = this.bracketsCount[0];
 		changeCounter();
 		// check for the new block indexes, if needed.

@@ -10,6 +10,7 @@ FileCompiler.java
 scopeVariable.java
 VariableFactory.java
 
+
 =============================
 =          Design           =
 =============================
@@ -47,7 +48,7 @@ to separate the code into scopes first and the for each scope to create a mechan
 =============================
 =  Implementation details   =
 =============================
-
+We have decided to create an exception hirarchy of
 
 How did you handle the s-java errors ?:
 --------------------------------------

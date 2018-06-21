@@ -86,7 +86,7 @@ public class scopeVariable {
 
 	/**
 	 * A function that returns the Name of the variable.
-	 * @return
+	 * @return the name of the variable.
 	 */
 	public String getName() {
 		return name;

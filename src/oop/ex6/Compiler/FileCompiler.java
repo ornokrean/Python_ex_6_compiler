@@ -1,5 +1,7 @@
 package oop.ex6.Compiler;
 
+import oop.ex6.main.compilerExceptions.InvalidLineException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,6 +10,9 @@ import java.util.regex.Matcher;
 
 public class FileCompiler {
 	static final String EMPTY_LINE = "";
+	static final String BAD_COMMENT_MSG = "bad comment in line ";
+	static final String BAD_CODE_SYNTAX_MSG = "bad code syntax in line ";
+	static final String ILLEGAL_RETURN_MSG = "return statement at illegal location (global scope)";
 	static BlockCompiler globalScope;
 	ArrayList<BlockCompiler> mySubBlocks = new ArrayList<>();
 	int[] bracketsCount = {0, 0};
@@ -45,9 +50,9 @@ public class FileCompiler {
 	 * @param b2 the second condition
 	 * @throws Exception if on of the conditions matches, exception will be thrown.
 	 */
-	static void checkCounter(boolean b, boolean b2) throws Exception {
+	static void checkCounter(boolean b, boolean b2) throws InvalidLineException {
 		if (b || b2)
-			throw new Exception("problem with {}()");
+			throw new InvalidLineException("problem with {}()");
 		// TODO: lineNum used only for tests. please remove before submit;
 	}
 
@@ -56,17 +61,17 @@ public class FileCompiler {
 	 * @param line the line to check
 	 * @return true iff the line is valid.
 	 */
-	private boolean validateLine(String line) throws Exception {
+	private boolean validateLine(String line) throws InvalidLineException {
 		Matcher codePattern = CompilerPatterns.CODE_PATTERN.matcher(line);
 		Matcher comment = CompilerPatterns.COMMENT_PATTERN.matcher(line);
 		Matcher badComment = CompilerPatterns.BAD_COMMENT_PATTERN.matcher(line);
 		if (comment.matches()) { // if it is comment, lets check if the comment is valid:
 			if (badComment.matches()) {//bad comment line. bye bye.
-				throw new Exception("bad comment in line " + lineNum);
+				throw new InvalidLineException(BAD_COMMENT_MSG + lineNum);
 			}
 		} else if (!codePattern.matches() && !line.trim().equals(EMPTY_LINE)) {
 			//it has something inside but it isn't a code
-			throw new Exception("bad code syntax in line " + lineNum);
+			throw new InvalidLineException(BAD_CODE_SYNTAX_MSG + lineNum);
 		} else { // return a code
 			checkInvalidGlobalCode(line);
 			return codePattern.matches() && !line.trim().equals(EMPTY_LINE);
@@ -74,11 +79,11 @@ public class FileCompiler {
 		return false;
 	}
 
-	private void checkInvalidGlobalCode(String line) throws Exception {
+	private void checkInvalidGlobalCode(String line) throws InvalidLineException {
 		if (bracketsCount[0] == 0) {
 			Matcher globalScopeCode = CompilerPatterns.GLOBAL_SCOPE_CODE_PATTERN.matcher(line);
 			if (globalScopeCode.matches())
-				throw new Exception("return statement at bad place (global scope)");
+				throw new InvalidLineException(ILLEGAL_RETURN_MSG);
 		}
 	}
 
@@ -91,7 +96,7 @@ public class FileCompiler {
 	 * @throws IOException if there is a problem with the BufferedReader
 	 * @throws Exception   if there is a syntax error
 	 */
-	void initiateCompiler(BufferedReader codeReader) throws IOException, Exception {
+	void initiateCompiler(BufferedReader codeReader) throws IOException, InvalidLineException {
 		globalScope = new BlockCompiler(0, -1, this, false);
 		while ((currentCodeLine = codeReader.readLine()) != null) {
 			if (validateLine(currentCodeLine)) {
@@ -112,7 +117,7 @@ public class FileCompiler {
 		codeReader.close();
 	}
 
-	public void compile() throws Exception {
+	public void compile() throws InvalidLineException {
 
 		for (BlockCompiler block : mySubBlocks) {
 			block.checkSignature();
@@ -126,7 +131,7 @@ public class FileCompiler {
 	 * @throws Exception if there's a problem with the counters, too many unmatched parenthesis - (below
 	 * zero).
 	 */
-	void changeCounter() throws Exception {
+	void changeCounter() throws InvalidLineException {
 		Matcher m2 = CompilerPatterns.NOT_COMMENT_PATTERN.matcher(this.currentCodeLine);
 		if (!m2.matches())
 			return;
@@ -158,9 +163,9 @@ public class FileCompiler {
 	 * 1, we will save this line as the line the block started (blockStartIndex). then, after some line if
 	 * the counter went down from 1 to 0, we will create the new block with this line as the last index and
 	 * add it to the compiler's mySubBlocks ArrayList.
-	 * @throws Exception if the block compiler constructor throws exception
+	 * @throws InvalidLineException if the block compiler constructor throws exception
 	 */
-	void newBlockHelper(BlockCompiler parent, boolean isFunctionBlock) throws Exception {
+	void newBlockHelper(BlockCompiler parent, boolean isFunctionBlock) throws InvalidLineException {
 		if (this.oldCurlyBracketCount == 0 && this.bracketsCount[0] == 1) {
 			// a new block is in the block!
 			this.blockStartIndex = this.lineNum;
@@ -176,9 +181,9 @@ public class FileCompiler {
 	 * done and makes it into one function line. it will save the oldCurlyBracketCount, and run the change
 	 * counter and will add a new block when needed.
 	 *
-	 * @throws Exception if one of the counters is below zero, an exception will be thrown.
+	 * @throws InvalidLineException if one of the counters is below zero, an exception will be thrown.
 	 */
-	public void compileLine(BlockCompiler parent) throws Exception {
+	public void compileLine(BlockCompiler parent) throws InvalidLineException {
 		this.oldCurlyBracketCount = this.bracketsCount[0];
 		changeCounter();
 		// check for the new block indexes, if needed.
