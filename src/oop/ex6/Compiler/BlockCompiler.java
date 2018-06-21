@@ -138,7 +138,7 @@ public class BlockCompiler extends FileCompiler {
 
 			if (!(vars.length == 1 && vars[0].trim().equals(EMPTY_LINE))) {
 				for (int i = 0; i < vars.length; i++) {
-					Matcher m = CompilerPatterns.getMatcher(CompilerPatterns.VAR_DECLARATION_START_PATTERN,
+					Matcher m = CompilerPatterns.getMatcher(CompilerPatterns.VAR_DECLARATION_START_ONLY_PATTERN,
 							vars[i]);
 					if (m.matches()) {
 						vars[i] = m.group(3).trim();
@@ -313,9 +313,8 @@ public class BlockCompiler extends FileCompiler {
 
 	private String declarationCallCase(String line, int lineNum) throws InvalidLineException {
 		// var declaration call case.
-		Pattern p = Pattern.compile(CompilerPatterns.VAR_DECLARATION_TYPE_REGEX + CompilerPatterns.NAME_VAR_REGEX + CompilerPatterns
-				.EVERYTHING_REGEX);
-		Matcher m = p.matcher(line);
+
+		Matcher m = CompilerPatterns.getMatcher(CompilerPatterns.VAR_DECLARATION_START_PATTERN,line);
 		if (m.matches()) {
 			String lineType = m.group(3); // getting the type of the declaration.
 			boolean isFinal = false;
@@ -338,8 +337,7 @@ public class BlockCompiler extends FileCompiler {
 			scopeVariable existingVariableInScope = null;
 			checkEmptyVar(var, INVALID_VARIABLE_ASSIGNMENT);
 
-			Pattern p = Pattern.compile(CompilerPatterns.NAME_VAR_REGEX);
-			Matcher m = p.matcher(var);
+			Matcher m = CompilerPatterns.getMatcher(CompilerPatterns.NAME_VAR_PATTERN,var);
 
 			// just declaration of a variable with no assignment.
 
@@ -380,8 +378,7 @@ public class BlockCompiler extends FileCompiler {
 			}
 
 			// an assignment of a variable with a primitive.
-			p = Pattern.compile(CompilerPatterns.SOME_PRIMITIVE);
-			m = p.matcher(var);
+			m = CompilerPatterns.getMatcher(CompilerPatterns.PRIMITIVE_DECLARATION_PATTERN,var);
 			if (m.matches()) {
 				// separating the existing var assignment and the regular one.
 				if (lineType == null) {
@@ -403,8 +400,7 @@ public class BlockCompiler extends FileCompiler {
 
 
 			// need to check that the variable has not been assigned
-			p = Pattern.compile(CompilerPatterns.NAME_VAR_REGEX + CompilerPatterns.EQUALS_REGEX + CompilerPatterns.NAME_VAR_REGEX);
-			m = p.matcher(var);
+			m = CompilerPatterns.getMatcher(CompilerPatterns.ASSIGN_VAR_PATTERN,var);
 			if (m.matches()) {
 
 				//group  here is the name of the assigned-to variable, and group  is the new variable name.
@@ -464,14 +460,12 @@ public class BlockCompiler extends FileCompiler {
 	private void checkReturnStatement() throws InvalidLineException {
 		if (isFunctionBlock) {
 			// check if lat row is "}"
-			Pattern p = Pattern.compile(CompilerPatterns.BRACKET_CLOSE_REGEX);
-			Matcher m = p.matcher(code.get(end));
+			Matcher m = CompilerPatterns.getMatcher(CompilerPatterns.BRACKET_CLOSE_PATTERN,code.get(end));
 			if (!m.matches()) {
 				throw new InvalidLineException(INVALID_END_OF_BLOCK);
 			}
 			// check if one row before last contains "return;"
-			p = Pattern.compile(CompilerPatterns.RETURN_REGEX);
-			m = p.matcher(code.get(end - 1));
+			m = CompilerPatterns.getMatcher(CompilerPatterns.RETURN_PATTERN,code.get(end - 1));
 
 			if (!m.matches()) {
 				throw new InvalidLineException(INVALID_END_OF_BLOCK);

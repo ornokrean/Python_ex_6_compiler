@@ -42,13 +42,15 @@ public class CompilerPatterns {
 	static final String ROUND_OPEN = "(";
 
 	public static final String r = STRING_VALUE_REGEX + OR_REGEX + BOOLEAN_VALUE_REGEX + OR_REGEX + CHAR_VALUE_REGEX;
-	public static final String VAR_DECLARATION_START_REGEX = VAR_DECLARATION_TYPE_REGEX + NAME_VAR_REGEX + SPACES_REGEX;
-	public static final String SOME_PRIMITIVE = ROUND_OPEN + NAME_VAR_REGEX + EQUALS_REGEX + SPACES_REGEX + ROUND_OPEN +
+	public static final String VAR_DECLARATION_START_ONLY_REGEX = VAR_DECLARATION_TYPE_REGEX + NAME_VAR_REGEX + SPACES_REGEX;
+	public static final String PRIMITIVE_DECLARATION_REGEX = ROUND_OPEN + NAME_VAR_REGEX + EQUALS_REGEX + SPACES_REGEX + ROUND_OPEN +
 			r + ROUND_CLOSE + ROUND_CLOSE + SPACES_REGEX;
 	public static final String GLOBAL_CODE_REGEX = ROUND_OPEN + RETURN_REGEX + ROUND_CLOSE + OR_REGEX +
 			ROUND_OPEN + IF_WHILE_REGEX + ROUND_CLOSE + OR_REGEX + ROUND_OPEN + FUNC_CALL + ROUND_CLOSE;
 
-
+	public static final String VAR_DECLARATION_START_REGEX = VAR_DECLARATION_START_ONLY_REGEX +
+			EVERYTHING_REGEX;
+	public static final Pattern VAR_DECLARATION_START_PATTERN = Pattern.compile(VAR_DECLARATION_START_REGEX);
 	public static final Pattern BOOLEAN_VALUE_PATTERN = Pattern.compile(BOOLEAN_VALUE_REGEX);
 	public static final Pattern NAME_VAR_PATTERN= Pattern.compile(NAME_VAR_REGEX);
 
@@ -60,11 +62,12 @@ public class CompilerPatterns {
 	public static final Pattern RETURN_PATTERN= Pattern.compile(RETURN_REGEX);
 	public static final Pattern NAME_AND_ASSIGNMENT_PATTERN = Pattern.compile(NAME_AND_ASSIGNMENT_REGEX);
 
-
+	public static final String ASSIGN_VAR_REGEX = NAME_VAR_REGEX + EQUALS_REGEX+ NAME_VAR_REGEX;
+	public static final Pattern ASSIGN_VAR_PATTERN = Pattern.compile(ASSIGN_VAR_REGEX);
 
 
 	public static final Pattern r_PATTERN = Pattern.compile(r);
-	public static final Pattern VAR_DECLARATION_START_PATTERN = Pattern.compile(VAR_DECLARATION_START_REGEX);
+	public static final Pattern VAR_DECLARATION_START_ONLY_PATTERN = Pattern.compile(VAR_DECLARATION_START_ONLY_REGEX);
 	public static final Pattern INT_VALUE_PATTERN = Pattern.compile(INT_VALUE_REGEX);
 	public static final Pattern DOUBLE_VALUE_PATTERN = Pattern.compile(DOUBLE_VALUE_REGEX);
 	public static final Pattern FUNC_DECLARATION_PATTERN = Pattern.compile(FUNC_DECLARATION);
@@ -74,6 +77,11 @@ public class CompilerPatterns {
 	public static final Pattern BAD_COMMENT_PATTERN = Pattern.compile(BAD_COMMENT_REGEX);
 	public static final Pattern COMMENT_PATTERN = Pattern.compile(COMMENT_REGEX);
 	public static final Pattern GLOBAL_SCOPE_CODE_PATTERN = Pattern.compile(GLOBAL_CODE_REGEX);
+
+
+	public static final Pattern BRACKET_CLOSE_PATTERN= Pattern.compile(BRACKET_CLOSE_REGEX);
+
+	public static final Pattern PRIMITIVE_DECLARATION_PATTERN = Pattern.compile(PRIMITIVE_DECLARATION_REGEX);
 
 
 
