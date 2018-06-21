@@ -1,6 +1,8 @@
 package oop.ex6.main;
 
 import oop.ex6.Compiler.FileCompiler;
+import oop.ex6.main.compilerExceptions.InvalidLineException;
+
 import java.io.*;
 
 public class  Sjavac {
@@ -34,7 +36,7 @@ public class  Sjavac {
 //            System.err.println(e.getMessage());
 //            throw e;
 
-        }catch (Exception e){
+        }catch (InvalidLineException e){
             System.out.print(1);
 //            System.err.println(e.getMessage());
 //            throw e;
