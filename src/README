@@ -5,11 +5,14 @@ or.nokrean
 =      File description     =
 =============================
 Sjavac.java
+CompilerPatterns.java
 BlockCompiler.java
 FileCompiler.java
 scopeVariable.java
 VariableFactory.java
-
+InvalidLineException.java
+InvalidNameException.java
+InvalidVariableUsageException.java
 
 =============================
 =          Design           =
@@ -48,14 +51,12 @@ to separate the code into scopes first and the for each scope to create a mechan
 =============================
 =  Implementation details   =
 =============================
-We have decided to create an exception hirarchy of
-
 How did you handle the s-java errors ?:
 --------------------------------------
 every error we caught we have decided to throw as an error of the program and only catch it in the Sjavac Main method
 that operates the other programs, As it seems to be reasonable since one error is enough to make the code not valid.
-
-
+We have decided to create an exception hierarchy of a line exception as the super class of a name exception and a
+variable exception.
 
 =============================
 =    Answers to questions   =
@@ -78,9 +79,6 @@ the function block, all done in the BlockCompiler.
 2) adding another line-case into the checkLine function inside the BlockCompiler class, that is able to read that kind
 of statements, and use the varDeclaration case function in order to check the value inserted and whether
 they are compatible or not.
-
-
-
 
 
 ------------------------------------------------------------------------------
