@@ -188,7 +188,7 @@ public class BlockCompiler extends FileCompiler {
 
 		for (int i = 0; i < validVars.length; i++) {
 			callVars[i] = callVars[i].trim();
-			Matcher m = CompilerPatterns.getMatcher(CompilerPatterns.r_PATTERN, callVars[i]);
+			Matcher m = CompilerPatterns.getMatcher(CompilerPatterns.PRIMITIVE_VAL_PATTERN, callVars[i]);
 			scopeVariable currVar = getVarInScope(callVars[i]);
 			checkEmptyVar(callVars[i], EMPTY_FUNC_CALL_SLOT);
 			if (m.matches()) {
