@@ -184,7 +184,8 @@ public class BlockCompiler extends FileCompiler {
 		if (callVars.length == 1 && validVars[0].equals(EMPTY_LINE)) {
 			return;
 		}
-		Pattern p = Pattern.compile(CompilerPatterns.STRING_VALUE_REGEX + CompilerPatterns.OR_REGEX + CompilerPatterns.BOOLEAN_VALUE + CompilerPatterns.OR_REGEX + CompilerPatterns.CHAR_VALUE);
+		Pattern p = Pattern.compile(CompilerPatterns.STRING_VALUE_REGEX + CompilerPatterns.OR_REGEX +
+				CompilerPatterns.BOOLEAN_VALUE + CompilerPatterns.OR_REGEX + CompilerPatterns.CHAR_VALUE_REGEX);
 		Matcher m;
 
 		for (int i = 0; i < validVars.length; i++) {
