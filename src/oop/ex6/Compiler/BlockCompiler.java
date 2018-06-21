@@ -13,7 +13,6 @@ import static oop.ex6.Variables.VariableFactory.variableFactory;
 
 public class BlockCompiler extends FileCompiler {
 	private static final String SEMICOLON = ";";
-	private static final String COMMA_SEPARATOR = ";";
 	private static final String DEFAULT_VAR_NAME = "varName";
 	private static final String NO_MATCH_FOR_LINE = "No match for line";
 	private static final String VAR_IN_SCOPE_ERROR = "declaring a var that is already in scope.";
@@ -138,7 +137,7 @@ public class BlockCompiler extends FileCompiler {
 			String funcDeclaration = this.code.get(this.start);
 			String name = getFuncName(funcDeclaration, CompilerPatterns.FUNC_DECLARATION_PATTERN);
 			String[] vars = splitSignature(funcDeclaration, CompilerPatterns.ROUND_OPEN,
-					CompilerPatterns.ROUND_CLOSE, CompilerPatterns.FUNC_DELIMITER);
+					CompilerPatterns.ROUND_CLOSE, CompilerPatterns.COMMA_SEPARATOR);
 			addFuncVars(vars);
 			if (!(vars.length == 1 && vars[0].trim().equals(EMPTY_LINE))) {
 				for (int i = 0; i < vars.length; i++) {
@@ -179,7 +178,7 @@ public class BlockCompiler extends FileCompiler {
 	private void checkValidFuncCall(String line) throws InvalidLineException {
 		String name = getFuncName(line, CompilerPatterns.FUNC_CALL_PATTERN);
 		String[] callVars = splitSignature(line, CompilerPatterns.ROUND_OPEN, CompilerPatterns.ROUND_CLOSE,
-				CompilerPatterns.FUNC_DELIMITER);
+				CompilerPatterns.COMMA_SEPARATOR);
 		if (functionsList.containsKey(name)) {
 			String[] validVars = functionsList.get(name);
 			checkFuncCallVars(callVars, validVars);
@@ -333,7 +332,7 @@ public class BlockCompiler extends FileCompiler {
 	private void varDeclarationCase(String line, String lineType, boolean isFinal, int lineNum)
 			throws InvalidLineException {
 		// get all declarations in the line:
-		String[] varsDeclared = splitSignature(line, lineType, SEMICOLON, COMMA_SEPARATOR);
+		String[] varsDeclared = splitSignature(line, lineType, SEMICOLON, CompilerPatterns.COMMA_SEPARATOR);
 		if (line == null && varsDeclared.length != 1) {
 			throw new InvalidVariableUsageException(INVALID_VARIABLE_ASSIGNMENT);
 		}

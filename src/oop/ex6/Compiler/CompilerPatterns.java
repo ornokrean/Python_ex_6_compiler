@@ -19,7 +19,7 @@ public class CompilerPatterns {
 			+ ROUND_CLOSE;
 	public static final String STRING_VALUE_REGEX = "([\"][^\"]*[\"])";
 	public static final String CHAR_VALUE_REGEX = "([\'][^\'][\'])";
-	public static final String FUNC_DELIMITER = ",";
+	public static final String COMMA_SEPARATOR = ",";
 	public static final String BOOL_DELIMITER = "\\|\\||&&";
 	public static final String NAME_VAR_REGEX = "([\\s]*(([a-zA-Z]|[_][\\w])[\\w]*)[\\s]*)";
 	public static final String FUNC_DECLARATION = "[\\s]*(void)[\\s]*([a-zA-Z]+[\\w]*)[\\s]*[(].*[)" +
