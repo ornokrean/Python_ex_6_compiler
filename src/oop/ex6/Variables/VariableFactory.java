@@ -29,8 +29,8 @@ public class VariableFactory {
 	 * @return A variable.
 	 * @throws InvalidLineException an exception that is thrown in case of invalid parameters.
 	 */
-	public static scopeVariable variableFactory(boolean finalFlag, String type, String varName, String varValue,
-	                                            int lineNum) throws InvalidLineException {
+	public static ScopeVariable variableFactory(boolean finalFlag, String type, String varName,
+	                                            String varValue, int lineNum) throws InvalidLineException {
 		if (type.equals(typeCases.BOOLEAN.myType)) {
 			booleanHelper(varValue);
 		} else if (type.equals(typeCases.INT.myType)) {
@@ -44,7 +44,7 @@ public class VariableFactory {
 		} else {
 			throw new InvalidLineException(BAD_VARIABLE_DECLARATION);
 		}
-		return new scopeVariable(finalFlag, varName, type, lineNum);
+		return new ScopeVariable(finalFlag, varName, type, lineNum);
 	}
 
 	/*

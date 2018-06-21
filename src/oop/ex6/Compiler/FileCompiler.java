@@ -11,13 +11,14 @@ import java.util.regex.Matcher;
 
 public class FileCompiler {
 	/**
-	 * A class that its purpose is to check if a given code in a given path compiles, and throw an error if it does not.
+	 * A class that its purpose is to check if a given code in a given path compiles, and throw an error if
+	 * it does not.
 	 */
 
 	static final String EMPTY_LINE = "";
-	static final String BAD_COMMENT_MSG = "bad comment in line ";
-	static final String BAD_CODE_SYNTAX_MSG = "bad code syntax in line ";
-	static final String ILLEGAL_RETURN_MSG = "return statement at illegal location (global scope)";
+	private static final String BAD_COMMENT_MSG = "bad comment in line ";
+	private static final String BAD_CODE_SYNTAX_MSG = "bad code syntax in line ";
+	private static final String ILLEGAL_RETURN_MSG = "return statement at illegal location (global scope)";
 
 	/**
 	 * A data member of BlockCompiler type which represents the global scope of the code.
@@ -59,7 +60,7 @@ public class FileCompiler {
 	/**
 	 * A  Hash set containing the line numbers of the block.
 	 */
-	 HashSet<Integer> myLines = new HashSet<>();
+	private HashSet<Integer> myLines = new HashSet<>();
 
 	/**
 	 * default constructor
@@ -86,9 +87,9 @@ public class FileCompiler {
 	 *
 	 * @param b  the first condition
 	 * @param b2 the second condition
-	 * @throws Exception if on of the conditions matches, exception will be thrown.
+	 * @throws InvalidLineException if on of the conditions matches, exception will be thrown.
 	 */
-	static void checkCounter(boolean b, boolean b2) throws InvalidLineException {
+	private static void checkCounter(boolean b, boolean b2) throws InvalidLineException {
 		if (b || b2)
 			throw new InvalidLineException("problem with {}()");
 		// TODO: lineNum used only for tests. please remove before submit;
@@ -119,15 +120,16 @@ public class FileCompiler {
 
 	/**
 	 * A function checking that the lines written in the global scope are in the right format.
+	 *
 	 * @param line the current line.
 	 * @throws InvalidLineException throws an invalid line exception in case of identifying an invalid line.
 	 */
 	private void checkInvalidGlobalCode(String line) throws InvalidLineException {
 		if (bracketsCount[0] == 0) {
 			Matcher invalidGlobalScopeCode = CompilerPatterns.INVALID_GLOBAL_SCOPE_CODE_PATTERN.matcher(line);
-			if (!invalidGlobalScopeCode.matches()){
+			if (!invalidGlobalScopeCode.matches()) {
 				this.myLines.add(this.lineNum);
-			}else{
+			} else {
 				throw new InvalidLineException(ILLEGAL_RETURN_MSG);
 			}
 
@@ -140,10 +142,10 @@ public class FileCompiler {
 	 * errors, and adds the code to an ArrayList, and creates the code blocks accordingly.
 	 *
 	 * @param codeReader the BufferedReader to read the code from
-	 * @throws IOException if there is a problem with the BufferedReader
-	 * @throws Exception   if there is a syntax error
+	 * @throws IOException          if there is a problem with the BufferedReader
+	 * @throws InvalidLineException if there is a syntax error
 	 */
-	void initiateCompiler(BufferedReader codeReader) throws IOException, InvalidLineException {
+	private void initiateCompiler(BufferedReader codeReader) throws IOException, InvalidLineException {
 		globalScope = new BlockCompiler(0, -1, this, false);
 		while ((currentCodeLine = codeReader.readLine()) != null) {
 			if (validateLine(currentCodeLine)) {
@@ -164,10 +166,11 @@ public class FileCompiler {
 		codeReader.close();
 	}
 
-    /**
-     * The functions the actually compiles all the code after preparations.
-     * @throws InvalidLineException
-     */
+	/**
+	 * The functions the actually compiles all the code after preparations.
+	 *
+	 * @throws InvalidLineException if there was a code compiling error.
+	 */
 	public void compile() throws InvalidLineException {
 
 		for (BlockCompiler block : mySubBlocks) {
@@ -197,16 +200,17 @@ public class FileCompiler {
 	private void updateCounter() {
 		int lineLen = this.currentCodeLine.length();
 
-		this.bracketsCount[0] += lineLen - this.currentCodeLine.replace(CompilerPatterns.CURLY_OPEN, CompilerPatterns.EMPTY_STR).length();
+		this.bracketsCount[0] += lineLen - this.currentCodeLine.replace(CompilerPatterns.CURLY_OPEN,
+				CompilerPatterns.EMPTY_STR).length();
 
-		this.bracketsCount[0] -= lineLen - this.currentCodeLine.replace(CompilerPatterns.CURLY_CLOSE, CompilerPatterns.EMPTY_STR)
-				.length();
+		this.bracketsCount[0] -= lineLen - this.currentCodeLine.replace(CompilerPatterns.CURLY_CLOSE,
+				CompilerPatterns.EMPTY_STR).length();
 
-		this.bracketsCount[1] += lineLen - this.currentCodeLine.replace(CompilerPatterns.ROUND_OPEN, CompilerPatterns.EMPTY_STR)
-				.length();
+		this.bracketsCount[1] += lineLen - this.currentCodeLine.replace(CompilerPatterns.ROUND_OPEN,
+				CompilerPatterns.EMPTY_STR).length();
 
-		this.bracketsCount[1] -= lineLen - this.currentCodeLine.replace(CompilerPatterns.ROUND_CLOSE, CompilerPatterns.EMPTY_STR)
-				.length();
+		this.bracketsCount[1] -= lineLen - this.currentCodeLine.replace(CompilerPatterns.ROUND_CLOSE,
+				CompilerPatterns.EMPTY_STR).length();
 	}
 
 	/*
@@ -226,7 +230,8 @@ public class FileCompiler {
 					parent, isFunctionBlock));
 		}
 	}
-	boolean containsLine(int line){
+
+	boolean containsLine(int line) {
 		return this.myLines.contains(line);
 	}
 
@@ -234,6 +239,7 @@ public class FileCompiler {
 	 * this function is like the "main" function of the class, it operates all the work that needs to be
 	 * done and makes it into one function line. it will save the oldCurlyBracketCount, and run the change
 	 * counter and will add a new block when needed.
+	 *
 	 * @throws InvalidLineException if one of the counters is below zero, an exception will be thrown.
 	 */
 	public void compileLine() throws InvalidLineException {
