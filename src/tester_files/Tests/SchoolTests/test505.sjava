@@ -1,16 +1,3 @@
-boolean a = true;
-
-void foo() {
-	while(true) {
-		if (true) {
-			if(false && a) {
-				while(a) {
-					char p;
-				}
-			}
-			
-		}
-		
-	}
-	return;
+void foo (final int a, final int b ){
+return;
 }
