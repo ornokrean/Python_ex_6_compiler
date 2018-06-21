@@ -13,23 +13,23 @@ import java.util.regex.Pattern;
 import static oop.ex6.Variables.VariableFactory.variableFactory;
 
 public class BlockCompiler extends FileCompiler {
-	static final String SEMICOLON = ";";
-	static final String DEFAULT_VAR_NAME = "varName";
-	static final String NO_MATCH_FOR_LINE = "No match for line";
-	static final String VAR_IN_SCOPE_ERROR = "declaring a var that is already in scope.";
-	static final String FINAL_VAR_ASSIGNMENT_MSG = "trying to assign a variable that is final";
-	static final String VAR_IS_NOT_DECLARED_USAGE_MSG = "trying to assign a value with a value that has not been declared yet.";
-	static final String INVALID_ASSIGNMENT_OF_NEW_VARIABLE_WITH_OLD_ONE = "invalid assignment of new variable with old one";
-	static final String INVALID_END_OF_BLOCK = "Invalid end of block";
-	static final String ILLEGAL_FUNC_NAME = "illegal func name";
-	static final String INVALID_VARIABLE_ASSIGNMENT = "invalid variable assignment.";
-	static final String INVALID_FUNCTION_SIGNATURE = "Invalid function signature";
-	static final String EMPTY_FUNC_CALL_SLOT = "Empty func call slot";
-	static final String INVALID_FUNCTION_CALL = "Invalid function call";
-	static final String EMPTY_BOOLEAN_SLOT = "Empty boolean slot";
-	static final String INVALID_BOOLEAN_CONDITION = "invalid boolean condition";
+	private static final String SEMICOLON = ";";
+	private static final String DEFAULT_VAR_NAME = "varName";
+	private static final String NO_MATCH_FOR_LINE = "No match for line";
+	private static final String VAR_IN_SCOPE_ERROR = "declaring a var that is already in scope.";
+	private static final String FINAL_VAR_ASSIGNMENT_MSG = "trying to assign a variable that is final";
+	private static final String VAR_IS_NOT_DECLARED_USAGE_MSG = "trying to assign a value with a value that has not been declared yet.";
+	private static final String INVALID_ASSIGNMENT_OF_NEW_VARIABLE_WITH_OLD_ONE = "invalid assignment of new variable with old one";
+	private static final String INVALID_END_OF_BLOCK = "Invalid end of block";
+	private static final String ILLEGAL_FUNC_NAME = "illegal func name";
+	private static final String INVALID_VARIABLE_ASSIGNMENT = "invalid variable assignment.";
+	private static final String INVALID_FUNCTION_SIGNATURE = "Invalid function signature";
+	private static final String EMPTY_FUNC_CALL_SLOT = "Empty func call slot";
+	private static final String INVALID_FUNCTION_CALL = "Invalid function call";
+	private static final String EMPTY_BOOLEAN_SLOT = "Empty boolean slot";
+	private static final String INVALID_BOOLEAN_CONDITION = "invalid boolean condition";
 	private static final int NOT_ASSIGNED = -1;
-	static HashMap<String, String[]> functionsList = new HashMap<>();
+	private static HashMap<String, String[]> functionsList = new HashMap<>();
 	/**
 	 * A reference to the super FileCompiler
 	 */
@@ -50,10 +50,7 @@ public class BlockCompiler extends FileCompiler {
 	 * A Hash map containing the scope's variables.
 	 */
 	private HashMap<String, scopeVariable> scopeVariables = new HashMap<>();
-	/**
-	 * A  Hash set containing the line numbers of the block.
-	 */
-	private HashSet<Integer> myLines;
+
 	/**
 	 * a reference to the parent block.
 	 */
@@ -76,7 +73,6 @@ public class BlockCompiler extends FileCompiler {
 		this.code = myCompiler.code;
 		this.isFunctionBlock = isFunctionBlock;
 		initiateBlock();
-		myLines = new HashSet<>();
 		// compile first line
 	}
 
@@ -125,7 +121,7 @@ public class BlockCompiler extends FileCompiler {
 		for (int i = start + 1; i < end; i++) {
 			currentCodeLine = code.get(i);
 			lineNum = i;
-			compileLine(this);
+			compileLine();
 		}
 	}
 
@@ -266,7 +262,6 @@ public class BlockCompiler extends FileCompiler {
 
 	private void checkLine(int lineNum) throws InvalidLineException {
 		String line = code.get(lineNum);
-		myLines.add(lineNum);
 		Matcher matcher;
 		// if or while case.
 		matcher = CompilerPatterns.getMatcher(CompilerPatterns.IF_WHILE_PATTERN, line);
@@ -412,8 +407,8 @@ public class BlockCompiler extends FileCompiler {
 							(assignedVar.getVarLineNum() > lineNum)) {
 						throw new InvalidVariableUsageException(VAR_IS_NOT_DECLARED_USAGE_MSG);
 
-					} else if (globalScope.scopeVariables.containsValue(assignedVar) && !globalScope
-							.myLines.contains(assignedVar.getVarLineNum())) {
+					} else if (globalScope.scopeVariables.containsValue(assignedVar) && !myCompiler
+							.containsLine(assignedVar.getVarLineNum())) {
 						throw new InvalidVariableUsageException(VAR_IS_NOT_DECLARED_USAGE_MSG);
 
 					}
@@ -491,11 +486,13 @@ public class BlockCompiler extends FileCompiler {
 	}
 
 	@Override
-	public void compileLine(BlockCompiler parent) throws InvalidLineException {
+	public void compileLine() throws InvalidLineException {
 		this.oldCurlyBracketCount = this.bracketsCount[0];
 		changeCounter();
 		// check for the new block indexes, if needed.
 		this.newBlockHelper(this, false);
 	}
+
+
 
 }

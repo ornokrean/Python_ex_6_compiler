@@ -5,6 +5,7 @@ import oop.ex6.main.compilerExceptions.InvalidLineException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.regex.Matcher;
 
 
@@ -55,7 +56,11 @@ public class FileCompiler {
 	 */
 	private int blockStartIndex;
 
-
+	/**
+	 * A  Hash set containing the line numbers of the block.
+	 */
+	private HashSet<Integer> myLines = new HashSet<>();
+	;
 	/**
 	 * default constructor
 	 */
@@ -72,6 +77,7 @@ public class FileCompiler {
 	public FileCompiler(BufferedReader codeReader) throws IOException, Exception {
 		this();
 		initiateCompiler(codeReader);
+
 	}
 
 	/**
@@ -118,9 +124,13 @@ public class FileCompiler {
 	 */
 	private void checkInvalidGlobalCode(String line) throws InvalidLineException {
 		if (bracketsCount[0] == 0) {
-			Matcher globalScopeCode = CompilerPatterns.GLOBAL_SCOPE_CODE_PATTERN.matcher(line);
-			if (globalScopeCode.matches())
+			Matcher invalidGlobalScopeCode = CompilerPatterns.INVALID_GLOBAL_SCOPE_CODE_PATTERN.matcher(line);
+			if (!invalidGlobalScopeCode.matches()){
+				this.myLines.add(this.lineNum);
+			}else{
 				throw new InvalidLineException(ILLEGAL_RETURN_MSG);
+			}
+
 		}
 	}
 
@@ -140,7 +150,7 @@ public class FileCompiler {
 				//this is a valid line, add it to the code:
 				code.add(currentCodeLine.trim());
 				// compile this line and it's sub-blocks:
-				compileLine(globalScope);
+				compileLine();
 				lineNum++;
 			}
 		}
@@ -216,6 +226,9 @@ public class FileCompiler {
 					parent, isFunctionBlock));
 		}
 	}
+	boolean containsLine(int line){
+		return this.myLines.contains(line);
+	}
 
 	/**
 	 * this function is like the "main" function of the class, it operates all the work that needs to be
@@ -223,10 +236,11 @@ public class FileCompiler {
 	 * counter and will add a new block when needed.
 	 * @throws InvalidLineException if one of the counters is below zero, an exception will be thrown.
 	 */
-	public void compileLine(BlockCompiler parent) throws InvalidLineException {
+	public void compileLine() throws InvalidLineException {
 		this.oldCurlyBracketCount = this.bracketsCount[0];
 		changeCounter();
 		// check for the new block indexes, if needed.
-		this.newBlockHelper(parent, true);
+		this.newBlockHelper(globalScope, true);
+		//                globalScope
 	}
 }
