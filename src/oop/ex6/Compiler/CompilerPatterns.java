@@ -1,5 +1,6 @@
 package oop.ex6.Compiler;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CompilerPatterns {
@@ -50,8 +51,11 @@ public class CompilerPatterns {
 	public static final Pattern BAD_COMMENT_PATTERN = Pattern.compile(BAD_COMMENT_REGEX);
 	public static final Pattern COMMENT_PATTERN = Pattern.compile(COMMENT_REGEX);
 	public static final Pattern GLOBAL_SCOPE_CODE_PATTERN = Pattern.compile(ROUND_OPEN+ RETURN_REGEX +ROUND_CLOSE+OR_REGEX+ROUND_OPEN+ IF_WHILE_REGEX +ROUND_CLOSE+OR_REGEX+ROUND_OPEN+ FUNC_CALL + ROUND_CLOSE);
-	
-	
+
+
+	Matcher getMatcher(Pattern p, String s){
+		return p.matcher(s);
+	}
 	
 
 }

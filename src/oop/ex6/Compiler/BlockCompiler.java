@@ -5,7 +5,6 @@ import oop.ex6.main.compilerExceptions.InvalidLineException;
 import oop.ex6.main.compilerExceptions.InvalidNameException;
 import oop.ex6.main.compilerExceptions.InvalidVariableUsageException;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.regex.Matcher;
@@ -16,7 +15,6 @@ import static oop.ex6.Variables.VariableFactory.variableFactory;
 public class BlockCompiler extends FileCompiler {
 	static final String SEMICOLON = ";";
 	static final String DEFAULT_VAR_NAME = "varName";
-	private static final int NOT_ASSIGNED = -1;
 	static final String NO_MATCH_FOR_LINE = "No match for line";
 	static final String VAR_IN_SCOPE_ERROR = "declaring a var that is already in scope.";
 	static final String FINAL_VAR_ASSIGNMENT_MSG = "trying to assign a variable that is final";
@@ -30,6 +28,7 @@ public class BlockCompiler extends FileCompiler {
 	static final String INVALID_FUNCTION_CALL = "Invalid function call";
 	static final String EMPTY_BOOLEAN_SLOT = "Empty boolean slot";
 	static final String INVALID_BOOLEAN_CONDITION = "invalid boolean condition";
+	private static final int NOT_ASSIGNED = -1;
 	static HashMap<String, String[]> functionsList = new HashMap<>();
 	/**
 	 * A reference to the super FileCompiler
@@ -63,9 +62,10 @@ public class BlockCompiler extends FileCompiler {
 
 	/**
 	 * A constructor for BlockCompiler.
-	 * @param start a int indicating the start of a block in the code array.
-	 * @param end a int indicating the end of a block in the code array.
-	 * @param myCompiler A reference to the super FileCompiler
+	 *
+	 * @param start           a int indicating the start of a block in the code array.
+	 * @param end             a int indicating the end of a block in the code array.
+	 * @param myCompiler      A reference to the super FileCompiler
 	 * @param isFunctionBlock A boolean declaring if the block is a function block.
 	 * @throws InvalidLineException
 	 */
@@ -82,9 +82,10 @@ public class BlockCompiler extends FileCompiler {
 
 	/**
 	 * A constructor allowing to set the parent block of the block.
-	 * @param start a int indicating the start of a block in the code array.
-	 * @param end a int indicating the end of a block in the code array.
-	 * @param myCompiler A reference to the super FileCompiler
+	 *
+	 * @param start       a int indicating the start of a block in the code array.
+	 * @param end         a int indicating the end of a block in the code array.
+	 * @param myCompiler  A reference to the super FileCompiler
 	 * @param parentBlock a reference to the parent block.
 	 * @throws InvalidLineException
 	 */
@@ -95,10 +96,11 @@ public class BlockCompiler extends FileCompiler {
 
 	/**
 	 * A constructor allowing to create a function block and set a parent.
-	 * @param start a int indicating the start of a block in the code array.
-	 * @param end a int indicating the end of a block in the code array.
-	 * @param myCompiler A reference to the super FileCompiler
-	 * @param parentBlock a reference to the parent block.
+	 *
+	 * @param start           a int indicating the start of a block in the code array.
+	 * @param end             a int indicating the end of a block in the code array.
+	 * @param myCompiler      A reference to the super FileCompiler
+	 * @param parentBlock     a reference to the parent block.
 	 * @param isFunctionBlock A boolean declaring if the block is a function block.
 	 * @throws InvalidLineException
 	 */
@@ -109,7 +111,7 @@ public class BlockCompiler extends FileCompiler {
 	}
 
 	/*
-	* A method that allows setting the end of a Block.
+	 * A method that allows setting the end of a Block.
 	 */
 	void setEnd(int end) {
 		this.end = end;
@@ -119,7 +121,7 @@ public class BlockCompiler extends FileCompiler {
 	 * An initiator function that
 	 * @throws InvalidLineException
 	 */
-	void initiateBlock() throws  InvalidLineException {
+	void initiateBlock() throws InvalidLineException {
 		for (int i = start + 1; i < end; i++) {
 			currentCodeLine = code.get(i);
 			lineNum = i;
@@ -417,7 +419,7 @@ public class BlockCompiler extends FileCompiler {
 				//group  here is the name of the assigned-to variable, and group  is the new variable name.
 				scopeVariable assignedVar = getVarInScope(m.group(5).trim());
 
-				if (assignedVar.isAssigned()) {
+				if (assignedVar != null && assignedVar.isAssigned()) {
 					if (!globalScope.scopeVariables.containsValue(assignedVar) && (assignedVar
 							.getVarLineNum() < start || assignedVar.getVarLineNum() > end) &&
 							(assignedVar.getVarLineNum() > lineNum)) {
