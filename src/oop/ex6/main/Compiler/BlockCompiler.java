@@ -29,7 +29,7 @@ public class BlockCompiler extends FileCompiler {
 	static final String EVERYTHING_REGEX = ".*";
 	static final String EQUALS_REGEX = "[=]";
 	static final String BRACKET_CLOSE_REGEX = "}[\\s]*$";
-	private static final int NOT_ASSIGNED = -1;
+	private static final int NOT_ASSIGNED = -1 ;
 	private static final Pattern FUNC_DECLARATION_PATTERN = Pattern.compile(FUNC_DECLARATION);
 	private static final Pattern FUNC_CALL_PATTERN = Pattern.compile(FUNC_CALL);
 	static HashMap<String, String[]> functionsList = new HashMap<>();
@@ -234,7 +234,6 @@ public class BlockCompiler extends FileCompiler {
 			return;
 		}
 
-
 		// end of block case
 		p = Pattern.compile(END_BLOCK_REGEX);
 		m = p.matcher(line);
@@ -421,7 +420,7 @@ public class BlockCompiler extends FileCompiler {
 
 	private void checkReturnStatement() throws Exception {
 		if (isFunctionBlock) {
-			// check if lat row is "}"
+			// check if last row is "}"
 			Pattern p = Pattern.compile(BRACKET_CLOSE_REGEX);
 			Matcher m = p.matcher(code.get(end));
 			if (!m.matches()) {

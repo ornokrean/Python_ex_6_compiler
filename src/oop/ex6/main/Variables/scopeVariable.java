@@ -17,20 +17,25 @@
 package oop.ex6.main.Variables;
 
 public class scopeVariable {
+	static final String DEFAULT_STRING = "\"a-string\"";
+	static final String DEFAULT_CHAR = "\'a\'";
+	static final String DEFAULT_DOUBLE = "0.0";
+	static final String DEFAULT_BOOLEAN = "true";
+	static final String DEFAULT_INT = "0";
 	boolean isFinal;
 	String name;
 	String myType;
 	private int isAssigned = -1;
 
 	enum defaultVal{
-
-		BOOLEAN("boolean"), INT("int"), DOUBLE("double"), STRING("String"), CHAR("char"),ISFINAL("final"),
-		DECLARATION("declaration");
+		BOOLEAN("boolean","true"), INT("int","0"), DOUBLE("double","0.0"), STRING("String","\"a-string\""), CHAR("char","\'a\'");
 
 		private final String myType;
-
-		defaultVal(String string) {myType = string; }
+		private final String defaultVal;
+		defaultVal(String myType,String myDefault) { this.myType = myType; this.defaultVal = myDefault; }
 		public String getType() {return myType;}
+
+		public String getDefaultVal(){return defaultVal;}
 	}
 
 
@@ -65,30 +70,29 @@ public class scopeVariable {
 		return myType;
 	}
 
-
 	public void setAssigned(int assigned) {
 		isAssigned = assigned;
 	}
+
 	public int getVarLineNum(){
 		return isAssigned;
 	}
 
 	public String getDefaultVal(){
-
 		if(myType.equals(defaultVal.STRING.getType())){
-			return "\"a-string\"";
+			return defaultVal.STRING.getDefaultVal();
 		}
 		else if (myType.equals(defaultVal.CHAR.getType())){
-			return "\'a\'";
+			return defaultVal.CHAR.getDefaultVal();
 		}
 		else if (myType.equals(defaultVal.DOUBLE.getType())){
-			return "0.0";
+			return defaultVal.DOUBLE.getDefaultVal();
 		}
 		else if (myType.equals(defaultVal.BOOLEAN.getType())){
-			return "true";
+			return defaultVal.BOOLEAN.getDefaultVal();
 		}
 		else{
-			return "0";
+			return defaultVal.INT.getDefaultVal();
 		}
 	}
 	public Boolean isBoolean(){
