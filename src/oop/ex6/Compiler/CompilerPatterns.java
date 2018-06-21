@@ -7,6 +7,9 @@ public class CompilerPatterns {
 	/**
 	 * A class Containing Patterns and regex's and operates as a helper class for the compiler classes.
 	 */
+
+	/* ======================================== REGEXES ======================================== */
+
 	public static final String ROUND_CLOSE = ")";
 	public static final String OR_REGEX = "|";
 	public static final String SPACES_REGEX = "[\\s]*";
@@ -24,7 +27,6 @@ public class CompilerPatterns {
 	public static final String VAR_DECLARATION_TYPE_REGEX = "[\\s]*((final\\s)?[\\s]*" +
 			"(int|double|char|boolean|String)" +
 			"[\\s]+)";
-
 	public static final String END_BLOCK_REGEX = "^[\\s]*}[\\s]*$";
 	public static final String ASSIGNMENT_REGEX = "[\\s]*[=].*[;]";
 	public static final String EVERYTHING_REGEX = ".*";
@@ -55,6 +57,11 @@ public class CompilerPatterns {
 			+ ROUND_OPEN + FUNC_CALL + ROUND_CLOSE;
 	public static final String NAME_AND_ASSIGNMENT_REGEX = NAME_VAR_REGEX + ASSIGNMENT_REGEX;
 	public static final String ASSIGN_VAR_REGEX = NAME_VAR_REGEX + EQUALS_REGEX + NAME_VAR_REGEX;
+
+
+
+
+	/* ======================================== Patterns ======================================== */
 	public static final Pattern VAR_DECLARATION_START_PATTERN = Pattern.compile(VAR_DECLARATION_START_REGEX);
 	public static final Pattern BOOLEAN_VALUE_PATTERN = Pattern.compile(BOOLEAN_VALUE_REGEX);
 	public static final Pattern NAME_VAR_PATTERN = Pattern.compile(NAME_VAR_REGEX);
