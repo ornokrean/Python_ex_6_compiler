@@ -1,70 +1,36 @@
-16:01:11
+16:06:20
 
 school solution#User solution#result#Test name
 
-1		1		passed		/BaraksTests/structure/12.sjava		
-1		1		passed		/BaraksTests/structure/15.sjava		
 1		1		passed		/specificTests/3.sjava		
-1		1		passed		/BaraksTests/structure/17.sjava		
 0		0		passed		/specificTests/1.sjava		
 0		0		passed		/specificTests/5.sjava		
-1		1		passed		/BaraksTests/structure/13.sjava		
-1		1		passed		/BaraksTests/structure/11.sjava		
 1		1		passed		/specificTests/7.sjava		
-0		0		passed		/BaraksTests/structure/08.sjava		
 0		0		passed		/specificTests/2.sjava		
-0		0		passed		/BaraksTests/while/04.sjava		
 0		0		passed		/specificTests/6.sjava		
-1		1		passed		/BaraksTests/while/22.sjava		
 0		0		passed		/specificTests/4.sjava		
-0		0		passed		/BaraksTests/while/06.sjava		
 0		0		passed		/specificTests/8.sjava		
-1		1		passed		/BaraksTests/while/02.sjava		
 0		0		passed		/SchoolTests/test411.sjava		
-1		1		passed		/BaraksTests/while/26.sjava		
 1		1		passed		/SchoolTests/test454.sjava		
-1		1		passed		/BaraksTests/while/24.sjava		
 1		1		passed		/SchoolTests/test264.sjava		
-1		1		passed		/BaraksTests/while/23.sjava		
 0		0		passed		/SchoolTests/test221.sjava		
-0		0		passed		/BaraksTests/while/07.sjava		
 0		0		passed		/SchoolTests/test469.sjava		
-0		0		passed		/BaraksTests/while/05.sjava		
 0		0		passed		/SchoolTests/test301.sjava		
-1		1		passed		/BaraksTests/while/18.sjava		
 1		1		passed		/SchoolTests/test045.sjava		
-1		1		passed		/BaraksTests/while/25.sjava		
 1		1		passed		/SchoolTests/test238.sjava		
-0		0		passed		/BaraksTests/while/01.sjava		
 1		1		passed		/SchoolTests/test024.sjava		
-0		0		passed		/BaraksTests/while/03.sjava		
 1		1		passed		/SchoolTests/test061.sjava		
-1		1		passed		/BaraksTests/while/27.sjava		
 0		0		passed		/SchoolTests/test325.sjava		
-1		1		passed		/BaraksTests/while/16.sjava		
 1		1		passed		/SchoolTests/test408.sjava		
-0		0		passed		/BaraksTests/while/14.sjava		
 1		1		passed		/SchoolTests/test435.sjava		
-0		0		passed		/BaraksTests/while/10.sjava		
 1		1		passed		/SchoolTests/test470.sjava		
-0		0		passed		/BaraksTests/while/09.sjava		
 0		0		passed		/SchoolTests/test019.sjava		
-1		1		passed		/BaraksTests/while/12.sjava		
 1		1		passed		/SchoolTests/test104.sjava		
-1		1		passed		/BaraksTests/while/15.sjava		
 1		1		passed		/SchoolTests/test205.sjava		
-1		1		passed		/BaraksTests/while/28.sjava		
-1		1		passed		/BaraksTests/while/17.sjava		
 0		0		passed		/SchoolTests/test437.sjava		
-1		1		passed		/BaraksTests/while/13.sjava		
 0		0		passed		/SchoolTests/test472.sjava		
-0		0		passed		/BaraksTests/while/11.sjava		
 0		0		passed		/SchoolTests/test242.sjava		
 1		1		passed		/SchoolTests/test207.sjava		
-0		0		passed		/BaraksTests/while/08.sjava		
-
-passed 467 out of 467 tests.
-
 0		0		passed		/SchoolTests/test106.sjava		
 0		0		passed		/SchoolTests/test327.sjava		
 1		1		passed		/SchoolTests/test026.sjava		

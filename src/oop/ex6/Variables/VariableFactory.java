@@ -9,12 +9,24 @@ import java.util.regex.Pattern;
 
 
 public class VariableFactory {
+	/**
+	 * A class representing a Variable factory, its purpose is to create instances of a given parameters.
+	 */
+
 	private static final String BAD_VARIABLE_DECLARATION = "ERROR: Wrong type variable in line : ";
-	static final String INVALID_INT_ASSIGNMENT = "Invalid int assignment";
 	static final String INVALID_DOUBLE_ASSIGNMENT = "Invalid Double assignment";
 	static final String INVALID_BOOLEAN_ASSIGNMENT = "Invalid Boolean assignment";
 	static final String INVALID_STRING_ASSIGNMENT = "Invalid String assignment";
 	static final String INVALID_CHAR_ASSIGNMENT = "Invalid Char assignment";
+
+	/*
+	 * A enum class representing the different types of variables available.
+	 */
+	private enum typeCases {
+		BOOLEAN("boolean"), INT("int"), DOUBLE("double"), STRING("String"), CHAR("char");
+		private final String myType;
+		typeCases(String string) { myType = string; }
+	}
 
 	/**
 	 * A factory method that creates a relevant variable by the parameters given.
@@ -47,11 +59,6 @@ public class VariableFactory {
 	* A method the helps check if the int assignment in a value is valid.
 	*/
 	private static void intHelper(String varValue) throws InvalidVariableUsageException {
-//		try {
-////			return Integer.parseInt(varValue);
-////		} catch (NumberFormatException e) {
-////			throw new InvalidVariableUsageException(INVALID_INT_ASSIGNMENT);
-////		}
 		Matcher m = CompilerPatterns.getMatcher(CompilerPatterns.INT_VALUE_PATTERN,varValue);
 		if(!m.matches()){
 			throw new InvalidVariableUsageException(INVALID_DOUBLE_ASSIGNMENT);
@@ -61,11 +68,6 @@ public class VariableFactory {
 	 * A method the helps check if the double assignment in a value is valid.
 	 */
 	private static void doubleHelper(String varValue) throws InvalidVariableUsageException {
-//		try {
-//			return Double.parseDouble(varValue);
-//		} catch (NumberFormatException e) {
-//			throw new InvalidVariableUsageException(INVALID_DOUBLE_ASSIGNMENT);
-//		}
 		Matcher m = CompilerPatterns.getMatcher(CompilerPatterns.DOUBLE_VALUE_PATTERN,varValue);
 		if(!m.matches()){
 			throw new InvalidVariableUsageException(INVALID_DOUBLE_ASSIGNMENT);
@@ -91,7 +93,6 @@ public class VariableFactory {
 			throw new InvalidVariableUsageException(INVALID_STRING_ASSIGNMENT);
 		}
 	}
-
 	/*
 	 * A method the helps check if the char assignment in a value is valid.
 	 */
@@ -101,13 +102,5 @@ public class VariableFactory {
 		if (!(m.matches())) {
 			throw new InvalidVariableUsageException(INVALID_CHAR_ASSIGNMENT);
 		}
-	}
-	/*
-	 * A enum class representing the different types of variables available.
-	 */
-	private enum typeCases {
-		BOOLEAN("boolean"), INT("int"), DOUBLE("double"), STRING("String"), CHAR("char");
-		private final String myType;
-		typeCases(String string) { myType = string; }
 	}
 }
