@@ -1,7 +1,6 @@
-package oop.ex6.main.Compiler;
+package oop.ex6.Compiler;
 
-
-import oop.ex6.main.Variables.scopeVariable;
+import oop.ex6.Variables.scopeVariable;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -9,29 +8,14 @@ import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static oop.ex6.main.Variables.VariableFactory.variableFactory;
+import static oop.ex6.Variables.VariableFactory.variableFactory;
 
 public class BlockCompiler extends FileCompiler {
-
-	public static final String BOOLEAN_VALUE = "(true|false|[-]?[0-9]+[.]?[0-9]*|[-]?[.][0-9]+)";
-	public static final String STRING_VALUE = "([\"][^\"]*[\"])";
-	public static final String CHAR_VALUE = "([\'][^\'][\'])";
-	final static String FUNC_DELIMITER = ",";
-	final static String BOOL_DELIMITER = "\\|\\||&&";
-	static final String NAME_VAR = "([\\s]*(([a-zA-Z]|[_][\\w])[\\w]*)[\\s]*)";
-	public static final String SOME_PRIMITIVE = "(" + NAME_VAR + "[=][\\s]*" +
-			"(" + BOOLEAN_VALUE + "|" + CHAR_VALUE + "|" + STRING_VALUE + "))[\\s]*";
-	static final String FUNC_DECLARATION = "[\\s]*(void)[\\s]*([a-zA-Z]+[\\w]*)[\\s]*[(].*[)][\\s]*[{]";
-	static final String VAR_DECLARATION_REGEX = "[\\s]*((final\\s)?[\\s]*(int|double|char|boolean|String)" +
-			"[\\s]+)";
-	static final String END_BLOCK_REGEX = "^[\\s]*}[\\s]*$";
-	static final String ASSIGNMENT_REGEX = "[\\s]*[=].*[;]";
-	static final String EVERYTHING_REGEX = ".*";
-	static final String EQUALS_REGEX = "[=]";
-	static final String BRACKET_CLOSE_REGEX = "}[\\s]*$";
+	static final String SEMICOLON = ";";
+	static final String DEFAULT_VAR_NAME = "varName";
 	private static final int NOT_ASSIGNED = -1;
-	private static final Pattern FUNC_DECLARATION_PATTERN = Pattern.compile(FUNC_DECLARATION);
-	private static final Pattern FUNC_CALL_PATTERN = Pattern.compile(FUNC_CALL);
+	private static final Pattern FUNC_DECLARATION_PATTERN = Pattern.compile(Regex.FUNC_DECLARATION);
+	private static final Pattern FUNC_CALL_PATTERN = Pattern.compile(Regex.FUNC_CALL);
 	static HashMap<String, String[]> functionsList = new HashMap<>();
 	protected FileCompiler myCompiler;
 	boolean isFunctionBlock = false;
@@ -84,12 +68,12 @@ public class BlockCompiler extends FileCompiler {
 		if (this.isFunctionBlock) {
 			String funcDeclaration = this.code.get(this.start);
 			String name = getFuncName(funcDeclaration, FUNC_DECLARATION_PATTERN);
-			String[] vars = splitSignature(funcDeclaration, "(", ")", FUNC_DELIMITER);
+			String[] vars = splitSignature(funcDeclaration, Regex.ROUND_OPEN, Regex.ROUND_CLOSE, Regex.FUNC_DELIMITER);
 			addFuncVars(vars);
 
 			if (!(vars.length == 1 && vars[0].trim().equals(EMPTY_LINE))) {
 				for (int i = 0; i < vars.length; i++) {
-					Pattern p = Pattern.compile(VAR_DECLARATION_REGEX + NAME_VAR + "[\\s]*");
+					Pattern p = Pattern.compile(Regex.VAR_DECLARATION_REGEX + Regex.NAME_VAR + Regex.SPACES_REGEX);
 					Matcher m = p.matcher(vars[i]);
 					if (m.matches()) {
 						vars[i] = m.group(3).trim();
@@ -110,19 +94,16 @@ public class BlockCompiler extends FileCompiler {
 			var = var.trim();
 			if (vars.length > 1)
 				checkEmptyVar(var, "Empty func call slot");
-			String newVarName = declarationCallCase(var + ";", true, start);
-			if (newVarName != null) {
-				scopeVariable currVar = getVarInScope(newVarName);
-				currVar.setAssigned(start);
-				continue;
+			String newVarName = declarationCallCase(var + SEMICOLON, true, start);
+			if (newVarName == null) {
+				throw new Exception("invalid parameter in function call");
 			}
-			throw new Exception("invalid parameter in function call");
 		}
 	}
 
 	void checkValidFuncCall(String line) throws Exception {
 		String name = getFuncName(line, FUNC_CALL_PATTERN);
-		String[] callVars = splitSignature(line, "(", ")", FUNC_DELIMITER);
+		String[] callVars = splitSignature(line, Regex.ROUND_OPEN, Regex.ROUND_CLOSE, Regex.FUNC_DELIMITER);
 		if (functionsList.containsKey(name)) {
 			String[] validVars = functionsList.get(name);
 			checkFuncCallVars(callVars, validVars);
@@ -138,7 +119,7 @@ public class BlockCompiler extends FileCompiler {
 		if (callVars.length == 1 && validVars[0].equals(EMPTY_LINE)) {
 			return;
 		}
-		Pattern p = Pattern.compile(STRING_VALUE + "|" + BOOLEAN_VALUE + "|" + CHAR_VALUE);
+		Pattern p = Pattern.compile(Regex.STRING_VALUE_REGEX + Regex.OR_REGEX + Regex.BOOLEAN_VALUE + Regex.OR_REGEX + Regex.CHAR_VALUE);
 		Matcher m;
 
 		for (int i = 0; i < validVars.length; i++) {
@@ -147,26 +128,26 @@ public class BlockCompiler extends FileCompiler {
 			scopeVariable currVar = getVarInScope(callVars[i]);
 			checkEmptyVar(callVars[i], "Empty func call slot");
 			if (m.matches()) {
-				variableFactory(true, validVars[i], "no_matter", callVars[i], 0);
+				variableFactory(true, validVars[i], DEFAULT_VAR_NAME, callVars[i], 0);
 			} else if (currVar == null || !(currVar.isAssigned())) {
 				throw new Exception("invalid variable assignment.");
 			} else {
-				variableFactory(true, validVars[i], "no_matter", currVar.getDefaultVal(), 0);
+				variableFactory(true, validVars[i], DEFAULT_VAR_NAME, currVar.getDefaultVal(), 0);
 			}
 
 		}
 	}
 
 	void checkBooleanCall(String line, int lineNum) throws Exception {
-		String[] checkVars = splitSignature(line, "(", ")", BOOL_DELIMITER);
+		String[] checkVars = splitSignature(line, Regex.ROUND_OPEN, Regex.ROUND_CLOSE, Regex.BOOL_DELIMITER);
 		for (String var : checkVars) {
 			checkEmptyVar(var, "Empty boolean slot");
-			Pattern p = Pattern.compile(BOOLEAN_VALUE);
+			Pattern p = Pattern.compile(Regex.BOOLEAN_VALUE);
 			Matcher m = p.matcher(var.trim());
 			if (m.matches()) {
 				continue;
 			}
-			p = Pattern.compile(NAME_VAR);
+			p = Pattern.compile(Regex.NAME_VAR);
 			m = p.matcher(var.trim());
 			if (m.matches()) {
 				scopeVariable currVar = getVarInScope(var.trim());
@@ -200,8 +181,6 @@ public class BlockCompiler extends FileCompiler {
 	public void compile() throws Exception {
 		// first off we check if the last 2 lines contains the return and "}"  statement.
 		checkReturnStatement();
-		//TODO check signature
-
 		int i = this.start;
 		if (isFunctionBlock) {
 			i++;
@@ -227,7 +206,7 @@ public class BlockCompiler extends FileCompiler {
 		String line = code.get(lineNum);
 		myLines.add(lineNum);
 		// if or while case.
-		Pattern p = Pattern.compile(IF_WHILE_REGEX);
+		Pattern p = Pattern.compile(Regex.IF_WHILE_REGEX);
 		Matcher m = p.matcher(line);
 		if (m.matches()) {
 			checkBooleanCall(line, lineNum);
@@ -236,7 +215,7 @@ public class BlockCompiler extends FileCompiler {
 
 
 		// end of block case
-		p = Pattern.compile(END_BLOCK_REGEX);
+		p = Pattern.compile(Regex.END_BLOCK_REGEX);
 		m = p.matcher(line);
 		if (m.matches()) {
 			return;
@@ -244,7 +223,7 @@ public class BlockCompiler extends FileCompiler {
 
 
 		// return line case.
-		p = Pattern.compile(RETURN_REGEX);
+		p = Pattern.compile(Regex.RETURN_REGEX);
 		m = p.matcher(line);
 		if (m.matches()) {
 			return;
@@ -255,7 +234,7 @@ public class BlockCompiler extends FileCompiler {
 
 
 		// existing var usage call case.
-		p = Pattern.compile(NAME_VAR + ASSIGNMENT_REGEX);
+		p = Pattern.compile(Regex.NAME_VAR + Regex.ASSIGNMENT_REGEX);
 		m = p.matcher(line);
 		if (m.matches()) {
 			// notice we are sending the is final true by default but in this case it makes no difference since it is
@@ -264,7 +243,7 @@ public class BlockCompiler extends FileCompiler {
 			return;
 		}
 		// function call case
-		p = Pattern.compile(FUNC_CALL);
+		p = Pattern.compile(Regex.FUNC_CALL);
 		m = p.matcher(line);
 		if (m.matches()) {
 			checkValidFuncCall(line);
@@ -276,7 +255,7 @@ public class BlockCompiler extends FileCompiler {
 
 	private String declarationCallCase(String line, boolean insertVal, int lineNum) throws Exception {
 		// var declaration call case.
-		Pattern p = Pattern.compile(VAR_DECLARATION_REGEX + NAME_VAR + EVERYTHING_REGEX);
+		Pattern p = Pattern.compile(Regex.VAR_DECLARATION_REGEX + Regex.NAME_VAR + Regex.EVERYTHING_REGEX);
 		Matcher m = p.matcher(line);
 		if (m.matches()) {
 			String lineType = m.group(3); // getting the type of the declaration.
@@ -301,7 +280,7 @@ public class BlockCompiler extends FileCompiler {
 			scopeVariable existingVariableInScope = null;
 			checkEmptyVar(var, "bad var assignment");
 
-			Pattern p = Pattern.compile(NAME_VAR);
+			Pattern p = Pattern.compile(Regex.NAME_VAR);
 			Matcher m = p.matcher(var);
 
 			// just declaration of a variable with no assignment.
@@ -326,8 +305,13 @@ public class BlockCompiler extends FileCompiler {
 
 			if (m.matches()) {
 				if (insertVal) {
-					scopeVariables.put(m.group(1).trim(), new scopeVariable(isFinal, m.group(1).trim(), lineType,
-							NOT_ASSIGNED));
+					if (IsSignatureLine(lineNum)) {
+						scopeVariables.put(m.group(1).trim(), new scopeVariable(isFinal, m.group(1).trim(),
+								lineType, start));
+					} else {
+						scopeVariables.put(m.group(1).trim(), new scopeVariable(isFinal, m.group(1).trim(), lineType,
+								NOT_ASSIGNED));
+					}
 				}
 				continue;
 			}
@@ -339,7 +323,7 @@ public class BlockCompiler extends FileCompiler {
 			}
 
 			// an assignment of a variable with a primitive.
-			p = Pattern.compile(SOME_PRIMITIVE);
+			p = Pattern.compile(Regex.SOME_PRIMITIVE);
 			m = p.matcher(var);
 			if (m.matches()) {
 				// separating the existing var assignment and the regular one.
@@ -363,7 +347,7 @@ public class BlockCompiler extends FileCompiler {
 
 
 			// need to check that the variable has not been assigned
-			p = Pattern.compile(NAME_VAR + EQUALS_REGEX + NAME_VAR);
+			p = Pattern.compile(Regex.NAME_VAR + Regex.EQUALS_REGEX + Regex.NAME_VAR);
 			m = p.matcher(var);
 			if (m.matches()) {
 
@@ -406,6 +390,10 @@ public class BlockCompiler extends FileCompiler {
 
 	}
 
+	private boolean IsSignatureLine(int lineNum) {
+		return lineNum == start && isFunctionBlock;
+	}
+
 
 	private scopeVariable getVarInScope(String varName) {
 		BlockCompiler currentBlock = this;
@@ -422,13 +410,13 @@ public class BlockCompiler extends FileCompiler {
 	private void checkReturnStatement() throws Exception {
 		if (isFunctionBlock) {
 			// check if lat row is "}"
-			Pattern p = Pattern.compile(BRACKET_CLOSE_REGEX);
+			Pattern p = Pattern.compile(Regex.BRACKET_CLOSE_REGEX);
 			Matcher m = p.matcher(code.get(end));
 			if (!m.matches()) {
 				throw new Exception("bad end of block");
 			}
 			// check if one row before last contains "return;"
-			p = Pattern.compile(RETURN_REGEX);
+			p = Pattern.compile(Regex.RETURN_REGEX);
 			m = p.matcher(code.get(end - 1));
 
 			if (!m.matches()) {

@@ -1,7 +1,6 @@
 package oop.ex6.main;
 
-import oop.ex6.main.Compiler.BlockCompiler;
-import oop.ex6.main.Compiler.FileCompiler;
+import oop.ex6.Compiler.FileCompiler;
 import java.io.*;
 
 public class  Sjavac {
@@ -38,7 +37,7 @@ public class  Sjavac {
         }catch (Exception e){
             System.out.print(1);
 //            System.err.println(e.getMessage());
-//            throw e;
+            throw e;
         }
     }
 

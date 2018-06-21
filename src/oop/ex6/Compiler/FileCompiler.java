@@ -1,4 +1,4 @@
-package oop.ex6.main.Compiler;
+package oop.ex6.Compiler;
 
 
 import java.io.BufferedReader;
@@ -9,23 +9,12 @@ import java.util.regex.Pattern;
 
 public class FileCompiler {
 	public static final String EMPTY_LINE = "";
-	static final String EMPTY_STR = "";
-	static final String CURLY_OPEN = "{";
-	static final String CURLY_CLOSE = "}";
-	static final String ROUND_OPEN = "(";
-	static final String ROUND_CLOSE = ")";
-	//todo this is for the if inside, returns an array of the conditions.
-	static final String RETURN_REGEX = "[\\s]*(return)[\\s]*[;]";
-	static final String NOT_COMMENT_REGEX = "([^/]{2}.*|}|\\{)";
-	static final String IF_WHILE_REGEX = "^[\\s]*(if|while)[\\s]*[(].+[)][\\s]*[{]";
-	static final String FUNC_CALL = "([\\s]*)([a-zA-Z][\\w]*)[\\s]*[(].*[)][\\s]*(;)";
-	private static final String CODE_REGEX = "[\\s]*(?:(?:(?:(?:void|if|while)[^{]*\\{)|\\}|[^;" +
-			"]*[;][\\s]*))[\\s]*";
-	private static final Pattern CODE_PATTERN = Pattern.compile(CODE_REGEX);
-	private static final String BAD_COMMENT_REGEX = "([\\s].*|[/][*].*)";
-	private static final Pattern BAD_COMMENT_PATTERN = Pattern.compile(BAD_COMMENT_REGEX);
-	private static final String COMMENT_REGEX = "[\\s]*([/]|[/*])+.*";
-	private static final Pattern COMMENT_PATTERN = Pattern.compile(COMMENT_REGEX);
+
+	private static final Pattern CODE_PATTERN = Pattern.compile(Regex.CODE_REGEX);
+
+	private static final Pattern BAD_COMMENT_PATTERN = Pattern.compile(Regex.BAD_COMMENT_REGEX);
+
+	private static final Pattern COMMENT_PATTERN = Pattern.compile(Regex.COMMENT_REGEX);
 	static BlockCompiler globalScope;
 
 	ArrayList<BlockCompiler> mySubBlocks = new ArrayList<>();
@@ -96,7 +85,11 @@ public class FileCompiler {
 
 	private void checkInvalidGlobalCode(String line) throws Exception {
 		if (bracketsCount[0] == 0) {
-			Pattern p = Pattern.compile("(" + RETURN_REGEX + ")|(" + IF_WHILE_REGEX + ")|(" + FUNC_CALL + ")");
+//			Pattern p = Pattern.compile(Regex.ROUND_OPEN + Regex.RETURN_REGEX + Regex.ROUND_CLOSE + Regex.OR_REGEX + Regex.ROUND_OPEN + Regex.IF_WHILE_REGEX + Regex.ROUND_CLOSE + Regex.OR_REGEX + Regex.ROUND_OPEN + Regex.FUNC_CALL + Regex.ROUND_CLOSE);
+			Pattern p = Pattern.compile(Regex.ROUND_OPEN+ Regex.RETURN_REGEX + ")|(" + Regex.IF_WHILE_REGEX + ")|(" +
+					Regex.FUNC_CALL +
+					")");
+
 			Matcher m = p.matcher(line);
 			if (m.matches())
 				throw new Exception("return statement at bad place (global scope)");
@@ -149,7 +142,7 @@ public class FileCompiler {
 	 * zero).
 	 */
 	void changeCounter() throws Exception {
-		Pattern notCommentPattern = Pattern.compile(NOT_COMMENT_REGEX);
+		Pattern notCommentPattern = Pattern.compile(Regex.NOT_COMMENT_REGEX);
 		Matcher m2 = notCommentPattern.matcher(this.currentCodeLine);
 		if (!m2.matches())
 			return;
@@ -166,15 +159,15 @@ public class FileCompiler {
 	private void updateCounter() {
 		int lineLen = this.currentCodeLine.length();
 
-		this.bracketsCount[0] += lineLen - this.currentCodeLine.replace(CURLY_OPEN, EMPTY_STR).length();
+		this.bracketsCount[0] += lineLen - this.currentCodeLine.replace(Regex.CURLY_OPEN, Regex.EMPTY_STR).length();
 
-		this.bracketsCount[0] -= lineLen - this.currentCodeLine.replace(CURLY_CLOSE, EMPTY_STR)
+		this.bracketsCount[0] -= lineLen - this.currentCodeLine.replace(Regex.CURLY_CLOSE, Regex.EMPTY_STR)
 				.length();
 
-		this.bracketsCount[1] += lineLen - this.currentCodeLine.replace(ROUND_OPEN, EMPTY_STR)
+		this.bracketsCount[1] += lineLen - this.currentCodeLine.replace(Regex.ROUND_OPEN, Regex.EMPTY_STR)
 				.length();
 
-		this.bracketsCount[1] -= lineLen - this.currentCodeLine.replace(ROUND_CLOSE, EMPTY_STR)
+		this.bracketsCount[1] -= lineLen - this.currentCodeLine.replace(Regex.ROUND_CLOSE, Regex.EMPTY_STR)
 				.length();
 	}
 

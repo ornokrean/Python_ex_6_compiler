@@ -1,4 +1,4 @@
-//package oop.ex6.main.Variables;
+//package oop.ex6.Variables;
 //
 //public abstract class scopeVariable {
 //	boolean isFinal;
@@ -14,7 +14,7 @@
 //	}
 //}
 
-package oop.ex6.main.Variables;
+package oop.ex6.Variables;
 
 public class scopeVariable {
 	boolean isFinal;
@@ -40,7 +40,7 @@ public class scopeVariable {
 		this.myType =type;
 	}
 
-	public scopeVariable(boolean isFinal, String name, String type,int isAssigned) throws Exception{
+	public scopeVariable(boolean isFinal, String name, String type, int isAssigned) throws Exception{
 		this(isFinal,name,type);
 		if (isFinal && isAssigned == -1) {
 			throw new Exception("final with no value");
