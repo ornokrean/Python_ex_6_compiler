@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 public class CompilerPatterns {
 	/**
-	 * A class Containing Patterns and regex's and operates as a helper class
+	 * A class Containing Patterns and regex's and operates as a helper class for the compiler classes.
 	 */
 	public static final String ROUND_CLOSE = ")";
 	public static final String OR_REGEX = "|";
@@ -42,10 +42,10 @@ public class CompilerPatterns {
 	public static final String COMMENT_REGEX = "[\\s]*([/]|[/*])+.*";
 	static final String ROUND_OPEN = "(";
 
-	public static final String r = STRING_VALUE_REGEX + OR_REGEX + BOOLEAN_VALUE_REGEX + OR_REGEX + CHAR_VALUE_REGEX;
+	public static final String PRIMITIVE_VAL_REGEX = STRING_VALUE_REGEX + OR_REGEX + BOOLEAN_VALUE_REGEX + OR_REGEX + CHAR_VALUE_REGEX;
 	public static final String VAR_DECLARATION_START_ONLY_REGEX = VAR_DECLARATION_TYPE_REGEX + NAME_VAR_REGEX + SPACES_REGEX;
 	public static final String PRIMITIVE_DECLARATION_REGEX = ROUND_OPEN + NAME_VAR_REGEX + EQUALS_REGEX + SPACES_REGEX + ROUND_OPEN +
-			r + ROUND_CLOSE + ROUND_CLOSE + SPACES_REGEX;
+			PRIMITIVE_VAL_REGEX + ROUND_CLOSE + ROUND_CLOSE + SPACES_REGEX;
 	public static final String GLOBAL_CODE_REGEX = ROUND_OPEN + RETURN_REGEX + ROUND_CLOSE + OR_REGEX +
 			ROUND_OPEN + IF_WHILE_REGEX + ROUND_CLOSE + OR_REGEX + ROUND_OPEN + FUNC_CALL + ROUND_CLOSE;
 
@@ -67,7 +67,7 @@ public class CompilerPatterns {
 	public static final Pattern ASSIGN_VAR_PATTERN = Pattern.compile(ASSIGN_VAR_REGEX);
 
 
-	public static final Pattern r_PATTERN = Pattern.compile(r);
+	public static final Pattern PRIMITIVE_VAL_PATTERN = Pattern.compile(PRIMITIVE_VAL_REGEX);
 	public static final Pattern VAR_DECLARATION_START_ONLY_PATTERN = Pattern.compile(VAR_DECLARATION_START_ONLY_REGEX);
 	public static final Pattern INT_VALUE_PATTERN = Pattern.compile(INT_VALUE_REGEX);
 	public static final Pattern DOUBLE_VALUE_PATTERN = Pattern.compile(DOUBLE_VALUE_REGEX);
@@ -79,6 +79,8 @@ public class CompilerPatterns {
 	public static final Pattern COMMENT_PATTERN = Pattern.compile(COMMENT_REGEX);
 	public static final Pattern GLOBAL_SCOPE_CODE_PATTERN = Pattern.compile(GLOBAL_CODE_REGEX);
 	public static final Pattern STRING_VALUE_PATTERN = Pattern.compile(STRING_VALUE_REGEX);
+	public static final Pattern CHAR_VALUE_PATTERN = Pattern.compile(CHAR_VALUE_REGEX);
+
 
 
 	public static final Pattern BRACKET_CLOSE_PATTERN= Pattern.compile(BRACKET_CLOSE_REGEX);
@@ -86,10 +88,14 @@ public class CompilerPatterns {
 	public static final Pattern PRIMITIVE_DECLARATION_PATTERN = Pattern.compile(PRIMITIVE_DECLARATION_REGEX);
 
 
-
-
-	public static Matcher getMatcher(Pattern p, String s) {
-		return p.matcher(s);
+	/**
+	 * A function that  receives a pattern and a String and returns a matcher for them.
+	 * @param pattern A given Pattern.
+	 * @param string A given String.
+	 * @return A matcher object.
+	 */
+	public static Matcher getMatcher(Pattern pattern, String string) {
+		return pattern.matcher(string);
 	}
 
 
