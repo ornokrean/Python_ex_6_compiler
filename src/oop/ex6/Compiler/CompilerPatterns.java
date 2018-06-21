@@ -15,7 +15,7 @@ public class CompilerPatterns {
 	public static final String CHAR_VALUE_REGEX = "([\'][^\'][\'])";
 	public static final String FUNC_DELIMITER = ",";
 	public static final String BOOL_DELIMITER = "\\|\\||&&";
-	public static final String NAME_VAR = "([\\s]*(([a-zA-Z]|[_][\\w])[\\w]*)[\\s]*)";
+	public static final String NAME_VAR_REGEX = "([\\s]*(([a-zA-Z]|[_][\\w])[\\w]*)[\\s]*)";
 	public static final String FUNC_DECLARATION = "[\\s]*(void)[\\s]*([a-zA-Z]+[\\w]*)[\\s]*[(].*[)" +
 			"][\\s]*[{]";
 	public static final String VAR_DECLARATION_TYPE_REGEX = "[\\s]*((final\\s)?[\\s]*" +
@@ -41,13 +41,24 @@ public class CompilerPatterns {
 	public static final String COMMENT_REGEX = "[\\s]*([/]|[/*])+.*";
 	static final String ROUND_OPEN = "(";
 
-
 	public static final String r = STRING_VALUE_REGEX + OR_REGEX + BOOLEAN_VALUE_REGEX + OR_REGEX + CHAR_VALUE_REGEX;
-	public static final String VAR_DECLARATION_START_REGEX = VAR_DECLARATION_TYPE_REGEX + NAME_VAR + SPACES_REGEX;
-	public static final String SOME_PRIMITIVE = ROUND_OPEN + NAME_VAR + EQUALS_REGEX + SPACES_REGEX + ROUND_OPEN +
+	public static final String VAR_DECLARATION_START_REGEX = VAR_DECLARATION_TYPE_REGEX + NAME_VAR_REGEX + SPACES_REGEX;
+	public static final String SOME_PRIMITIVE = ROUND_OPEN + NAME_VAR_REGEX + EQUALS_REGEX + SPACES_REGEX + ROUND_OPEN +
 			r + ROUND_CLOSE + ROUND_CLOSE + SPACES_REGEX;
 	public static final String GLOBAL_CODE_REGEX = ROUND_OPEN + RETURN_REGEX + ROUND_CLOSE + OR_REGEX +
 			ROUND_OPEN + IF_WHILE_REGEX + ROUND_CLOSE + OR_REGEX + ROUND_OPEN + FUNC_CALL + ROUND_CLOSE;
+
+
+	public static final Pattern BOOLEAN_VALUE_PATTERN = Pattern.compile(BOOLEAN_VALUE_REGEX);
+	public static final Pattern NAME_VAR_PATTERN= Pattern.compile(NAME_VAR_REGEX);
+
+
+	public static final Pattern IF_WHILE_PATTERN= Pattern.compile(IF_WHILE_REGEX);
+	public static final Pattern END_BLOCK_PATTERN= Pattern.compile(END_BLOCK_REGEX);
+	public static final String NAME_AND_ASSIGNMENT_REGEX = NAME_VAR_REGEX + ASSIGNMENT_REGEX;
+
+	public static final Pattern RETURN_PATTERN= Pattern.compile(RETURN_REGEX);
+	public static final Pattern NAME_AND_ASSIGNMENT_PATTERN = Pattern.compile(NAME_AND_ASSIGNMENT_REGEX);
 
 
 
