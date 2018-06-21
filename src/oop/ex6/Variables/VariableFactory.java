@@ -1,7 +1,6 @@
 package oop.ex6.Variables;
 
-import oop.ex6.Compiler.BlockCompiler;
-import oop.ex6.Compiler.Regex;
+import oop.ex6.Compiler.Patterns;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -44,7 +43,7 @@ public class VariableFactory {
 	}
 
 	private static Boolean booleanHelper(String varValue) throws Exception {
-		Pattern p = Pattern.compile(Regex.BOOLEAN_VALUE);
+		Pattern p = Pattern.compile(Patterns.BOOLEAN_VALUE);
 		Matcher m = p.matcher(varValue);
 		if (!(m.matches())) {
 			throw new Exception("bad boolean");
@@ -58,7 +57,7 @@ public class VariableFactory {
 	}
 
 	private static String stringHelper(String varValue) throws Exception {
-		Pattern p = Pattern.compile(Regex.STRING_VALUE_REGEX);
+		Pattern p = Pattern.compile(Patterns.STRING_VALUE_REGEX);
 		Matcher m = p.matcher(varValue);
 		if (!(m.matches())) {
 			throw new Exception("bad string");
@@ -70,7 +69,7 @@ public class VariableFactory {
 	}
 
 	private static char charHelper(String varValue) throws Exception {
-		Pattern p = Pattern.compile(Regex.CHAR_VALUE);
+		Pattern p = Pattern.compile(Patterns.CHAR_VALUE);
 		Matcher m = p.matcher(varValue);
 		if (!(m.matches())) {
 			throw new Exception("bad char");

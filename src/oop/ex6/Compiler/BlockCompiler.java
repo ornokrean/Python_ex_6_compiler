@@ -14,8 +14,8 @@ public class BlockCompiler extends FileCompiler {
 	static final String SEMICOLON = ";";
 	static final String DEFAULT_VAR_NAME = "varName";
 	private static final int NOT_ASSIGNED = -1;
-	private static final Pattern FUNC_DECLARATION_PATTERN = Pattern.compile(Regex.FUNC_DECLARATION);
-	private static final Pattern FUNC_CALL_PATTERN = Pattern.compile(Regex.FUNC_CALL);
+	private static final Pattern FUNC_DECLARATION_PATTERN = Pattern.compile(Patterns.FUNC_DECLARATION);
+	private static final Pattern FUNC_CALL_PATTERN = Pattern.compile(Patterns.FUNC_CALL);
 	static HashMap<String, String[]> functionsList = new HashMap<>();
 	protected FileCompiler myCompiler;
 	boolean isFunctionBlock = false;
@@ -68,12 +68,12 @@ public class BlockCompiler extends FileCompiler {
 		if (this.isFunctionBlock) {
 			String funcDeclaration = this.code.get(this.start);
 			String name = getFuncName(funcDeclaration, FUNC_DECLARATION_PATTERN);
-			String[] vars = splitSignature(funcDeclaration, Regex.ROUND_OPEN, Regex.ROUND_CLOSE, Regex.FUNC_DELIMITER);
+			String[] vars = splitSignature(funcDeclaration, Patterns.ROUND_OPEN, Patterns.ROUND_CLOSE, Patterns.FUNC_DELIMITER);
 			addFuncVars(vars);
 
 			if (!(vars.length == 1 && vars[0].trim().equals(EMPTY_LINE))) {
 				for (int i = 0; i < vars.length; i++) {
-					Pattern p = Pattern.compile(Regex.VAR_DECLARATION_REGEX + Regex.NAME_VAR + Regex.SPACES_REGEX);
+					Pattern p = Pattern.compile(Patterns.VAR_DECLARATION_REGEX + Patterns.NAME_VAR + Patterns.SPACES_REGEX);
 					Matcher m = p.matcher(vars[i]);
 					if (m.matches()) {
 						vars[i] = m.group(3).trim();
@@ -103,7 +103,7 @@ public class BlockCompiler extends FileCompiler {
 
 	void checkValidFuncCall(String line) throws Exception {
 		String name = getFuncName(line, FUNC_CALL_PATTERN);
-		String[] callVars = splitSignature(line, Regex.ROUND_OPEN, Regex.ROUND_CLOSE, Regex.FUNC_DELIMITER);
+		String[] callVars = splitSignature(line, Patterns.ROUND_OPEN, Patterns.ROUND_CLOSE, Patterns.FUNC_DELIMITER);
 		if (functionsList.containsKey(name)) {
 			String[] validVars = functionsList.get(name);
 			checkFuncCallVars(callVars, validVars);
@@ -119,7 +119,7 @@ public class BlockCompiler extends FileCompiler {
 		if (callVars.length == 1 && validVars[0].equals(EMPTY_LINE)) {
 			return;
 		}
-		Pattern p = Pattern.compile(Regex.STRING_VALUE_REGEX + Regex.OR_REGEX + Regex.BOOLEAN_VALUE + Regex.OR_REGEX + Regex.CHAR_VALUE);
+		Pattern p = Pattern.compile(Patterns.STRING_VALUE_REGEX + Patterns.OR_REGEX + Patterns.BOOLEAN_VALUE + Patterns.OR_REGEX + Patterns.CHAR_VALUE);
 		Matcher m;
 
 		for (int i = 0; i < validVars.length; i++) {
@@ -139,15 +139,15 @@ public class BlockCompiler extends FileCompiler {
 	}
 
 	void checkBooleanCall(String line, int lineNum) throws Exception {
-		String[] checkVars = splitSignature(line, Regex.ROUND_OPEN, Regex.ROUND_CLOSE, Regex.BOOL_DELIMITER);
+		String[] checkVars = splitSignature(line, Patterns.ROUND_OPEN, Patterns.ROUND_CLOSE, Patterns.BOOL_DELIMITER);
 		for (String var : checkVars) {
 			checkEmptyVar(var, "Empty boolean slot");
-			Pattern p = Pattern.compile(Regex.BOOLEAN_VALUE);
+			Pattern p = Pattern.compile(Patterns.BOOLEAN_VALUE);
 			Matcher m = p.matcher(var.trim());
 			if (m.matches()) {
 				continue;
 			}
-			p = Pattern.compile(Regex.NAME_VAR);
+			p = Pattern.compile(Patterns.NAME_VAR);
 			m = p.matcher(var.trim());
 			if (m.matches()) {
 				scopeVariable currVar = getVarInScope(var.trim());
@@ -206,7 +206,7 @@ public class BlockCompiler extends FileCompiler {
 		String line = code.get(lineNum);
 		myLines.add(lineNum);
 		// if or while case.
-		Pattern p = Pattern.compile(Regex.IF_WHILE_REGEX);
+		Pattern p = Pattern.compile(Patterns.IF_WHILE_REGEX);
 		Matcher m = p.matcher(line);
 		if (m.matches()) {
 			checkBooleanCall(line, lineNum);
@@ -215,7 +215,7 @@ public class BlockCompiler extends FileCompiler {
 
 
 		// end of block case
-		p = Pattern.compile(Regex.END_BLOCK_REGEX);
+		p = Pattern.compile(Patterns.END_BLOCK_REGEX);
 		m = p.matcher(line);
 		if (m.matches()) {
 			return;
@@ -223,7 +223,7 @@ public class BlockCompiler extends FileCompiler {
 
 
 		// return line case.
-		p = Pattern.compile(Regex.RETURN_REGEX);
+		p = Pattern.compile(Patterns.RETURN_REGEX);
 		m = p.matcher(line);
 		if (m.matches()) {
 			return;
@@ -234,7 +234,7 @@ public class BlockCompiler extends FileCompiler {
 
 
 		// existing var usage call case.
-		p = Pattern.compile(Regex.NAME_VAR + Regex.ASSIGNMENT_REGEX);
+		p = Pattern.compile(Patterns.NAME_VAR + Patterns.ASSIGNMENT_REGEX);
 		m = p.matcher(line);
 		if (m.matches()) {
 			// notice we are sending the is final true by default but in this case it makes no difference since it is
@@ -243,7 +243,7 @@ public class BlockCompiler extends FileCompiler {
 			return;
 		}
 		// function call case
-		p = Pattern.compile(Regex.FUNC_CALL);
+		p = Pattern.compile(Patterns.FUNC_CALL);
 		m = p.matcher(line);
 		if (m.matches()) {
 			checkValidFuncCall(line);
@@ -255,7 +255,7 @@ public class BlockCompiler extends FileCompiler {
 
 	private String declarationCallCase(String line, boolean insertVal, int lineNum) throws Exception {
 		// var declaration call case.
-		Pattern p = Pattern.compile(Regex.VAR_DECLARATION_REGEX + Regex.NAME_VAR + Regex.EVERYTHING_REGEX);
+		Pattern p = Pattern.compile(Patterns.VAR_DECLARATION_REGEX + Patterns.NAME_VAR + Patterns.EVERYTHING_REGEX);
 		Matcher m = p.matcher(line);
 		if (m.matches()) {
 			String lineType = m.group(3); // getting the type of the declaration.
@@ -280,7 +280,7 @@ public class BlockCompiler extends FileCompiler {
 			scopeVariable existingVariableInScope = null;
 			checkEmptyVar(var, "bad var assignment");
 
-			Pattern p = Pattern.compile(Regex.NAME_VAR);
+			Pattern p = Pattern.compile(Patterns.NAME_VAR);
 			Matcher m = p.matcher(var);
 
 			// just declaration of a variable with no assignment.
@@ -323,7 +323,7 @@ public class BlockCompiler extends FileCompiler {
 			}
 
 			// an assignment of a variable with a primitive.
-			p = Pattern.compile(Regex.SOME_PRIMITIVE);
+			p = Pattern.compile(Patterns.SOME_PRIMITIVE);
 			m = p.matcher(var);
 			if (m.matches()) {
 				// separating the existing var assignment and the regular one.
@@ -347,7 +347,7 @@ public class BlockCompiler extends FileCompiler {
 
 
 			// need to check that the variable has not been assigned
-			p = Pattern.compile(Regex.NAME_VAR + Regex.EQUALS_REGEX + Regex.NAME_VAR);
+			p = Pattern.compile(Patterns.NAME_VAR + Patterns.EQUALS_REGEX + Patterns.NAME_VAR);
 			m = p.matcher(var);
 			if (m.matches()) {
 
@@ -410,13 +410,13 @@ public class BlockCompiler extends FileCompiler {
 	private void checkReturnStatement() throws Exception {
 		if (isFunctionBlock) {
 			// check if lat row is "}"
-			Pattern p = Pattern.compile(Regex.BRACKET_CLOSE_REGEX);
+			Pattern p = Pattern.compile(Patterns.BRACKET_CLOSE_REGEX);
 			Matcher m = p.matcher(code.get(end));
 			if (!m.matches()) {
 				throw new Exception("bad end of block");
 			}
 			// check if one row before last contains "return;"
-			p = Pattern.compile(Regex.RETURN_REGEX);
+			p = Pattern.compile(Patterns.RETURN_REGEX);
 			m = p.matcher(code.get(end - 1));
 
 			if (!m.matches()) {

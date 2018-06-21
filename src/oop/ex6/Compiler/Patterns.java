@@ -1,7 +1,7 @@
 package oop.ex6.Compiler;
 
-public class Regex {
-	public static final String ROUND_OPEN = "(";
+public class Patterns {
+	static final String ROUND_OPEN = "(";
 	public static final String ROUND_CLOSE = ")";
 	public static final String BOOLEAN_VALUE = "(true|false|[-]?[0-9]+[.]?[0-9]*)";
 	public static final String STRING_VALUE_REGEX = "([\"][^\"]*[\"])";
