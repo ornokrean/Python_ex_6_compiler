@@ -1,0 +1,6 @@
+int c;
+//foo(int a){
+//    if (a){
+//    }
+//    return;
+//}

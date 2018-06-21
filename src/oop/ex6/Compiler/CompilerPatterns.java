@@ -33,13 +33,12 @@ public class CompilerPatterns {
 	public static final String NOT_COMMENT_REGEX = "([^/]{2}.*|}|\\{)";
 	public static final String IF_WHILE_REGEX = "^[\\s]*(if|while)[\\s]*[(].+[)][\\s]*[{]";
 	public static final String FUNC_CALL = "([\\s]*)([a-zA-Z][\\w]*)[\\s]*[(].*[)][\\s]*(;)";
-	public static final String CODE_REGEX = "[\\s]*(?:(?:(?:(?:void|if|while)[^{]*\\{)|\\}|[^;" +
-			"]*[;][\\s]*))[\\s]*";
+	public static final String CODE_REGEX = "[\\s]*(?:(?:void|if|while)[^{]*\\{|\\}|[^;]*[;][\\s]*)[\\s]*";
 	public static final String BAD_COMMENT_REGEX = "([\\s].*|[/][*].*)";
 	public static final String COMMENT_REGEX = "[\\s]*([/]|[/*])+.*";
 
 
-	public static final String SOME_PRIMITIVE = ROUND_OPEN + NAME_VAR + "[=][\\s]*" + ROUND_OPEN +
+	public static final String SOME_PRIMITIVE = ROUND_OPEN + NAME_VAR + EQUALS_REGEX+SPACES_REGEX + ROUND_OPEN +
 			BOOLEAN_VALUE_REGEX + OR_REGEX + CHAR_VALUE_REGEX + OR_REGEX + STRING_VALUE_REGEX + ROUND_CLOSE +
 			ROUND_CLOSE + "[\\s]*";
 
@@ -58,6 +57,6 @@ public class CompilerPatterns {
 	public static Matcher getMatcher(Pattern p, String s){
 		return p.matcher(s);
 	}
-	
+
 
 }
