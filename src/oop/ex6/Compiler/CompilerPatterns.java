@@ -56,7 +56,7 @@ public class CompilerPatterns {
 	public static final Pattern GLOBAL_SCOPE_CODE_PATTERN = Pattern.compile(ROUND_OPEN+ RETURN_REGEX +ROUND_CLOSE+OR_REGEX+ROUND_OPEN+ IF_WHILE_REGEX +ROUND_CLOSE+OR_REGEX+ROUND_OPEN+ FUNC_CALL + ROUND_CLOSE);
 
 
-	Matcher getMatcher(Pattern p, String s){
+	public Matcher getMatcher(Pattern p, String s){
 		return p.matcher(s);
 	}
 	
