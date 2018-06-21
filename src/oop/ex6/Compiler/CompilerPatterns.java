@@ -3,6 +3,7 @@ package oop.ex6.Compiler;
 import java.util.regex.Pattern;
 
 public class CompilerPatterns {
+	static final String ROUND_OPEN = "(";
 	public static final String ROUND_CLOSE = ")";
 	public static final String BOOLEAN_VALUE = "(true|false|[-]?[0-9]+[.]?[0-9]*)";
 	public static final String STRING_VALUE_REGEX = "([\"][^\"]*[\"])";
@@ -33,11 +34,24 @@ public class CompilerPatterns {
 			"]*[;][\\s]*))[\\s]*";
 	public static final String BAD_COMMENT_REGEX = "([\\s].*|[/][*].*)";
 	public static final String COMMENT_REGEX = "[\\s]*([/]|[/*])+.*";
-	public static final Pattern CODE_PATTERN = Pattern.compile(CompilerPatterns.CODE_REGEX);
-	public static final Pattern BAD_COMMENT_PATTERN = Pattern.compile(CompilerPatterns.BAD_COMMENT_REGEX);
-	public static final Pattern COMMENT_PATTERN = Pattern.compile(CompilerPatterns.COMMENT_REGEX);
-	static final String ROUND_OPEN = "(";
+
+
 	public static final String SOME_PRIMITIVE = ROUND_OPEN + NAME_VAR + "[=][\\s]*" + ROUND_OPEN +
 			BOOLEAN_VALUE + OR_REGEX + CHAR_VALUE + OR_REGEX + STRING_VALUE_REGEX + ROUND_CLOSE + ROUND_CLOSE + "[\\s]*";
+
+
+
+
+
+
+	public static final Pattern NOT_COMMENT_PATTERN = Pattern.compile(NOT_COMMENT_REGEX);
+
+	public static final Pattern CODE_PATTERN = Pattern.compile(CODE_REGEX);
+	public static final Pattern BAD_COMMENT_PATTERN = Pattern.compile(BAD_COMMENT_REGEX);
+	public static final Pattern COMMENT_PATTERN = Pattern.compile(COMMENT_REGEX);
+	public static final Pattern GLOBAL_SCOPE_CODE_PATTERN = Pattern.compile(ROUND_OPEN+ RETURN_REGEX +ROUND_CLOSE+OR_REGEX+ROUND_OPEN+ IF_WHILE_REGEX +ROUND_CLOSE+OR_REGEX+ROUND_OPEN+ FUNC_CALL + ROUND_CLOSE);
+	
+	
+	
 
 }

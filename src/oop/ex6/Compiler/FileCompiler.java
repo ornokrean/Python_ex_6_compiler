@@ -4,22 +4,19 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 public class FileCompiler {
-	public static final String EMPTY_LINE = "";
-
-
+	static final String EMPTY_LINE = "";
 	static BlockCompiler globalScope;
-
 	ArrayList<BlockCompiler> mySubBlocks = new ArrayList<>();
 	int[] bracketsCount = {0, 0};
 	ArrayList<String> code = new ArrayList<>();
 	String currentCodeLine;
 	int oldCurlyBracketCount;
 	int lineNum;
-	int blockStartIndex;
+
+	private int blockStartIndex;
 
 
 	/**
@@ -74,21 +71,13 @@ public class FileCompiler {
 			checkInvalidGlobalCode(line);
 			return codePattern.matches() && !line.trim().equals(EMPTY_LINE);
 		}
-		//return !line.equals(EMPTY_LINE);
-		//fix: check with tomer if there's need for double return (?)
 		return false;
 	}
 
 	private void checkInvalidGlobalCode(String line) throws Exception {
 		if (bracketsCount[0] == 0) {
-//			Pattern p = Pattern.compile(CompilerPatterns.ROUND_OPEN + CompilerPatterns.RETURN_REGEX + CompilerPatterns.ROUND_CLOSE + CompilerPatterns.OR_REGEX + CompilerPatterns.ROUND_OPEN + CompilerPatterns.IF_WHILE_REGEX + CompilerPatterns.ROUND_CLOSE + CompilerPatterns.OR_REGEX + CompilerPatterns.ROUND_OPEN + CompilerPatterns.FUNC_CALL + CompilerPatterns.ROUND_CLOSE);
-			Pattern p = Pattern.compile(CompilerPatterns.ROUND_OPEN+ CompilerPatterns.RETURN_REGEX
-					+CompilerPatterns.ROUND_CLOSE+CompilerPatterns.OR_REGEX+CompilerPatterns.ROUND_OPEN+
-							CompilerPatterns.IF_WHILE_REGEX +CompilerPatterns.ROUND_CLOSE+CompilerPatterns.OR_REGEX+CompilerPatterns.ROUND_OPEN+ CompilerPatterns
-					.FUNC_CALL + CompilerPatterns.ROUND_CLOSE);
-
-			Matcher m = p.matcher(line);
-			if (m.matches())
+			Matcher globalScopeCode = CompilerPatterns.GLOBAL_SCOPE_CODE_PATTERN.matcher(line);
+			if (globalScopeCode.matches())
 				throw new Exception("return statement at bad place (global scope)");
 		}
 	}
@@ -103,19 +92,18 @@ public class FileCompiler {
 	 * @throws Exception   if there is a syntax error
 	 */
 	void initiateCompiler(BufferedReader codeReader) throws IOException, Exception {
-		this.globalScope = new BlockCompiler(0, -1, this, false);
-		// FIX TODO FIX what to do with globals? which block will handle?
+		globalScope = new BlockCompiler(0, -1, this, false);
 		while ((currentCodeLine = codeReader.readLine()) != null) {
 			if (validateLine(currentCodeLine)) {
 				//this is a valid line, add it to the code:
 				code.add(currentCodeLine.trim());
 				// compile this line and it's sub-blocks:
-				compileLine(this.globalScope);
+				compileLine(globalScope);
 				lineNum++;
 			}
 		}
-		this.globalScope.mySubBlocks = this.mySubBlocks;
-		this.globalScope.setEnd(lineNum - 1);
+		globalScope.mySubBlocks = this.mySubBlocks;
+		globalScope.setEnd(lineNum - 1);
 		// check counter at the end
 		checkCounter(bracketsCount[0] != 0, bracketsCount[1] != 0);
 
@@ -129,7 +117,7 @@ public class FileCompiler {
 		for (BlockCompiler block : mySubBlocks) {
 			block.checkSignature();
 		}
-		this.globalScope.compile();
+		globalScope.compile();
 	}
 
 	/*
@@ -139,14 +127,11 @@ public class FileCompiler {
 	 * zero).
 	 */
 	void changeCounter() throws Exception {
-		Pattern notCommentPattern = Pattern.compile(CompilerPatterns.NOT_COMMENT_REGEX);
-		Matcher m2 = notCommentPattern.matcher(this.currentCodeLine);
+		Matcher m2 = CompilerPatterns.NOT_COMMENT_PATTERN.matcher(this.currentCodeLine);
 		if (!m2.matches())
 			return;
 		updateCounter();
 		checkCounter(this.bracketsCount[0] < 0, this.bracketsCount[1] < 0);
-		// TODO: lineNum used only for tests. please remove before submit;
-
 	}
 
 
@@ -199,6 +184,4 @@ public class FileCompiler {
 		// check for the new block indexes, if needed.
 		this.newBlockHelper(parent, true);
 	}
-
-
 }
