@@ -1,13 +1,13 @@
 package oop.ex6.Variables;
 
-import oop.ex6.Compiler.Patterns;
+import oop.ex6.Compiler.CompilerPatterns;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
 public class VariableFactory {
-	private static final String BAD_VARIABLE_DECLERATION = "ERROR: Wrong type variable in line : ";
+	private static final String BAD_VARIABLE_DECLARATION = "ERROR: Wrong type variable in line : ";
 
 	public static scopeVariable variableFactory(boolean finalFlag, String type, String varName, String varValue, int lineNum) throws Exception {
 		if (type.equals(typeCases.BOOLEAN.myType)) {
@@ -21,7 +21,7 @@ public class VariableFactory {
 		} else if (type.equals(typeCases.CHAR.myType)) {
 			charHelper(varValue);
 		} else {
-			throw new Exception(BAD_VARIABLE_DECLERATION);
+			throw new Exception(BAD_VARIABLE_DECLARATION);
 		}
 		return new scopeVariable(finalFlag, varName, type, lineNum);
 	}
@@ -43,7 +43,7 @@ public class VariableFactory {
 	}
 
 	private static Boolean booleanHelper(String varValue) throws Exception {
-		Pattern p = Pattern.compile(Patterns.BOOLEAN_VALUE);
+		Pattern p = Pattern.compile(CompilerPatterns.BOOLEAN_VALUE);
 		Matcher m = p.matcher(varValue);
 		if (!(m.matches())) {
 			throw new Exception("bad boolean");
@@ -57,7 +57,7 @@ public class VariableFactory {
 	}
 
 	private static String stringHelper(String varValue) throws Exception {
-		Pattern p = Pattern.compile(Patterns.STRING_VALUE_REGEX);
+		Pattern p = Pattern.compile(CompilerPatterns.STRING_VALUE_REGEX);
 		Matcher m = p.matcher(varValue);
 		if (!(m.matches())) {
 			throw new Exception("bad string");
@@ -69,7 +69,7 @@ public class VariableFactory {
 	}
 
 	private static char charHelper(String varValue) throws Exception {
-		Pattern p = Pattern.compile(Patterns.CHAR_VALUE);
+		Pattern p = Pattern.compile(CompilerPatterns.CHAR_VALUE);
 		Matcher m = p.matcher(varValue);
 		if (!(m.matches())) {
 			throw new Exception("bad char");

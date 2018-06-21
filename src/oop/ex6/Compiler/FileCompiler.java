@@ -1,20 +1,16 @@
 package oop.ex6.Compiler;
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 public class FileCompiler {
 	public static final String EMPTY_LINE = "";
 
-	private static final Pattern CODE_PATTERN = Pattern.compile(Patterns.CODE_REGEX);
 
-	private static final Pattern BAD_COMMENT_PATTERN = Pattern.compile(Patterns.BAD_COMMENT_REGEX);
-
-	private static final Pattern COMMENT_PATTERN = Pattern.compile(Patterns.COMMENT_REGEX);
 	static BlockCompiler globalScope;
 
 	ArrayList<BlockCompiler> mySubBlocks = new ArrayList<>();
@@ -64,9 +60,9 @@ public class FileCompiler {
 	 * @return true iff the line is valid.
 	 */
 	private boolean validateLine(String line) throws Exception {
-		Matcher codePattern = CODE_PATTERN.matcher(line);
-		Matcher comment = COMMENT_PATTERN.matcher(line);
-		Matcher badComment = BAD_COMMENT_PATTERN.matcher(line);
+		Matcher codePattern = CompilerPatterns.CODE_PATTERN.matcher(line);
+		Matcher comment = CompilerPatterns.COMMENT_PATTERN.matcher(line);
+		Matcher badComment = CompilerPatterns.BAD_COMMENT_PATTERN.matcher(line);
 		if (comment.matches()) { // if it is comment, lets check if the comment is valid:
 			if (badComment.matches()) {//bad comment line. bye bye.
 				throw new Exception("bad comment in line " + lineNum);
@@ -85,11 +81,11 @@ public class FileCompiler {
 
 	private void checkInvalidGlobalCode(String line) throws Exception {
 		if (bracketsCount[0] == 0) {
-//			Pattern p = Pattern.compile(Patterns.ROUND_OPEN + Patterns.RETURN_REGEX + Patterns.ROUND_CLOSE + Patterns.OR_REGEX + Patterns.ROUND_OPEN + Patterns.IF_WHILE_REGEX + Patterns.ROUND_CLOSE + Patterns.OR_REGEX + Patterns.ROUND_OPEN + Patterns.FUNC_CALL + Patterns.ROUND_CLOSE);
-			Pattern p = Pattern.compile(Patterns.ROUND_OPEN+ Patterns.RETURN_REGEX
-					+Patterns.ROUND_CLOSE+Patterns.OR_REGEX+Patterns.ROUND_OPEN+
-							Patterns.IF_WHILE_REGEX +Patterns.ROUND_CLOSE+Patterns.OR_REGEX+Patterns.ROUND_OPEN+ Patterns
-					.FUNC_CALL + Patterns.ROUND_CLOSE);
+//			Pattern p = Pattern.compile(CompilerPatterns.ROUND_OPEN + CompilerPatterns.RETURN_REGEX + CompilerPatterns.ROUND_CLOSE + CompilerPatterns.OR_REGEX + CompilerPatterns.ROUND_OPEN + CompilerPatterns.IF_WHILE_REGEX + CompilerPatterns.ROUND_CLOSE + CompilerPatterns.OR_REGEX + CompilerPatterns.ROUND_OPEN + CompilerPatterns.FUNC_CALL + CompilerPatterns.ROUND_CLOSE);
+			Pattern p = Pattern.compile(CompilerPatterns.ROUND_OPEN+ CompilerPatterns.RETURN_REGEX
+					+CompilerPatterns.ROUND_CLOSE+CompilerPatterns.OR_REGEX+CompilerPatterns.ROUND_OPEN+
+							CompilerPatterns.IF_WHILE_REGEX +CompilerPatterns.ROUND_CLOSE+CompilerPatterns.OR_REGEX+CompilerPatterns.ROUND_OPEN+ CompilerPatterns
+					.FUNC_CALL + CompilerPatterns.ROUND_CLOSE);
 
 			Matcher m = p.matcher(line);
 			if (m.matches())
@@ -143,7 +139,7 @@ public class FileCompiler {
 	 * zero).
 	 */
 	void changeCounter() throws Exception {
-		Pattern notCommentPattern = Pattern.compile(Patterns.NOT_COMMENT_REGEX);
+		Pattern notCommentPattern = Pattern.compile(CompilerPatterns.NOT_COMMENT_REGEX);
 		Matcher m2 = notCommentPattern.matcher(this.currentCodeLine);
 		if (!m2.matches())
 			return;
@@ -160,15 +156,15 @@ public class FileCompiler {
 	private void updateCounter() {
 		int lineLen = this.currentCodeLine.length();
 
-		this.bracketsCount[0] += lineLen - this.currentCodeLine.replace(Patterns.CURLY_OPEN, Patterns.EMPTY_STR).length();
+		this.bracketsCount[0] += lineLen - this.currentCodeLine.replace(CompilerPatterns.CURLY_OPEN, CompilerPatterns.EMPTY_STR).length();
 
-		this.bracketsCount[0] -= lineLen - this.currentCodeLine.replace(Patterns.CURLY_CLOSE, Patterns.EMPTY_STR)
+		this.bracketsCount[0] -= lineLen - this.currentCodeLine.replace(CompilerPatterns.CURLY_CLOSE, CompilerPatterns.EMPTY_STR)
 				.length();
 
-		this.bracketsCount[1] += lineLen - this.currentCodeLine.replace(Patterns.ROUND_OPEN, Patterns.EMPTY_STR)
+		this.bracketsCount[1] += lineLen - this.currentCodeLine.replace(CompilerPatterns.ROUND_OPEN, CompilerPatterns.EMPTY_STR)
 				.length();
 
-		this.bracketsCount[1] -= lineLen - this.currentCodeLine.replace(Patterns.ROUND_CLOSE, Patterns.EMPTY_STR)
+		this.bracketsCount[1] -= lineLen - this.currentCodeLine.replace(CompilerPatterns.ROUND_CLOSE, CompilerPatterns.EMPTY_STR)
 				.length();
 	}
 
