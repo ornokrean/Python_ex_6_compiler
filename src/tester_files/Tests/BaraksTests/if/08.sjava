@@ -1,5 +1,0 @@
-void foo() {
-	if    (   -99.3   )    {
-	}
-	return;
-}

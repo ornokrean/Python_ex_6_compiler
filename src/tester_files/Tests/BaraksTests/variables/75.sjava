@@ -1,7 +1,0 @@
-void foo() {
-	int a = 3;
-	if (true) {
-		int x = a;
-	}
-	return;
-}

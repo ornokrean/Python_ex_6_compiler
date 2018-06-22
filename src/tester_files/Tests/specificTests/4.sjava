@@ -1,5 +1,0 @@
-int c = 6;
-void foo(boolean a){
-    c= 4;
-    return;
-}

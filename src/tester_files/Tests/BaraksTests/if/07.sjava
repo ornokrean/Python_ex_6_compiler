@@ -1,5 +1,0 @@
-void foo() {
-	if    (   3   )    {
-	}
-	return;
-}

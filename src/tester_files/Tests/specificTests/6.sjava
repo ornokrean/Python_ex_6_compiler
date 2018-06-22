@@ -1,6 +1,0 @@
-int c;
-void foo(boolean a){
-    if (a){
-   }
-    return;
-}

@@ -1,6 +1,6 @@
 package oop.ex6.Compiler;
 
-import oop.ex6.main.compilerExceptions.InvalidLineException;
+import oop.ex6.CompilerExceptions.InvalidLineException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,29 +8,29 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.regex.Matcher;
 
+/**
+ * A class that its purpose is to check if a given code in a given path compiles, and throw an error if
+ * it does not.
+ */
 
 public class FileCompiler {
-	/**
-	 * A class that its purpose is to check if a given code in a given path compiles, and throw an error if
-	 * it does not.
-	 */
 
 	static final String EMPTY_LINE = "";
-	private static final String BAD_COMMENT_MSG = "bad comment in line ";
-	private static final String BAD_CODE_SYNTAX_MSG = "bad code syntax in line ";
-	private static final String ILLEGAL_RETURN_MSG = "return statement at illegal location (global scope)";
+	private static final String BAD_COMMENT_MSG = "Bad comment in line ";
+	private static final String BAD_CODE_SYNTAX_MSG = "Bad code syntax in line ";
+	private static final String ILLEGAL_RETURN_MSG = "Return statement at illegal location (global scope)";
 
 	/**
-	 * A data member of BlockCompiler type which represents the global scope of the code.
+	 * A data member of ScopeCompiler type which represents the global scope of the code.
 	 */
-	static BlockCompiler globalScope;
+	static ScopeCompiler globalScope;
 	/**
-	 * An array of BlockCompilers Containing all the Function Blocks.
+	 * An array of ScopeCompilers Containing all the Function scopes.
 	 */
-	ArrayList<BlockCompiler> mySubBlocks = new ArrayList<>();
+	ArrayList<ScopeCompiler> mySubScopes = new ArrayList<>();
 
 	/**
-	 * A Array of size 2, of usage to count the number of brackets and by that create the subBlocks.
+	 * A Array of size 2, of usage to count the number of brackets and by that create the subScopes.
 	 */
 	int[] bracketsCount = {0, 0};
 
@@ -40,7 +40,7 @@ public class FileCompiler {
 	ArrayList<String> code = new ArrayList<>();
 
 	/**
-	 * the previous curly brackets count also held in order to create the subBlocks.
+	 * the previous curly brackets count also held in order to create the subScopes.
 	 */
 	int oldCurlyBracketCount;
 	/**
@@ -53,14 +53,14 @@ public class FileCompiler {
 	String currentCodeLine;
 
 	/**
-	 * An int indicating the index of the blockStart.
+	 * An int indicating the index of the ScopeStart.
 	 */
-	private int blockStartIndex;
+	private int scopeStartIndex;
 
 	/**
-	 * A  Hash set containing the line numbers of the block.
+	 * A  Hash set containing the line numbers of the Scope.
 	 */
-	private HashSet<Integer> myLines = new HashSet<>();
+	private HashSet<Integer> globalScopeLines = new HashSet<>();
 
 	/**
 	 * default constructor
@@ -128,7 +128,7 @@ public class FileCompiler {
 		if (bracketsCount[0] == 0) {
 			Matcher invalidGlobalScopeCode = CompilerPatterns.INVALID_GLOBAL_SCOPE_CODE_PATTERN.matcher(line);
 			if (!invalidGlobalScopeCode.matches()) {
-				this.myLines.add(this.lineNum);
+				this.globalScopeLines.add(this.lineNum);
 			} else {
 				throw new InvalidLineException(ILLEGAL_RETURN_MSG);
 			}
@@ -139,24 +139,24 @@ public class FileCompiler {
 
 	/**
 	 * this function initiates the Compiler. it reads the given code via the code reader, checks for syntax
-	 * errors, and adds the code to an ArrayList, and creates the code blocks accordingly.
+	 * errors, and adds the code to an ArrayList, and creates the code Scopes accordingly.
 	 *
 	 * @param codeReader the BufferedReader to read the code from
 	 * @throws IOException          if there is a problem with the BufferedReader
 	 * @throws InvalidLineException if there is a syntax error
 	 */
 	private void initiateCompiler(BufferedReader codeReader) throws IOException, InvalidLineException {
-		globalScope = new BlockCompiler(0, -1, this, false);
+		globalScope = new ScopeCompiler(0, -1, this, false);
 		while ((currentCodeLine = codeReader.readLine()) != null) {
 			if (validateLine(currentCodeLine)) {
 				//this is a valid line, add it to the code:
 				code.add(currentCodeLine.trim());
-				// compile this line and it's sub-blocks:
+				// compile this line and it's sub-Scopes:
 				compileLine();
 				lineNum++;
 			}
 		}
-		globalScope.mySubBlocks = this.mySubBlocks;
+		globalScope.mySubScopes = this.mySubScopes;
 		globalScope.setEnd(lineNum - 1);
 		// check counter at the end
 		checkCounter(bracketsCount[0] != 0, bracketsCount[1] != 0);
@@ -173,8 +173,8 @@ public class FileCompiler {
 	 */
 	public void compile() throws InvalidLineException {
 
-		for (BlockCompiler block : mySubBlocks) {
-			block.checkSignature();
+		for (ScopeCompiler scope : mySubScopes) {
+			scope.checkSignature();
 		}
 		globalScope.compile();
 	}
@@ -214,38 +214,38 @@ public class FileCompiler {
 	}
 
 	/*
-	 * this function creates an new block when needed: if the curly bracketsCounter spot went up from 0 to
-	 * 1, we will save this line as the line the block started (blockStartIndex). then, after some line if
-	 * the counter went down from 1 to 0, we will create the new block with this line as the last index and
-	 * add it to the compiler's mySubBlocks ArrayList.
-	 * @throws InvalidLineException if the block compiler constructor throws exception
+	 * this function creates an new scope when needed: if the curly bracketsCounter spot went up from 0 to
+	 * 1, we will save this line as the line the scope started (scopeStartIndex). then, after some line if
+	 * the counter went down from 1 to 0, we will create the new scope with this line as the last index and
+	 * add it to the compiler's mySubScopes ArrayList.
+	 * @throws InvalidLineException if the scope compiler constructor throws exception
 	 */
-	void newBlockHelper(BlockCompiler parent, boolean isFunctionBlock) throws InvalidLineException {
+	void newScopeHelper(ScopeCompiler parent, boolean isFunctionScope) throws InvalidLineException {
 		if (this.oldCurlyBracketCount == 0 && this.bracketsCount[0] == 1) {
-			// a new block is in the block!
-			this.blockStartIndex = this.lineNum;
+			// a new scope is in the scope!
+			this.scopeStartIndex = this.lineNum;
 		} else if (this.oldCurlyBracketCount == 1 && this.bracketsCount[0] == 0) {
-			//it is the end of the block:
-			this.mySubBlocks.add(new BlockCompiler(this.blockStartIndex, this.lineNum, globalScope.myCompiler,
-					parent, isFunctionBlock));
+			//it is the end of the scope:
+			this.mySubScopes.add(new ScopeCompiler(this.scopeStartIndex, this.lineNum, globalScope.myCompiler,
+					parent, isFunctionScope));
 		}
 	}
 
 	boolean containsLine(int line) {
-		return this.myLines.contains(line);
+		return this.globalScopeLines.contains(line);
 	}
 
 	/**
 	 * this function is like the "main" function of the class, it operates all the work that needs to be
 	 * done and makes it into one function line. it will save the oldCurlyBracketCount, and run the change
-	 * counter and will add a new block when needed.
+	 * counter and will add a new scope when needed.
 	 *
 	 * @throws InvalidLineException if one of the counters is below zero, an exception will be thrown.
 	 */
 	public void compileLine() throws InvalidLineException {
 		this.oldCurlyBracketCount = this.bracketsCount[0];
 		changeCounter();
-		// check for the new block indexes, if needed.
-		this.newBlockHelper(globalScope, true);
+		// check for the new scope indexes, if needed.
+		this.newScopeHelper(globalScope, true);
 	}
 }

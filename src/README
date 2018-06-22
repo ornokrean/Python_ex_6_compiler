@@ -1,12 +1,12 @@
 tomernx
-or.nokrean
+ornokrean
 
 =============================
 =      File description     =
 =============================
 Sjavac.java
 CompilerPatterns.java
-BlockCompiler.java
+ScopeCompiler.java
 FileCompiler.java
 scopeVariable.java
 VariableFactory.java
@@ -21,42 +21,47 @@ InvalidVariableUsageException.java
 . Please describe your design
 and focus on non-trivial decisions you made.
 ----------------------------------------------
-Our design was based on several patterns we saw in class, such as polymorphism, the Creative design pattern and the
-encapsulation.
-we tried to separate the different options for lines we are reading and encapsulate the handling of each line by
-recognising the line type. meaning dealing with several line types :variable declaration, variable usage, function call,
-function signature, if/while lines, return statements, function closing line, and comments.
+Our design was based on several patterns we saw in class, such as polymorphism, the Creative design pattern
+and the encapsulation.
+we tried to separate the different options for lines we are reading and encapsulate the handling of each line
+by recognising the line type. meaning dealing with several line types :variable declaration, variable usage,
+function call, function signature, if/while lines, return statements, function closing line, and comments.
 
-by dividing the lines into types we were able to encapsulate each handeling of th line type and implement th
-e reuse-ability principle in a such way that we recognised many of the line handeling is practically checking if the
-variables declared ( inside a function call/signature,boolean statements in if/while, general variable assignment etc.)
+by dividing the lines into types we were able to encapsulate each handling of th line type and implement the
+e reuse-ability principle in a such way that we recognised many of the line handling is practically checking
+if the variables declared ( inside a function call/signature,boolean statements in if/while, general variable
+assignment etc.)
 were practically the same as checking if the variable is properly assigned and add it to the variable scope.
-So once we recognised it we were able to modify out code in a way that allowed us to use mainly the variable handeling
-to solve most of the checks necessary on most type on lines.
+So once we recognised it we were able to modify out code in a way that allowed us to use mainly the variable
+handling to solve most of the checks necessary on most type on lines.
 
 
 
 alternatives we ruled out during the exercise :
 ----------------------------------------------
-At first we thought about making the scopeVariable class a generic class and create real type Variables for each scope
-yet we understood later on it would not be of much use since the object type comes in as a String and can be held on
-to as a string and once we try to use it it is available for comparison with other objects.
+At first we thought about making the scopeVariable class a generic class and create real type Variables for
+each scope
+yet we understood later on it would not be of much use since the object type comes in as a String and can be
+held on to as a string and once we try to use it it is available for comparison with other objects.
 
-Another issue we hd in mind of doing and decided to rule out was creating the different Blocks(scopes), while we are
-checking if each line is valid.
-At first it seemed as if it is a good way to do it, meaning compiling a line while seperating the scopes but it caused
-trouble when we needed access to variables of different scopes as we were going over the lines, so eventually we decided
-to separate the code into scopes first and the for each scope to create a mechanism the goes only on its own scope.
+Another issue we hd in mind of doing and decided to rule out was creating the different Scopes, while
+we are checking if each line is valid.
+At first it seemed as if it is a good way to do it, meaning compiling a line while separating the scopes but
+it caused
+trouble when we needed access to variables of different scopes as we were going over the lines, so eventually
+we decided to separate the code into scopes first and the for each scope to create a mechanism the goes only
+on its own scope.
 
 =============================
 =  Implementation details   =
 =============================
 How did you handle the s-java errors ?:
 --------------------------------------
-every error we caught we have decided to throw as an error of the program and only catch it in the Sjavac Main method
-that operates the other programs, As it seems to be reasonable since one error is enough to make the code not valid.
-We have decided to create an exception hierarchy of a line exception as the super class of a name exception and a
-variable exception.
+every error we caught we have decided to throw as an error of the program and only catch it in the Sjavac
+Main method that operates the other programs, As it seems to be reasonable since one error is enough to make
+the code not valid.
+We have decided to create an exception hierarchy of a line exception as the super class of a name exception
+and a variable exception.
 
 =============================
 =    Answers to questions   =
@@ -65,20 +70,20 @@ variable exception.
 How would you modify your code to add new types of variables (e.g., float)?
 ------------------------------------------------------------------------------
 practically it would be simply to add another type to VariableFactory, and add another option for a type in
-blockCompilers biggest method mostly just expanding one of the regex to be compatible with another type.
+ScopeCompilers biggest method mostly just expanding one of the regex to be compatible with another type.
 
 ------------------------------------------------------------------------------
 What will need to be modified in order to support :
 1)– Different method types (i.e int foo())?
 2)– Using methods of standard java (i.e System.out.println)?
 ------------------------------------------------------------------------------
-1) just add to the return-case in BlockCompiler the specification that the function must return the type described in the
-"father" function block of the function and adding the option (int,double...) to the regex that checks the signature of
-the function block, all done in the BlockCompiler.
+1) just add to the return-case in ScopeCompiler the specification that the function must return the type
+described in the "father" function Scope of the function and adding the option (int,double...) to the regex
+that checks the signature of the function Scope, all done in the ScopeCompiler.
 
-2) adding another line-case into the checkLine function inside the BlockCompiler class, that is able to read that kind
-of statements, and use the varDeclaration case function in order to check the value inserted and whether
-they are compatible or not.
+2) adding another line-case into the checkLine function inside the ScopeCompiler class, that is able to read
+that kind of statements, and use the varDeclaration case function in order to check the value inserted and
+whether they are compatible or not.
 
 
 ------------------------------------------------------------------------------
@@ -86,8 +91,8 @@ In your README file, please describe two of the main regular expressions you
 used in your code.
 ------------------------------------------------------------------------------
 
-The most used regex we implemented was the NAME_VAR regex saved in BlockCompiler, a regex that recognises if a variable
-name is valid by the specifications given :=  ([\s]*(([a-zA-Z]|[_][\w])[\w]*)[\s]*)
+The most used regex we implemented was the NAME_VAR regex saved in ScopeCompiler, a regex that recognises if
+a variable name is valid by the specifications given :=  ([\s]*(([a-zA-Z]|[_][\w])[\w]*)[\s]*)
 
 The second most used regex's were the comment/bad comment regex to take off the needless comments.
  comment := [\s]*([/]|[/*])+.*    , bad comment := ([\s].*|[/][*].*).

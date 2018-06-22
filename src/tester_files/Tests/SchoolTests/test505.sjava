@@ -1,3 +1,0 @@
-void foo (final int a, final int b ){
-return;
-}

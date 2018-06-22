@@ -1,27 +1,12 @@
-//package oop.ex6.Variables;
-//
-//public abstract class ScopeVariable {
-//	boolean isFinal;
-//	String name;
-//
-//
-//	public ScopeVariable() {
-//	}
-//
-//	public ScopeVariable(boolean isFinal, String name) {
-//		this.isFinal = isFinal;
-//		this.name = name;
-//	}
-//}
-
 package oop.ex6.Variables;
 
-import oop.ex6.main.compilerExceptions.InvalidVariableUsageException;
+import oop.ex6.CompilerExceptions.InvalidVariableUsageException;
 
+/**
+ * A class representing a variable in a scope of a Scope.
+ */
 public class ScopeVariable {
-	/**
-	 * A class representing a variable in a scope of a block.
-	 */
+
 	/*
 	 * A constant representing a value of an declared but not assigned variable.
 	 */
@@ -63,7 +48,7 @@ public class ScopeVariable {
 	 * @param name       a  string representing the name of the variable.
 	 * @param type       a string representing the type of the variable.
 	 * @param isAssigned a string representing the line type .
-	 * @throws InvalidVariableUsageException
+	 * @throws InvalidVariableUsageException if there is a code compiling error
 	 */
 	public ScopeVariable(boolean isFinal, String name, String type, int isAssigned) throws
 			InvalidVariableUsageException {

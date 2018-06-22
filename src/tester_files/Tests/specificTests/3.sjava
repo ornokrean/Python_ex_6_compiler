@@ -1,6 +1,0 @@
-int c;
-void foo(String a){
-    if (a){
-   }
-    return;
-}
