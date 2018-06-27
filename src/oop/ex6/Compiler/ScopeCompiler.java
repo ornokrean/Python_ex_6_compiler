@@ -35,7 +35,6 @@ public class ScopeCompiler extends FileCompiler {
 	private static final String EMPTY_BOOLEAN_SLOT = "Empty boolean slot";
 	private static final String INVALID_BOOLEAN_CONDITION = "Invalid boolean condition";
 	private static final int NOT_ASSIGNED = -1;
-	private static HashMap<String, String[]> functionsList = new HashMap<>();
 	/**
 	 * A reference to the super FileCompiler
 	 */
@@ -141,6 +140,9 @@ public class ScopeCompiler extends FileCompiler {
 		if (this.isFunctionScope) {
 			String funcDeclaration = this.code.get(this.start);
 			String name = getFuncName(funcDeclaration, CompilerPatterns.FUNC_DECLARATION_PATTERN);
+			if (functionsList.containsKey(name)){
+				throw new InvalidLineException("Function with this name already stated");
+			}
 			String[] vars = splitSignature(funcDeclaration, CompilerPatterns.ROUND_OPEN,
 					CompilerPatterns.ROUND_CLOSE, CompilerPatterns.COMMA_SEPARATOR);
 			addFuncVars(vars);

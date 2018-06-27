@@ -42,8 +42,7 @@ public class Sjavac {
 		}
 	}
 
-	public static void main(String[] args) throws Exception {
-
+	public static void main(String[] args) {
 		try (BufferedReader reader = new BufferedReader(new FileReader(args[PATH]))) {
 			checkInput(args);
 			FileCompiler compiler = new FileCompiler(reader);
@@ -52,7 +51,6 @@ public class Sjavac {
 		} catch (IOException e) {
 			System.out.print(IO_ERROR);
 			System.err.println(e.getMessage());
-
 		} catch (InvalidLineException e) {
 			System.out.print(COMPILING_ERROR);
 			System.err.println(e.getMessage());

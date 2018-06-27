@@ -5,6 +5,7 @@ import oop.ex6.CompilerExceptions.InvalidLineException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.regex.Matcher;
 
@@ -23,7 +24,10 @@ public class FileCompiler {
 	/**
 	 * A data member of ScopeCompiler type which represents the global scope of the code.
 	 */
-	static ScopeCompiler globalScope;
+	static ScopeCompiler globalScope = null;
+	static HashMap<String, String[]> functionsList;
+
+
 	/**
 	 * An array of ScopeCompilers Containing all the Function scopes.
 	 */
@@ -75,8 +79,7 @@ public class FileCompiler {
 	 * @throws IOException if there is a problem with the BufferedReader
 	 * @throws Exception   if there is a syntax error.
 	 */
-	public FileCompiler(BufferedReader codeReader) throws IOException, Exception {
-		this();
+	public FileCompiler(BufferedReader codeReader) throws IOException,InvalidLineException {
 		initiateCompiler(codeReader);
 
 	}
@@ -146,6 +149,7 @@ public class FileCompiler {
 	 * @throws InvalidLineException if there is a syntax error
 	 */
 	private void initiateCompiler(BufferedReader codeReader) throws IOException, InvalidLineException {
+		functionsList = new HashMap<>();
 		globalScope = new ScopeCompiler(0, -1, this, false);
 		while ((currentCodeLine = codeReader.readLine()) != null) {
 			if (validateLine(currentCodeLine)) {
