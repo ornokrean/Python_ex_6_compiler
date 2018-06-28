@@ -42,6 +42,10 @@ public class Sjavac {
 		}
 	}
 
+	/**
+	 * this is the main function, it will run the compiler and will print the results
+	 * @param args the args of the main given from the user
+	 */
 	public static void main(String[] args) {
 		try (BufferedReader reader = new BufferedReader(new FileReader(args[PATH]))) {
 			checkInput(args);

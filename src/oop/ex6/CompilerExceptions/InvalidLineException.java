@@ -1,5 +1,8 @@
 package oop.ex6.CompilerExceptions;
 
+/**
+ * Exception of the state of invalid Line
+ */
 public class InvalidLineException extends Exception {
 	private static final long serialVersionUID = 1L;
 

@@ -1,6 +1,10 @@
 package oop.ex6.CompilerExceptions;
 
+/**
+ * Exception of the state of invalid variable usage
+ */
 public class InvalidVariableUsageException extends InvalidLineException {
+
 	private static final long serialVersionUID = 1L;
 
 	/**

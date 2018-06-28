@@ -1,5 +1,8 @@
 package oop.ex6.CompilerExceptions;
 
+/**
+ * Exception of the state of invalid name usage
+ */
 public class InvalidNameException extends InvalidLineException {
 
 	private static final long serialVersionUID = 1L;

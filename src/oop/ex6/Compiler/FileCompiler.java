@@ -77,7 +77,7 @@ public class FileCompiler {
 	 *
 	 * @param codeReader the BufferedReader to read the code from
 	 * @throws IOException if there is a problem with the BufferedReader
-	 * @throws Exception   if there is a syntax error.
+	 * @throws InvalidLineException   if there is a syntax error.
 	 */
 	public FileCompiler(BufferedReader codeReader) throws IOException,InvalidLineException {
 		initiateCompiler(codeReader);

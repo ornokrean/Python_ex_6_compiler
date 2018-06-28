@@ -158,10 +158,18 @@ public class ScopeVariable {
 			this.defaultVal = myDefault;
 		}
 
+		/**
+		 * get the type of the variable
+		 * @return the type
+		 */
 		public String getType() {
 			return myType;
 		}
 
+		/**
+		 * get the default value of the variable
+		 * @return the default value
+		 */
 		public String getDefaultVal() {
 			return defaultVal;
 		}
