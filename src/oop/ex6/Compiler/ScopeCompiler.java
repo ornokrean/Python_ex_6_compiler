@@ -545,6 +545,7 @@ public class ScopeCompiler extends FileCompiler {
 		throw new InvalidNameException(ILLEGAL_FUNC_NAME);
 	}
 
+
 	@Override
 	public void compileLine() throws InvalidLineException {
 		this.oldCurlyBracketCount = this.bracketsCount[0];
